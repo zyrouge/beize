@@ -1,0 +1,48 @@
+# include "console"
+
+textIdent := "Hello\x09World!"
+rawTextIdent := r"Hello\x09World!"
+numberIdent := 10
+plusIdent := 2 + 2
+minusIdent := 2 - 2
+asteriskIdent := 2 * 2
+exponentIdent := 2 ** 2
+slashIdent := 2 / 2
+floorIdent := 2 // 2
+moduloIdent := 2 % 2
+ampersandIdent := 0 & 1
+andIdent := true && false
+pipeIdent := 0 | 1
+orIdent := true || false
+caretIdent := 0 ^ 1
+tidleIdent := ~ 0
+equalIdent := 2 == 2
+notEqualIdent := 2 != 2
+lesserThanIdent := 2 < 2
+greaterThanIdent := 2 > 2
+lesserThanEqualIdent := 2 <= 2
+greaterThanEqualIdent := 2 >= 2
+groupedIdent := 1 + (2 * 3 / 4)
+trueIdent := true
+falseIdent := false
+nullIdent := null
+fnIdent := fn () return null
+fnNoParamIdent := fn return null
+emptyListIdent := []
+listIdent := [true, 1, "hello"]
+
+dummyIdent1 := 5
+dummyIdent2 := 10
+ternaryLikeIdent := trueIdent ? "hello" : "world"
+assignUseIdent := dummyIdent1 = dummyIdent2 = 15
+
+fnCallIdent = fnIdent() ? "hello" : "world"
+fnNoParamIdent()
+
+if (trueIdent) {
+} else if (falseIdent) {
+} else {}
+
+while (trueIdent) {
+    break
+}
