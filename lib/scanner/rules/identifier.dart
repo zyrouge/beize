@@ -1,20 +1,29 @@
 import '../../lexer/exports.dart';
 import '../scanner.dart';
 import '../utils.dart';
+import 'rules.dart';
 
 abstract class OutreIdentifierScanner {
-  static const Map<String, OutreTokens> keywords = <String, OutreTokens>{
-    'true': OutreTokens.trueKw,
-    'false': OutreTokens.falseKw,
-    'if': OutreTokens.ifKw,
-    'else': OutreTokens.elseKw,
-    'while': OutreTokens.whileKw,
-    'null': OutreTokens.nullKw,
-    'fn': OutreTokens.fnKw,
-    'return': OutreTokens.returnKw,
-    'break': OutreTokens.breakKw,
-    'continue': OutreTokens.continueKw,
-  };
+  static const OutreScannerCustomRule rule =
+      OutreScannerCustomRule(matches, readIdentifier);
+
+  static const List<OutreTokens> keywords = <OutreTokens>[
+    OutreTokens.trueKw,
+    OutreTokens.falseKw,
+    OutreTokens.ifKw,
+    OutreTokens.elseKw,
+    OutreTokens.whileKw,
+    OutreTokens.nullKw,
+    OutreTokens.fnKw,
+    OutreTokens.returnKw,
+    OutreTokens.breakKw,
+    OutreTokens.continueKw,
+  ];
+
+  static final Map<String, OutreTokens> keywordsMap = keywords.asMap().map(
+        (final _, final OutreTokens x) =>
+            MapEntry<String, OutreTokens>(x.code, x),
+      );
 
   static bool matches(
     final OutreScanner scanner,
@@ -36,7 +45,7 @@ abstract class OutreIdentifierScanner {
     }
     final String output = buffer.toString();
     return OutreToken(
-      keywords[output] ?? OutreTokens.identifier,
+      keywordsMap[output] ?? OutreTokens.identifier,
       output,
       OutreSpan(start.point, current.point),
     );

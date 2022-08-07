@@ -31,13 +31,13 @@ abstract class OutreStatementParser {
     final OutreParser parser,
     final OutreToken keyword,
   ) {
-    parser.consume(OutreTokens.parenLeft, 'Expected "(" after "if"');
+    parser.consume(OutreTokens.parenLeft);
 
     final OutreExpression condition = OutreExpressionParser.parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.none,
     );
-    parser.consume(OutreTokens.parenRight, 'Expected ")" after "if" condition');
+    parser.consume(OutreTokens.parenRight);
 
     final OutreStatement whenTrue = OutreStatementParser.parseStatement(parser);
     OutreStatement? whenFalse;
@@ -53,19 +53,15 @@ abstract class OutreStatementParser {
     final OutreParser parser,
     final OutreToken keyword,
   ) {
-    parser.consume(OutreTokens.parenLeft, 'Expected "(" after "while"');
+    parser.consume(OutreTokens.parenLeft);
 
     final OutreExpression condition = OutreExpressionParser.parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.none,
     );
-    parser.consume(
-      OutreTokens.parenRight,
-      'Expected ")" after "while" condition',
-    );
+    parser.consume(OutreTokens.parenRight);
 
     final OutreStatement body = OutreStatementParser.parseStatement(parser);
-
     return OutreWhileStatement(keyword, condition, body);
   }
 
@@ -73,24 +69,31 @@ abstract class OutreStatementParser {
     final OutreParser parser,
     final OutreToken keyword,
   ) {
-    final OutreExpression expression = OutreExpressionParser.parseExpression(
-      parser,
-      precedence: OutreExpressionPrecedence.none,
-    );
+    final OutreExpression? expression = !parser.check(OutreTokens.semi)
+        ? OutreExpressionParser.parseExpression(
+            parser,
+            precedence: OutreExpressionPrecedence.none,
+          )
+        : null;
+    parser.maybeConsume(OutreTokens.semi);
     return OutreReturnStatement(keyword, expression);
   }
 
   static OutreStatement parseBreakStatement(
     final OutreParser parser,
     final OutreToken keyword,
-  ) =>
-      OutreBreakStatement(keyword);
+  ) {
+    parser.maybeConsume(OutreTokens.semi);
+    return OutreBreakStatement(keyword);
+  }
 
   static OutreStatement parseContinueStatement(
     final OutreParser parser,
     final OutreToken keyword,
-  ) =>
-      OutreContinueStatement(keyword);
+  ) {
+    parser.maybeConsume(OutreTokens.semi);
+    return OutreContinueStatement(keyword);
+  }
 
   static OutreStatement parseBlockStatement(
     final OutreParser parser,
@@ -100,8 +103,8 @@ abstract class OutreStatementParser {
     while (!parser.check(OutreTokens.braceRight)) {
       statements.add(parseStatement(parser));
     }
-    final OutreToken end =
-        parser.consume(OutreTokens.braceRight, 'Expected "}" after block');
+    final OutreToken end = parser.consume(OutreTokens.braceRight);
+    parser.maybeConsume(OutreTokens.semi);
     return OutreBlockStatement(keyword, statements, end);
   }
 
@@ -115,6 +118,7 @@ abstract class OutreStatementParser {
       token,
       precedence: OutreExpressionPrecedence.none,
     );
+    parser.maybeConsume(OutreTokens.semi);
     return OutreExpressionStatement(expression);
   }
 }

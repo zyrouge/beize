@@ -15,17 +15,22 @@ Future<void> main() async {
 
     final OutreInput input = OutreInput(source);
     final OutreScanner scanner = OutreScanner(input);
-    final List<OutreToken> tokens = scanner.scan();
-    final OutreParser parser = OutreParser(tokens);
-    final OutreProgram program = parser.parse();
+    final OutreScannerResult result = scanner.scan();
+    if (result.hasErrors) {
+      print('Exiting as scanner returned errors');
+      exit(1);
+    }
 
-    final dynamic jsonAst = program.toJson();
+    final OutreParser parser = OutreParser(result.tokens);
+    final OutreModule module = parser.parse();
+
+    final dynamic jsonAst = module.toJson();
     final String prettyAst =
         const JsonEncoder.withIndent('  ').convert(jsonAst);
     final String unprettyAst = json.encode(jsonAst);
 
     print(prettyAst);
-    expect(OutreNode.fromJson(jsonAst) is OutreProgram, true);
+    expect(OutreNode.fromJson(jsonAst) is OutreModule, true);
 
     final String prettyAstFile =
         path.join(OutreTestPaths.testDataDir, 'parser_test_pretty_ast.json');

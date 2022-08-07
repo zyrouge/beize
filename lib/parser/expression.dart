@@ -1,4 +1,5 @@
 import '../ast/exports.dart';
+import '../errors/exports.dart';
 import '../lexer/exports.dart';
 import 'parser.dart';
 import 'precedence.dart';
@@ -12,9 +13,8 @@ typedef OutrePrefixExpressionParseFn = OutreExpression Function(
 typedef OutreInfixExpressionParseFn = OutreExpression Function(
   OutreParser parser,
   OutreExpression left,
-  OutreToken operator, {
-  required int precedence,
-});
+  OutreToken operator,
+);
 
 abstract class OutreExpressionParser {
   static final Map<OutreTokens, OutrePrefixExpressionParseFn> prefixParseFns =
@@ -37,8 +37,8 @@ abstract class OutreExpressionParser {
   static final Map<OutreTokens, OutreInfixExpressionParseFn> infixParseFns =
       <OutreTokens, OutreInfixExpressionParseFn>{
     OutreTokens.parenLeft: parseCallExpression,
-    OutreTokens.question: parseInfixExpression,
-    OutreTokens.colon: parseInfixExpression,
+    OutreTokens.question: parseTernaryExpression,
+    OutreTokens.nullOr: parseInfixExpression,
     OutreTokens.assign: parseInfixExpression,
     OutreTokens.declare: parseInfixExpression,
     OutreTokens.plus: parseInfixExpression,
@@ -56,9 +56,9 @@ abstract class OutreExpressionParser {
     OutreTokens.lesserThanEqual: parseInfixExpression,
     OutreTokens.greaterThanEqual: parseInfixExpression,
     OutreTokens.ampersand: parseInfixExpression,
-    OutreTokens.and: parseInfixExpression,
+    OutreTokens.logicalAnd: parseInfixExpression,
     OutreTokens.pipe: parseInfixExpression,
-    OutreTokens.or: parseInfixExpression,
+    OutreTokens.logicalOr: parseInfixExpression,
   };
 
   static OutreExpression parseExpression(
@@ -76,26 +76,25 @@ abstract class OutreExpressionParser {
   }) {
     final OutrePrefixExpressionParseFn? prefixFn = prefixParseFns[token.type];
     if (prefixFn == null) {
-      throw parser.error('Expected expression', token.span);
+      throw parser.error(
+        OutreIllegalExpressionError.expectedXButReceivedToken(
+          'expression',
+          token.type,
+          token.span,
+        ),
+      );
     }
 
     OutreExpression expression = prefixFn(parser, token);
-    int peekPrecedence = OutreExpressionPrecedence.of(parser.peek().type);
-    while (!parser.isEndOfFile() && precedence < peekPrecedence) {
+    while (!parser.isEndOfStatement() &&
+        precedence < OutreExpressionPrecedence.of(parser.peek().type)) {
       final OutreToken token = parser.peek();
       final OutreInfixExpressionParseFn? infixFn = infixParseFns[token.type];
       if (infixFn == null) break;
 
       parser.advance();
-      expression = infixFn(
-        parser,
-        expression,
-        token,
-        precedence: precedence,
-      );
-      peekPrecedence = OutreExpressionPrecedence.of(parser.peek().type);
+      expression = infixFn(parser, expression, token);
     }
-
     return expression;
   }
 
@@ -113,12 +112,11 @@ abstract class OutreExpressionParser {
   static OutreExpression parseInfixExpression(
     final OutreParser parser,
     final OutreExpression left,
-    final OutreToken operator, {
-    required final int precedence,
-  }) {
+    final OutreToken operator,
+  ) {
     final OutreExpression right = parseExpression(
       parser,
-      precedence: precedence,
+      precedence: OutreExpressionPrecedence.of(operator.type),
     );
     return OutreBinaryExpression(left, operator, right);
   }
@@ -149,8 +147,7 @@ abstract class OutreExpressionParser {
       parser,
       precedence: OutreExpressionPrecedence.none,
     );
-    final OutreToken end =
-        parser.consume(OutreTokens.parenRight, 'Expected ")" after group');
+    final OutreToken end = parser.consume(OutreTokens.parenRight);
     return OutreGroupingExpression(start, expression, end);
   }
 
@@ -176,21 +173,12 @@ abstract class OutreExpressionParser {
       final List<OutreToken> elements = <OutreToken>[];
       while (!parser.check(OutreTokens.parenRight)) {
         elements.add(
-          parser.consume(
-            OutreTokens.identifier,
-            'Expected identifier after function parenthesis',
-          ),
+          parser.consume(OutreTokens.identifier),
         );
         if (parser.check(OutreTokens.parenRight)) break;
-        parser.consume(
-          OutreTokens.comma,
-          'Expected "," after function argument',
-        );
+        parser.consume(OutreTokens.comma);
       }
-      final OutreToken end = parser.consume(
-        OutreTokens.parenRight,
-        'Expected ")" after function arguments',
-      );
+      final OutreToken end = parser.consume(OutreTokens.parenRight);
       parameters = OutreFunctionExpressionParameters(start, elements, end);
     }
     final OutreStatement body = OutreStatementParser.parseStatement(parser);
@@ -200,22 +188,20 @@ abstract class OutreExpressionParser {
   static OutreExpression parseCallExpression(
     final OutreParser parser,
     final OutreExpression callee,
-    final OutreToken start, {
-    required final int precedence,
-  }) {
+    final OutreToken start,
+  ) {
     final List<OutreExpression> arguments = <OutreExpression>[];
     while (!parser.check(OutreTokens.parenRight)) {
-      arguments.add(parseExpression(parser, precedence: precedence));
-      if (parser.check(OutreTokens.parenRight)) break;
-      parser.consume(
-        OutreTokens.comma,
-        'Expected "," after function argument',
+      arguments.add(
+        parseExpression(
+          parser,
+          precedence: OutreExpressionPrecedence.none,
+        ),
       );
+      if (parser.check(OutreTokens.parenRight)) break;
+      parser.consume(OutreTokens.comma);
     }
-    final OutreToken end = parser.consume(
-      OutreTokens.parenRight,
-      'Expected ")" after function arguments',
-    );
+    final OutreToken end = parser.consume(OutreTokens.parenRight);
     return OutreCallExpression(
       callee,
       OutreCallExpressionArguments(start, arguments, end),
@@ -235,15 +221,26 @@ abstract class OutreExpressionParser {
         ),
       );
       if (parser.check(OutreTokens.bracketRight)) break;
-      parser.consume(
-        OutreTokens.comma,
-        'Expected "," after array element',
-      );
+      parser.consume(OutreTokens.comma);
     }
-    final OutreToken end = parser.consume(
-      OutreTokens.bracketRight,
-      'Expected "]" after array literal',
-    );
+    final OutreToken end = parser.consume(OutreTokens.bracketRight);
     return OutreArrayExpression(start, elements, end);
+  }
+
+  static OutreExpression parseTernaryExpression(
+    final OutreParser parser,
+    final OutreExpression condition,
+    final OutreToken operator,
+  ) {
+    final OutreExpression whenTrue = parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.of(operator.type),
+    );
+    parser.consume(OutreTokens.colon);
+    final OutreExpression whenFalse = parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.none,
+    );
+    return OutreTernaryExpression(condition, whenTrue, whenFalse);
   }
 }

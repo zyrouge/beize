@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import '../ast/exports.dart';
 import '../lexer/exports.dart';
-import '../utils.dart';
+import '../utils/exports.dart';
 import 'nodes.dart';
 
 typedef OutreNodeFromJsonFn = OutreNode Function(Map<dynamic, dynamic> json);
@@ -30,8 +30,8 @@ abstract class OutreNode {
     OutreNodes.groupExpr: OutreGroupingExpression.fromJson,
     OutreNodes.identifierExpr: OutreIdentifierExpression.fromJson,
     OutreNodes.literalExpr: OutreLiteralExpression.fromJson,
+    OutreNodes.ternaryExpr: OutreTernaryExpression.fromJson,
     OutreNodes.unaryExpr: OutreUnaryExpression.fromJson,
-    OutreNodes.program: OutreProgram.fromJson,
     OutreNodes.blockStmt: OutreBlockStatement.fromJson,
     OutreNodes.expressionStmt: OutreExpressionStatement.fromJson,
     OutreNodes.ifStmt: OutreIfStatement.fromJson,
@@ -39,6 +39,7 @@ abstract class OutreNode {
     OutreNodes.whileStmt: OutreWhileStatement.fromJson,
     OutreNodes.breakStmt: OutreBreakStatement.fromJson,
     OutreNodes.continueStmt: OutreContinueStatement.fromJson,
+    OutreNodes.module: OutreModule.fromJson,
   };
 
   static T fromJson<T>(final dynamic json) {

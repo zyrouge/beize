@@ -1,3 +1,3 @@
 export 'expressions/exports.dart';
-export 'program.dart';
+export 'module.dart';
 export 'statements/exports.dart';

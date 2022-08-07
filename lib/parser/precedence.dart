@@ -21,8 +21,9 @@ abstract class OutreExpressionPrecedence {
     OutreTokens.assign: assignment,
     OutreTokens.question: assignment,
     OutreTokens.colon: assignment,
-    OutreTokens.or: or,
-    OutreTokens.and: and,
+    OutreTokens.nullOr: or,
+    OutreTokens.logicalOr: or,
+    OutreTokens.logicalAnd: and,
     OutreTokens.pipe: pipe,
     OutreTokens.caret: caret,
     OutreTokens.ampersand: ampersand,
@@ -40,6 +41,7 @@ abstract class OutreExpressionPrecedence {
     OutreTokens.modulo: factor,
     OutreTokens.exponent: exponent,
     OutreTokens.parenLeft: call,
+    OutreTokens.nullAccess: call,
   };
 
   static int of(final OutreTokens token) => precedence[token] ?? none;

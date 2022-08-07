@@ -58,9 +58,6 @@ class OutreSpanPoint extends OutreNode {
         'row': row,
         'column': column,
       };
-
-  @override
-  String toString() => 'OutreSpanMarker(${toPositionString()})';
 }
 
 class OutreSpan extends OutreNode {

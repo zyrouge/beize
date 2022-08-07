@@ -1,4 +1,4 @@
-import '../utils.dart';
+import '../utils/exports.dart';
 
 enum OutreNodes {
   span,
@@ -13,8 +13,8 @@ enum OutreNodes {
   groupExpr,
   identifierExpr,
   literalExpr,
+  ternaryExpr,
   unaryExpr,
-  program,
   blockStmt,
   expressionStmt,
   ifStmt,
@@ -22,6 +22,8 @@ enum OutreNodes {
   whileStmt,
   breakStmt,
   continueStmt,
+  illegalStmt,
+  module,
 }
 
 extension OutreNodesUtils on OutreNodes {

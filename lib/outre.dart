@@ -8,4 +8,4 @@ export 'lexer/exports.dart';
 export 'node/exports.dart';
 export 'parser/exports.dart';
 export 'scanner/exports.dart';
-export 'utils.dart';
+export 'utils/exports.dart';

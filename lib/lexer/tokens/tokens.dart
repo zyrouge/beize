@@ -1,4 +1,4 @@
-import '../../utils.dart';
+import '../../utils/exports.dart';
 
 enum OutreTokens {
   eof,
@@ -7,6 +7,7 @@ enum OutreTokens {
   string,
   number,
 
+  hash, // #
   parenLeft, // (
   parenRight, // )
   bracketLeft, // [
@@ -16,6 +17,7 @@ enum OutreTokens {
 
   dot, // .
   comma, // ,
+  semi, // ;
   question, // ?
   nullOr, // ??
   nullAccess, // ?.
@@ -30,9 +32,9 @@ enum OutreTokens {
   floor, // //
   modulo, // %
   ampersand, // &
-  and, // &&
+  logicalAnd, // &&
   pipe, // |
-  or, // ||
+  logicalOr, // ||
   caret, // ^
   tilde, // ~
   equal, // ==
@@ -55,8 +57,63 @@ enum OutreTokens {
   continueKw, // continue
 }
 
+const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
+  OutreTokens.eof: 'eof',
+  OutreTokens.illegal: 'illegal',
+  OutreTokens.identifier: 'identifier',
+  OutreTokens.string: 'string',
+  OutreTokens.number: 'number',
+  OutreTokens.hash: '#',
+  OutreTokens.parenLeft: '(',
+  OutreTokens.parenRight: ')',
+  OutreTokens.bracketLeft: '[',
+  OutreTokens.bracketRight: ']',
+  OutreTokens.braceLeft: '{',
+  OutreTokens.braceRight: '}',
+  OutreTokens.dot: '.',
+  OutreTokens.comma: ',',
+  OutreTokens.semi: ';',
+  OutreTokens.question: '?',
+  OutreTokens.nullOr: '??',
+  OutreTokens.nullAccess: '?.',
+  OutreTokens.colon: ':',
+  OutreTokens.declare: ':=',
+  OutreTokens.assign: '=',
+  OutreTokens.plus: '+',
+  OutreTokens.minus: '-',
+  OutreTokens.asterisk: '*',
+  OutreTokens.exponent: '**',
+  OutreTokens.slash: '/',
+  OutreTokens.floor: '//',
+  OutreTokens.modulo: '%',
+  OutreTokens.ampersand: '&',
+  OutreTokens.logicalAnd: '&&',
+  OutreTokens.pipe: '|',
+  OutreTokens.logicalOr: '||',
+  OutreTokens.caret: '^',
+  OutreTokens.tilde: '~',
+  OutreTokens.equal: '==',
+  OutreTokens.bang: '!',
+  OutreTokens.notEqual: '!=',
+  OutreTokens.lesserThan: '<',
+  OutreTokens.greaterThan: '>',
+  OutreTokens.lesserThanEqual: '<=',
+  OutreTokens.greaterThanEqual: '>=',
+  OutreTokens.trueKw: 'true',
+  OutreTokens.falseKw: 'false',
+  OutreTokens.ifKw: 'if',
+  OutreTokens.elseKw: 'else',
+  OutreTokens.whileKw: 'while',
+  OutreTokens.nullKw: 'null',
+  OutreTokens.fnKw: 'fn',
+  OutreTokens.returnKw: 'return',
+  OutreTokens.breakKw: 'break',
+  OutreTokens.continueKw: 'continue',
+};
+
 extension OutreTokensUtils on OutreTokens {
   String get stringify => OutreUtils.pascalToKebabCase(name);
+  String get code => _tokensCodeMap[this]!;
 }
 
 OutreTokens parseOutreTokens(final String value) => OutreUtils.findEnum(

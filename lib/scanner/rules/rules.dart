@@ -23,62 +23,61 @@ class OutreScannerCustomRule {
 }
 
 class OutreScannerRules {
-  static Map<String, OutreScannerRuleReadFn> offset1ScanFns =
-      <String, OutreScannerRuleReadFn>{
-    '#': scanComment,
-    '(': constructOffset1ScanFn(OutreTokens.parenLeft),
-    ')': constructOffset1ScanFn(OutreTokens.parenRight),
-    '[': constructOffset1ScanFn(OutreTokens.bracketLeft),
-    ']': constructOffset1ScanFn(OutreTokens.bracketRight),
-    '{': constructOffset1ScanFn(OutreTokens.braceLeft),
-    '}': constructOffset1ScanFn(OutreTokens.braceRight),
-    '.': constructOffset1ScanFn(OutreTokens.dot),
-    ',': constructOffset1ScanFn(OutreTokens.comma),
-    '?': constructOffset1ScanFn(OutreTokens.question),
-    ':': constructOffset1ScanFn(OutreTokens.colon),
-    '+': constructOffset1ScanFn(OutreTokens.plus),
-    '-': constructOffset1ScanFn(OutreTokens.minus),
-    '*': constructOffset1ScanFn(OutreTokens.asterisk),
-    '/': constructOffset1ScanFn(OutreTokens.slash),
-    '%': constructOffset1ScanFn(OutreTokens.modulo),
-    '&': constructOffset1ScanFn(OutreTokens.ampersand),
-    '|': constructOffset1ScanFn(OutreTokens.pipe),
-    '^': constructOffset1ScanFn(OutreTokens.caret),
-    '~': constructOffset1ScanFn(OutreTokens.tilde),
-    '=': constructOffset1ScanFn(OutreTokens.assign),
-    '!': constructOffset1ScanFn(OutreTokens.bang),
-    '<': constructOffset1ScanFn(OutreTokens.lesserThan),
-    '>': constructOffset1ScanFn(OutreTokens.greaterThan),
-  };
+  static final Map<String, OutreScannerRuleReadFn> offset1ScanFns =
+      Map<String, OutreScannerRuleReadFn>.fromEntries(
+    <MapEntry<String, OutreScannerRuleReadFn>>[
+      MapEntry<String, OutreScannerRuleReadFn>(
+        OutreTokens.hash.code,
+        scanComment,
+      ),
+      constructOffset1ScanFn(OutreTokens.parenLeft),
+      constructOffset1ScanFn(OutreTokens.parenRight),
+      constructOffset1ScanFn(OutreTokens.bracketLeft),
+      constructOffset1ScanFn(OutreTokens.bracketRight),
+      constructOffset1ScanFn(OutreTokens.braceLeft),
+      constructOffset1ScanFn(OutreTokens.braceRight),
+      constructOffset1ScanFn(OutreTokens.dot),
+      constructOffset1ScanFn(OutreTokens.comma),
+      constructOffset1ScanFn(OutreTokens.semi),
+      constructOffset1ScanFn(OutreTokens.question),
+      constructOffset1ScanFn(OutreTokens.colon),
+      constructOffset1ScanFn(OutreTokens.plus),
+      constructOffset1ScanFn(OutreTokens.minus),
+      constructOffset1ScanFn(OutreTokens.asterisk),
+      constructOffset1ScanFn(OutreTokens.slash),
+      constructOffset1ScanFn(OutreTokens.modulo),
+      constructOffset1ScanFn(OutreTokens.ampersand),
+      constructOffset1ScanFn(OutreTokens.pipe),
+      constructOffset1ScanFn(OutreTokens.caret),
+      constructOffset1ScanFn(OutreTokens.tilde),
+      constructOffset1ScanFn(OutreTokens.assign),
+      constructOffset1ScanFn(OutreTokens.bang),
+      constructOffset1ScanFn(OutreTokens.lesserThan),
+      constructOffset1ScanFn(OutreTokens.greaterThan),
+    ],
+  );
 
-  static Map<String, OutreScannerRuleReadFn> offset2ScanFns =
-      <String, OutreScannerRuleReadFn>{
-    '?.': constructOffset2ScanFn(OutreTokens.nullAccess),
-    '??': constructOffset2ScanFn(OutreTokens.nullOr),
-    ':=': constructOffset2ScanFn(OutreTokens.declare),
-    '**': constructOffset2ScanFn(OutreTokens.exponent),
-    '//': constructOffset2ScanFn(OutreTokens.floor),
-    '&&': constructOffset2ScanFn(OutreTokens.and),
-    '||': constructOffset2ScanFn(OutreTokens.or),
-    '==': constructOffset2ScanFn(OutreTokens.equal),
-    '!=': constructOffset2ScanFn(OutreTokens.notEqual),
-    '<=': constructOffset2ScanFn(OutreTokens.lesserThanEqual),
-    '>=': constructOffset2ScanFn(OutreTokens.greaterThanEqual),
-  };
+  static final Map<String, OutreScannerRuleReadFn> offset2ScanFns =
+      Map<String, OutreScannerRuleReadFn>.fromEntries(
+    <MapEntry<String, OutreScannerRuleReadFn>>[
+      constructOffset2ScanFn(OutreTokens.nullAccess),
+      constructOffset2ScanFn(OutreTokens.nullOr),
+      constructOffset2ScanFn(OutreTokens.declare),
+      constructOffset2ScanFn(OutreTokens.exponent),
+      constructOffset2ScanFn(OutreTokens.floor),
+      constructOffset2ScanFn(OutreTokens.logicalAnd),
+      constructOffset2ScanFn(OutreTokens.logicalOr),
+      constructOffset2ScanFn(OutreTokens.equal),
+      constructOffset2ScanFn(OutreTokens.notEqual),
+      constructOffset2ScanFn(OutreTokens.lesserThanEqual),
+      constructOffset2ScanFn(OutreTokens.greaterThanEqual),
+    ],
+  );
 
   static List<OutreScannerCustomRule> customScanFns = <OutreScannerCustomRule>[
-    const OutreScannerCustomRule(
-      OutreStringScanner.matches,
-      OutreStringScanner.readString,
-    ),
-    const OutreScannerCustomRule(
-      OutreNumberScanner.matches,
-      OutreNumberScanner.readNumber,
-    ),
-    const OutreScannerCustomRule(
-      OutreIdentifierScanner.matches,
-      OutreIdentifierScanner.readIdentifier,
-    ),
+    OutreStringScanner.rule,
+    OutreNumberScanner.rule,
+    OutreIdentifierScanner.rule,
   ];
 
   static OutreToken scan(
@@ -123,36 +122,39 @@ class OutreScannerRules {
   ) =>
       offset2ScanFns[scanner.input.getCharactersAt(current.point.position, 2)];
 
-  static OutreScannerRuleReadFn constructOffset1ScanFn(
+  static MapEntry<String, OutreScannerRuleReadFn> constructOffset1ScanFn(
     final OutreTokens type,
   ) =>
       constructOffsetScanFn(type, 1);
 
-  static OutreScannerRuleReadFn constructOffset2ScanFn(
+  static MapEntry<String, OutreScannerRuleReadFn> constructOffset2ScanFn(
     final OutreTokens type,
   ) =>
       constructOffsetScanFn(type, 2);
 
-  static OutreScannerRuleReadFn constructOffsetScanFn(
+  static MapEntry<String, OutreScannerRuleReadFn> constructOffsetScanFn(
     final OutreTokens type,
     final int offset,
   ) =>
-      (final OutreScanner scanner, final OutreInputIteration current) {
-        final OutreStrictStringBuffer buffer =
-            OutreStrictStringBuffer(current.char);
+      MapEntry<String, OutreScannerRuleReadFn>(
+        type.code,
+        (final OutreScanner scanner, final OutreInputIteration current) {
+          final OutreStrictStringBuffer buffer =
+              OutreStrictStringBuffer(current.char);
 
-        OutreInputIteration end = current;
-        for (int i = 0; i < offset - 1; i++) {
-          end = scanner.input.advance();
-          buffer.write(end.char);
-        }
+          OutreInputIteration end = current;
+          for (int i = 0; i < offset - 1; i++) {
+            end = scanner.input.advance();
+            buffer.write(end.char);
+          }
 
-        return OutreToken(
-          type,
-          buffer.toString(),
-          OutreSpan(current.point, end.point),
-        );
-      };
+          return OutreToken(
+            type,
+            buffer.toString(),
+            OutreSpan(current.point, end.point),
+          );
+        },
+      );
 
   static OutreToken scanComment(
     final OutreScanner scanner,

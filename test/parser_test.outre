@@ -27,17 +27,22 @@ trueIdent := true
 falseIdent := false
 nullIdent := null
 fnIdent := fn () return null
-fnNoParamIdent := fn return null
+fnNoParamIdent := fn return;
 emptyListIdent := []
 listIdent := [true, 1, "hello"]
 
 dummyIdent1 := 5
 dummyIdent2 := 10
+dummyIdent1;
+dummyIdent1 = nullIdent ?? dummyIdent1
 ternaryLikeIdent := trueIdent ? "hello" : "world"
 assignUseIdent := dummyIdent1 = dummyIdent2 = 15
 
 fnCallIdent = fnIdent() ? "hello" : "world"
-fnNoParamIdent()
+fnNoParamIdent();
+
+(fn return;)();
+(fn return null)();
 
 if (trueIdent) {
 } else if (falseIdent) {
@@ -45,4 +50,4 @@ if (trueIdent) {
 
 while (trueIdent) {
     break
-}
+};

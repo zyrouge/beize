@@ -29,6 +29,21 @@ class OutreToken extends OutreNode {
   OutreToken setLiteral(final dynamic literal) =>
       OutreToken(type, literal, span, error: error, errorSpan: errorSpan);
 
+  OutreToken copyWith({
+    final OutreTokens? type,
+    final dynamic literal,
+    final OutreSpan? span,
+    final String? error,
+    final OutreSpan? errorSpan,
+  }) =>
+      OutreToken(
+        type ?? this.type,
+        literal ?? this.literal,
+        span ?? this.span,
+        error: error ?? this.error,
+        errorSpan: errorSpan ?? this.errorSpan,
+      );
+
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         ...super.toJson(),
@@ -40,11 +55,6 @@ class OutreToken extends OutreNode {
       };
 
   @override
-  String toString() => 'OutreToken(${<String>[
-        type.name,
-        literal.toString(),
-        span.toPositionString(),
-        if (error != null)
-          '$error at ${(errorSpan ?? span).toPositionString()}',
-      ].map((final String x) => '"$x"').join(', ')})';
+  String toString() =>
+      'OutreToken($type, $literal, ${span.toPositionString()}, $error, ${errorSpan?.toPositionString()})';
 }

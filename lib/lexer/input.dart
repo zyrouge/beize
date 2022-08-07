@@ -6,10 +6,6 @@ class OutreInputIteration {
 
   final String char;
   final OutreSpanPoint point;
-
-  @override
-  String toString() =>
-      'OutreInputIteration("$char", ${point.toPositionString()})';
 }
 
 class OutreInput {

@@ -1,14 +1,23 @@
 import '../../lexer/exports.dart';
 import '../scanner.dart';
 import '../utils.dart';
+import 'rules.dart';
 
 abstract class OutreStringScanner {
+  static const OutreScannerCustomRule rule =
+      OutreScannerCustomRule(matches, readString);
+
+  static const String rawStringIdentifier = 'r';
+
+  static bool isRawStringIdentifier(final String char) =>
+      char == rawStringIdentifier;
+
   static bool matches(
     final OutreScanner scanner,
     final OutreInputIteration current,
   ) =>
       OutreLexerUtils.isQuote(current.char) ||
-      (current.char == 'r' &&
+      (isRawStringIdentifier(current.char) &&
           OutreLexerUtils.isQuote(scanner.input.peek().char));
 
   static OutreToken readString(
@@ -16,7 +25,7 @@ abstract class OutreStringScanner {
     final OutreInputIteration current,
   ) {
     final OutreSpanPoint start = current.point;
-    final bool isRaw = current.char == 'r';
+    final bool isRaw = isRawStringIdentifier(current.char);
     if (isRaw) {
       final String delimiter = scanner.input.advance().char;
       return readRawString(scanner, delimiter, start);

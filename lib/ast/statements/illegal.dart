@@ -5,7 +5,7 @@ import 'statement.dart';
 
 class OutreReturnStatement extends OutreStatement {
   const OutreReturnStatement(this.keyword, this.expression)
-      : super(OutreNodes.returnStmt);
+      : super(OutreNodes.illegalStmt);
 
   factory OutreReturnStatement.fromJson(final Map<dynamic, dynamic> json) =>
       OutreReturnStatement(

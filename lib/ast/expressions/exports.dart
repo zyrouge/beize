@@ -6,4 +6,5 @@ export 'function.dart';
 export 'grouping.dart';
 export 'identifier.dart';
 export 'literal.dart';
+export 'ternary.dart';
 export 'unary.dart';

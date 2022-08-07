@@ -1,8 +1,12 @@
 import '../../lexer/exports.dart';
 import '../scanner.dart';
 import '../utils.dart';
+import 'rules.dart';
 
 abstract class OutreNumberScanner {
+  static const OutreScannerCustomRule rule =
+      OutreScannerCustomRule(matches, readNumber);
+
   static bool matches(
     final OutreScanner scanner,
     final OutreInputIteration current,
@@ -20,7 +24,7 @@ abstract class OutreNumberScanner {
     while (!scanner.input.isEndOfLine()) {
       current = scanner.input.peek();
       if (!OutreLexerUtils.isNumeric(current.char)) break;
-      if (current.char == '.') {
+      if (current.char == OutreTokens.dot.code) {
         if (hasDot) break;
         hasDot = true;
       }
