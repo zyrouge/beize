@@ -15,6 +15,8 @@ class OutreCallExpression extends OutreExpression {
   final OutreExpression callee;
   final OutreCallExpressionArguments arguments;
 
+  int get arity => arguments.arguments.length;
+
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         ...super.toJson(),

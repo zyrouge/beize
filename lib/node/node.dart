@@ -11,6 +11,8 @@ abstract class OutreNode {
 
   final OutreNodes kind;
 
+  T cast<T extends OutreNode>() => this as T;
+
   @mustCallSuper
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         'kind': kind.stringify,
@@ -22,6 +24,8 @@ abstract class OutreNode {
     OutreNodes.spanPoint: OutreSpanPoint.fromJson,
     OutreNodes.token: OutreToken.fromJson,
     OutreNodes.arrayExpr: OutreArrayExpression.fromJson,
+    OutreNodes.assignExpr: OutreAssignExpression.fromJson,
+    OutreNodes.declareExpr: OutreDeclareExpression.fromJson,
     OutreNodes.binaryExpr: OutreBinaryExpression.fromJson,
     OutreNodes.callExpr: OutreCallExpression.fromJson,
     OutreNodes.callExprArgs: OutreCallExpressionArguments.fromJson,
@@ -29,7 +33,12 @@ abstract class OutreNode {
     OutreNodes.functionExprParams: OutreFunctionExpressionParameters.fromJson,
     OutreNodes.groupExpr: OutreGroupingExpression.fromJson,
     OutreNodes.identifierExpr: OutreIdentifierExpression.fromJson,
-    OutreNodes.literalExpr: OutreLiteralExpression.fromJson,
+    OutreNodes.stringExpr: OutreStringLiteralExpression.fromJson,
+    OutreNodes.booleanExpr: OutreBooleanLiteralExpression.fromJson,
+    OutreNodes.numberExpr: OutreNumberLiteralExpression.fromJson,
+    OutreNodes.nullExpr: OutreNullLiteralExpression.fromJson,
+    OutreNodes.objectExpr: OutreObjectExpression.fromJson,
+    OutreNodes.objectPropExpr: OutreObjectExpressionProperty.fromJson,
     OutreNodes.ternaryExpr: OutreTernaryExpression.fromJson,
     OutreNodes.unaryExpr: OutreUnaryExpression.fromJson,
     OutreNodes.blockStmt: OutreBlockStatement.fromJson,
@@ -42,7 +51,7 @@ abstract class OutreNode {
     OutreNodes.module: OutreModule.fromJson,
   };
 
-  static T fromJson<T>(final dynamic json) {
+  static T fromJson<T extends OutreNode>(final dynamic json) {
     final Map<dynamic, dynamic> casted = json as Map<dynamic, dynamic>;
     final OutreNodes type = OutreUtils.findEnum(
       OutreNodes.values,
@@ -51,13 +60,14 @@ abstract class OutreNode {
     return fromJsonFns[type]!(casted) as T;
   }
 
-  static T? fromJsonNullable<T>(final dynamic json) =>
+  static T? fromJsonNullable<T extends OutreNode>(final dynamic json) =>
       json != null ? fromJson(json) : null;
 
-  static List<T> fromJsonList<T>(final dynamic json) => (json as List<dynamic>)
-      .cast<Map<dynamic, dynamic>>()
-      .map((final Map<dynamic, dynamic> x) => OutreNode.fromJson<T>(x))
-      .toList();
+  static List<T> fromJsonList<T extends OutreNode>(final dynamic json) =>
+      (json as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>()
+          .map((final Map<dynamic, dynamic> x) => OutreNode.fromJson<T>(x))
+          .toList();
 
   static List<Map<dynamic, dynamic>> toJsonList<T extends OutreNode>(
     final List<T> elements,

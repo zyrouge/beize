@@ -18,6 +18,7 @@ abstract class OutreIdentifierScanner {
     OutreTokens.returnKw,
     OutreTokens.breakKw,
     OutreTokens.continueKw,
+    OutreTokens.objKw,
   ];
 
   static final Map<String, OutreTokens> keywordsMap = keywords.asMap().map(

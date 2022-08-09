@@ -2,6 +2,7 @@ import '../lexer/exports.dart';
 
 abstract class OutreExpressionPrecedence {
   static const int none = 0;
+  static const int comma = 1; // ,
   static const int assignment = 2; // := = ? :
   static const int or = 3; // ||
   static const int and = 4; // &&
@@ -17,10 +18,11 @@ abstract class OutreExpressionPrecedence {
   static const int call = 17; // ()
 
   static const Map<OutreTokens, int> precedence = <OutreTokens, int>{
+    OutreTokens.comma: comma,
+    OutreTokens.colon: comma,
     OutreTokens.declare: assignment,
     OutreTokens.assign: assignment,
     OutreTokens.question: assignment,
-    OutreTokens.colon: assignment,
     OutreTokens.nullOr: or,
     OutreTokens.logicalOr: or,
     OutreTokens.logicalAnd: and,

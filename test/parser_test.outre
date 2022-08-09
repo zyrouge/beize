@@ -30,6 +30,12 @@ fnIdent := fn () return null
 fnNoParamIdent := fn return;
 emptyListIdent := []
 listIdent := [true, 1, "hello"]
+emptyObjIdent := obj {}
+objIdent := obj {
+    'hello': true,
+    'world': '',
+    textIndent: fn return;,
+}
 
 dummyIdent1 := 5
 dummyIdent2 := 10

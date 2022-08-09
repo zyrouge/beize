@@ -22,14 +22,16 @@ class OutreScanner {
   final OutreScannerResult result = OutreScannerResult();
 
   OutreScannerResult scan() {
-    while (!input.isEndOfFile()) {
-      addToken(readToken());
+    while (true) {
+      input.skipWhitespace();
+      final OutreToken token = readToken();
+      addToken(token);
+      if (token.type == OutreTokens.eof) break;
     }
     return result;
   }
 
   OutreToken readToken() {
-    input.skipWhitespace();
     final OutreInputIteration current = input.advance();
     return OutreScannerRules.scan(this, current);
   }

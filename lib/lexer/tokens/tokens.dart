@@ -55,6 +55,7 @@ enum OutreTokens {
   returnKw, // return
   breakKw, // break
   continueKw, // continue
+  objKw, // obj
 }
 
 const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
@@ -109,6 +110,7 @@ const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
   OutreTokens.returnKw: 'return',
   OutreTokens.breakKw: 'break',
   OutreTokens.continueKw: 'continue',
+  OutreTokens.objKw: 'obj',
 };
 
 extension OutreTokensUtils on OutreTokens {

@@ -18,6 +18,8 @@ class OutreFunctionExpression extends OutreExpression {
   final OutreFunctionExpressionParameters? parameters;
   final OutreStatement body;
 
+  int get arity => parameters?.parameters.length ?? 0;
+
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         ...super.toJson(),

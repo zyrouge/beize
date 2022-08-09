@@ -1,14 +1,12 @@
 import '../../lexer/exports.dart';
-import '../../node/exports.dart';
 import 'expression.dart';
 
-class OutreLiteralExpression extends OutreExpression {
-  const OutreLiteralExpression(this.token) : super(OutreNodes.literalExpr);
-
-  factory OutreLiteralExpression.fromJson(final Map<dynamic, dynamic> json) =>
-      OutreLiteralExpression(OutreNode.fromJson(json['token']));
+abstract class OutreLiteralExpression<T> extends OutreExpression {
+  const OutreLiteralExpression(this.token, super.nodeType);
 
   final OutreToken token;
+
+  T get value => token.literal as T;
 
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
