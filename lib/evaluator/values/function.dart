@@ -1,9 +1,9 @@
 import '../../lexer/exports.dart';
 import 'exports.dart';
 
-typedef OutreFunctionValueNoArgumentsCall = OutreValue Function();
+typedef OutreFunctionValueNoArgumentsCall = Future<OutreValue> Function();
 
-typedef OutreFunctionValueCallFn = OutreValue Function(
+typedef OutreFunctionValueCallFn = Future<OutreValue> Function(
   List<OutreValue> arguments,
 );
 
@@ -12,18 +12,12 @@ abstract class OutreFunctionValueProperties {
 }
 
 class OutreFunctionValue extends OutreValue {
-  OutreFunctionValue(this.arity, this._call) : super(OutreValues.functionValue);
+  OutreFunctionValue(this.call) : super(OutreValues.functionValue);
 
   factory OutreFunctionValue.fromOutreValue(final OutreValue value) =>
-      OutreFunctionValue.noArgumentsFunction(() => value);
+      OutreFunctionValue((final _) async => value);
 
-  factory OutreFunctionValue.noArgumentsFunction(
-    final OutreFunctionValueNoArgumentsCall fn,
-  ) =>
-      OutreFunctionValue(0, (final _) => fn());
-
-  final int arity;
-  final OutreFunctionValueCallFn _call;
+  final OutreFunctionValueCallFn call;
 
   @override
   late final Map<OutreValuePropertyKey, OutreValue> properties =
@@ -32,11 +26,4 @@ class OutreFunctionValue extends OutreValue {
     OutreValueProperties.kToString:
         OutreStringValue(OutreTokens.fnKw.code).asOutreFunctionValue(),
   };
-
-  OutreValue call(final List<OutreValue> arguments) {
-    if (arguments.length != arity) {
-      throw Exception('Invalid number of arguments');
-    }
-    return _call(arguments);
-  }
 }

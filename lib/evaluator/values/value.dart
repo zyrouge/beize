@@ -9,6 +9,7 @@ enum OutreValues {
   functionValue,
   nullValue,
   arrayValue,
+  promiseValue,
   internalReturnValue,
   internalBreakValue,
   interalContinueValue,
@@ -51,34 +52,18 @@ abstract class OutreValue {
   final OutreValues kind;
 
   late final OutreFunctionValue _equals = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) {
+    (final List<OutreValue> arguments) async {
       final OutreValue a = this;
       final OutreValue b = arguments.first;
-      return OutreBooleanValue(
-        (a is OutreBooleanValue &&
-                b is OutreBooleanValue &&
-                a.cast<OutreBooleanValue>().value ==
-                    b.cast<OutreBooleanValue>().value) ||
-            (a is OutreNullValue && b is OutreNullValue) ||
-            (a is OutreNumberValue &&
-                b is OutreNumberValue &&
-                a.cast<OutreNumberValue>().value ==
-                    b.cast<OutreNumberValue>().value) ||
-            (a is OutreStringValue &&
-                b is OutreStringValue &&
-                a.cast<OutreStringValue>().value ==
-                    b.cast<OutreStringValue>().value),
-      );
+      return OutreBooleanValue(OutreValueUtils.equals(a, b));
     },
   );
 
   late final OutreFunctionValue _notEquals = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) => OutreBooleanValue(
-      !getPropertyOfKey(OutreValueProperties.kLogicalEqual)
-          .cast<OutreFunctionValue>()
-          .call(arguments)
+    (final List<OutreValue> arguments) async => OutreBooleanValue(
+      !(await getPropertyOfKey(OutreValueProperties.kLogicalEqual)
+              .cast<OutreFunctionValue>()
+              .call(arguments))
           .cast<OutreBooleanValue>()
           .value,
     ),
@@ -139,4 +124,8 @@ abstract class OutreValue {
       OutreFunctionValue.fromOutreValue(this);
 
   T cast<T extends OutreValue>() => this as T;
+}
+
+mixin OutreConvertableValue {
+  OutreValue toOutreValue();
 }

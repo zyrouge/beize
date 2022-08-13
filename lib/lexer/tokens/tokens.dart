@@ -58,6 +58,9 @@ enum OutreTokens {
   objKw, // obj
   asyncKw, // async
   awaitKw, // await
+  tryKw, // try
+  catchKw, // catch
+  throwKw, // throw
 }
 
 const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
@@ -115,6 +118,9 @@ const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
   OutreTokens.objKw: 'obj',
   OutreTokens.asyncKw: 'async',
   OutreTokens.awaitKw: 'await',
+  OutreTokens.tryKw: 'try',
+  OutreTokens.catchKw: 'catch',
+  OutreTokens.throwKw: 'throw',
 };
 
 extension OutreTokensUtils on OutreTokens {

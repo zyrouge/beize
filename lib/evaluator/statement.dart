@@ -1,4 +1,5 @@
 import '../ast/exports.dart';
+import '../errors/runtime_exception.dart';
 import '../lexer/exports.dart';
 import '../node/exports.dart';
 import 'context.dart';
@@ -6,7 +7,7 @@ import 'environment.dart';
 import 'expression.dart';
 import 'values/exports.dart';
 
-typedef OutreStatementEvaluatorEvaluateFn = OutreValue Function(
+typedef OutreStatementEvaluatorEvaluateFn = Future<OutreValue> Function(
   OutreContext context,
   OutreEnvironment environment,
   OutreStatement statement,
@@ -22,17 +23,19 @@ abstract class OutreStatementEvaluator {
     OutreNodes.whileStmt: evaluateWhileStatement,
     OutreNodes.breakStmt: evaluateBreakStatement,
     OutreNodes.continueStmt: evaluateContinueStatement,
+    OutreNodes.tryCatchStmt: evaluateTryCatchStatement,
+    OutreNodes.throwStmt: evaluateThrowStatement,
   };
 
-  static OutreValue evaluateStatement(
+  static Future<OutreValue> evaluateStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     context.pushStackFrame(
       environment.createStackFrameFromOutreNode(statement),
     );
-    final OutreValue result = evaluateStatementWithoutTrace(
+    final OutreValue result = await evaluateStatementWithoutTrace(
       context,
       environment,
       statement,
@@ -41,12 +44,12 @@ abstract class OutreStatementEvaluator {
     return result;
   }
 
-  static OutreValue evaluateStatementWithoutTrace(
+  static Future<OutreValue> evaluateStatementWithoutTrace(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
-    final OutreValue result = evaluateStatementFns[statement.kind]!(
+  ) async {
+    final OutreValue result = await evaluateStatementFns[statement.kind]!(
       context,
       environment,
       statement,
@@ -54,15 +57,15 @@ abstract class OutreStatementEvaluator {
     return result;
   }
 
-  static OutreValue evaluateStatements(
+  static Future<OutreValue> evaluateStatements(
     final OutreContext context,
     final OutreEnvironment environment,
     final List<OutreStatement> statements,
-  ) {
+  ) async {
     OutreValue value = OutreNullValue();
     for (final OutreStatement x in statements) {
       context.pushStackFrame(environment.createStackFrameFromOutreNode(x));
-      value = evaluateStatementWithoutTrace(context, environment, x);
+      value = await evaluateStatementWithoutTrace(context, environment, x);
       if (value is OutreReturnValue) {
         if (environment.isInsideFunction) break;
         throw Exception('only return on function');
@@ -80,11 +83,11 @@ abstract class OutreStatementEvaluator {
     return value;
   }
 
-  static OutreValue evaluateBlockStatement(
+  static Future<OutreValue> evaluateBlockStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     final OutreBlockStatement casted = statement.cast();
     return evaluateStatements(
       context,
@@ -93,11 +96,11 @@ abstract class OutreStatementEvaluator {
     );
   }
 
-  static OutreValue evaluateExpressionStatement(
+  static Future<OutreValue> evaluateExpressionStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     final OutreExpressionStatement casted = statement.cast();
     return OutreExpressionEvaluator.evaluateExpression(
       context,
@@ -106,18 +109,18 @@ abstract class OutreStatementEvaluator {
     );
   }
 
-  static OutreValue evaluateIfStatement(
+  static Future<OutreValue> evaluateIfStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     final OutreIfStatement casted = statement.cast();
     final OutreBooleanValue condition =
-        OutreExpressionEvaluator.evaluateExpression(
+        await OutreExpressionEvaluator.evaluateExpressionAndCast(
       context,
       environment,
       casted.condition,
-    ).cast();
+    );
     if (condition.value) {
       return evaluateStatement(
         context,
@@ -135,15 +138,15 @@ abstract class OutreStatementEvaluator {
     return OutreNullValue();
   }
 
-  static OutreValue evaluateReturnStatement(
+  static Future<OutreValue> evaluateReturnStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     final OutreReturnStatement casted = statement.cast();
     return OutreReturnValue(
       casted.expression != null
-          ? OutreExpressionEvaluator.evaluateExpression(
+          ? await OutreExpressionEvaluator.evaluateExpression(
               context,
               environment,
               casted.expression!,
@@ -152,36 +155,36 @@ abstract class OutreStatementEvaluator {
     );
   }
 
-  static OutreValue evaluateBreakStatement(
+  static Future<OutreValue> evaluateBreakStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) =>
+  ) async =>
       OutreBreakValue();
 
-  static OutreValue evaluateContinueStatement(
+  static Future<OutreValue> evaluateContinueStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) =>
+  ) async =>
       OutreContinueValue();
 
-  static OutreValue evaluateWhileStatement(
+  static Future<OutreValue> evaluateWhileStatement(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreStatement statement,
-  ) {
+  ) async {
     final OutreWhileStatement casted = statement.cast();
     while (true) {
       final OutreBooleanValue condition =
-          OutreExpressionEvaluator.evaluateExpression(
+          await OutreExpressionEvaluator.evaluateExpressionAndCast(
         context,
         environment,
         casted.condition,
-      ).cast();
+      );
       if (!condition.value) break;
 
-      final OutreValue value = evaluateStatement(
+      final OutreValue value = await evaluateStatement(
         context,
         environment.wrap(
           frameName: '<${casted.keyword.type.code}>',
@@ -193,5 +196,49 @@ abstract class OutreStatementEvaluator {
       if (value is OutreBreakValue) break;
     }
     return OutreNullValue();
+  }
+
+  static Future<OutreValue> evaluateTryCatchStatement(
+    final OutreContext context,
+    final OutreEnvironment environment,
+    final OutreStatement statement,
+  ) async {
+    final OutreTryCatchStatement casted = statement.cast();
+    try {
+      await evaluateStatement(context, environment, casted.tryBlock);
+    } catch (err) {
+      final OutreEnvironment catchEnvironment = environment.wrap();
+      final List<OutreIdentifierExpression> catchParameters =
+          casted.catchParameters.cast();
+
+      catchEnvironment.declareMany(<String, OutreValue>{
+        if (catchParameters.isNotEmpty)
+          catchParameters[0].value:
+              OutreValueUtils.toOutreValue(err.toString()),
+        if (catchParameters.length > 1)
+          catchParameters[1].value: context.stackTrace.toOutreValue(),
+      });
+
+      await evaluateStatement(context, environment, casted.catchBlock);
+    }
+    return OutreNullValue();
+  }
+
+  static Future<OutreValue> evaluateThrowStatement(
+    final OutreContext context,
+    final OutreEnvironment environment,
+    final OutreStatement statement,
+  ) async {
+    final OutreThrowStatement casted = statement.cast();
+    final OutreValue value = await OutreExpressionEvaluator.evaluateExpression(
+      context,
+      environment,
+      casted.expression,
+    );
+    throw OutreCustomRuntimeException(
+      await OutreValueUtils.stringify(value),
+      value,
+      context.stackTrace,
+    );
   }
 }

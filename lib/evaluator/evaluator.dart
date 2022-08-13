@@ -8,26 +8,26 @@ import 'statement.dart';
 import 'values/exports.dart';
 
 abstract class OutreEvaluator {
-  static OutreValue evaluate(
+  static Future<OutreValue> evaluate(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreNode node,
-  ) {
+  ) async {
     context.pushStackFrame(
       environment.createStackFrameFromOutreNode(node),
     );
     final OutreValue result;
     try {
       if (node is OutreModule) {
-        result = evaluateModule(context, environment, node);
+        result = await evaluateModule(context, environment, node);
       } else if (node is OutreExpression) {
-        result = OutreExpressionEvaluator.evaluateExpression(
+        result = await OutreExpressionEvaluator.evaluateExpression(
           context,
           environment,
           node,
         );
       } else if (node is OutreStatement) {
-        result = OutreStatementEvaluator.evaluateStatement(
+        result = await OutreStatementEvaluator.evaluateStatement(
           context,
           environment,
           node,
@@ -36,6 +36,10 @@ abstract class OutreEvaluator {
         throw Exception('Unexpected node');
       }
     } catch (err, stackTrace) {
+      if (err is OutreRuntimeException) {
+        rethrow;
+      }
+
       throw OutreRuntimeException(
         err.toString(),
         context.stackTrace,
@@ -46,11 +50,11 @@ abstract class OutreEvaluator {
     return result;
   }
 
-  static OutreValue evaluateModule(
+  static Future<OutreValue> evaluateModule(
     final OutreContext context,
     final OutreEnvironment environment,
     final OutreModule program,
-  ) =>
+  ) async =>
       OutreStatementEvaluator.evaluateStatements(
         context,
         environment,

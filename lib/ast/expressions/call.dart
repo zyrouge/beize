@@ -22,8 +22,6 @@ class OutreCallExpression extends OutreExpression {
         'arguments': arguments.toJson(),
       };
 
-  int get arity => arguments.arguments.length;
-
   @override
   OutreSpan get span => OutreSpan(callee.span.start, arguments.span.end);
 }

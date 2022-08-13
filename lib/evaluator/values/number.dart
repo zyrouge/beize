@@ -78,8 +78,7 @@ class OutreNumberValue extends OutreValue {
     final double Function(double) fn,
   ) =>
       OutreFunctionValue(
-        1,
-        (final List<OutreValue> arguments) => OutreNumberValue(
+        (final List<OutreValue> arguments) async => OutreNumberValue(
           fn(arguments.first.cast<OutreNumberValue>().value),
         ),
       );
@@ -88,8 +87,7 @@ class OutreNumberValue extends OutreValue {
     final bool Function(double) fn,
   ) =>
       OutreFunctionValue(
-        1,
-        (final List<OutreValue> arguments) => OutreBooleanValue(
+        (final List<OutreValue> arguments) async => OutreBooleanValue(
           fn(arguments.first.cast<OutreNumberValue>().value),
         ),
       );

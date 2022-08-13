@@ -6,6 +6,8 @@ export 'function.dart';
 export 'null.dart';
 export 'number.dart';
 export 'object.dart';
+export 'promise.dart';
 export 'return.dart';
 export 'string.dart';
+export 'utils.dart';
 export 'value.dart';

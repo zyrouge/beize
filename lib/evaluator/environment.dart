@@ -40,6 +40,12 @@ class OutreEnvironment {
     values[name] = value;
   }
 
+  void declareMany(final Map<String, OutreValue> values) {
+    values.forEach((final String k, final OutreValue v) {
+      declare(k, v);
+    });
+  }
+
   void assign(final String name, final OutreValue value) {
     if (values.containsKey(name)) {
       values[name] = value;

@@ -1,8 +1,10 @@
 import '../ast/exports.dart';
 import '../lexer/exports.dart';
+import '../node/exports.dart';
 import 'expression.dart';
 import 'parser.dart';
 import 'precedence.dart';
+import 'utils.dart';
 
 typedef OutreStatementParseFn = OutreStatement Function(
   OutreParser parser,
@@ -18,13 +20,16 @@ abstract class OutreStatementParser {
     OutreTokens.returnKw: parseReturnStatement,
     OutreTokens.breakKw: parseBreakStatement,
     OutreTokens.continueKw: parseContinueStatement,
+    OutreTokens.tryKw: parseTryCatchStatement,
+    OutreTokens.throwKw: parseThrowStatement,
   };
 
   static OutreStatement parseStatement(final OutreParser parser) {
     final OutreToken token = parser.advance();
     final OutreStatementParseFn parseFn =
         parserFns[token.type] ?? parseExpressionStatement;
-    return parseFn(parser, token);
+    final OutreStatement statement = parseFn(parser, token);
+    return statement;
   }
 
   static OutreStatement parseIfStatement(
@@ -32,20 +37,17 @@ abstract class OutreStatementParser {
     final OutreToken keyword,
   ) {
     parser.consume(OutreTokens.parenLeft);
-
     final OutreExpression condition = OutreExpressionParser.parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.none,
     );
     parser.consume(OutreTokens.parenRight);
-
     final OutreStatement whenTrue = OutreStatementParser.parseStatement(parser);
     OutreStatement? whenFalse;
     if (parser.check(OutreTokens.elseKw)) {
       parser.advance();
       whenFalse = OutreStatementParser.parseStatement(parser);
     }
-
     return OutreIfStatement(keyword, condition, whenTrue, whenFalse);
   }
 
@@ -120,5 +122,45 @@ abstract class OutreStatementParser {
     );
     parser.maybeConsume(OutreTokens.semi);
     return OutreExpressionStatement(expression);
+  }
+
+  static OutreStatement parseTryCatchStatement(
+    final OutreParser parser,
+    final OutreToken tryKeyword,
+  ) {
+    final OutreStatement tryBlock = parseStatement(parser);
+    final OutreToken catchKeyword = parser.consume(OutreTokens.catchKw);
+    parser.consume(OutreTokens.parenLeft);
+    final List<OutreExpression> catchParameters =
+        OutreExpressionParser.parseExpressions(
+      parser,
+      seperator: OutreTokens.comma,
+      delimitier: OutreTokens.parenRight,
+    );
+    OutreParserUtils.assertNodeTypes(
+      OutreNodes.identifierExpr,
+      catchParameters,
+    );
+    parser.consume(OutreTokens.parenRight);
+    final OutreStatement catchBlock = parseStatement(parser);
+    return OutreTryCatchStatement(
+      tryKeyword,
+      tryBlock,
+      catchKeyword,
+      catchParameters,
+      catchBlock,
+    );
+  }
+
+  static OutreStatement parseThrowStatement(
+    final OutreParser parser,
+    final OutreToken keyword,
+  ) {
+    final OutreExpression expression = OutreExpressionParser.parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.none,
+    );
+    parser.maybeConsume(OutreTokens.semi);
+    return OutreThrowStatement(keyword, expression);
   }
 }

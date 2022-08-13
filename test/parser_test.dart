@@ -42,7 +42,7 @@ Future<void> main() async {
     await File(unprettyAstFile).writeAsString(unprettyAst);
 
     print(
-      OutreEvaluator.evaluate(
+      await OutreEvaluator.evaluate(
         OutreContext(),
         OutreEnvironment(null, frameName: '<script>', file: inputFile),
         module,

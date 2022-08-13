@@ -32,6 +32,8 @@ enum OutreNodes {
   whileStmt,
   breakStmt,
   continueStmt,
+  tryCatchStmt,
+  throwStmt,
   illegalStmt,
   module,
 }

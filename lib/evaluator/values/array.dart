@@ -14,35 +14,22 @@ class OutreArrayValue extends OutreValue {
       <OutreValuePropertyKey, OutreValue>{
     OutreValueProperties.kAdd: _add,
     OutreArrayValueProperties.kAddAll: _addAll,
-    OutreValueProperties.kToString: OutreFunctionValue.fromOutreValue(
-      OutreStringValue(
-        <String>[
-          '[',
-          values
-              .map(
-                (final OutreValue x) => x
-                    .getPropertyOfKey(OutreValueProperties.kToString)
-                    .cast<OutreFunctionValue>()
-                    .call(<OutreValue>[]).cast<OutreStringValue>(),
-              )
-              .join(','),
-          ']',
-        ].join(),
+    OutreValueProperties.kToString: OutreFunctionValue(
+      (final _) async => OutreStringValue(
+        await OutreValueUtils.stringifyMany(values, start: '[', end: ']'),
       ),
     ),
   };
 
   late final OutreFunctionValue _add = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) {
+    (final List<OutreValue> arguments) async {
       values.add(arguments.first.cast<OutreValue>());
       return OutreNullValue();
     },
   );
 
   late final OutreFunctionValue _addAll = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) {
+    (final List<OutreValue> arguments) async {
       values.addAll(arguments.first.cast<OutreArrayValue>().values);
       return OutreNullValue();
     },

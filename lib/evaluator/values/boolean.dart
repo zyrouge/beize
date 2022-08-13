@@ -29,8 +29,7 @@ class OutreBooleanValue extends OutreValue {
     final bool Function(bool) fn,
   ) =>
       OutreFunctionValue(
-        1,
-        (final List<OutreValue> arguments) => OutreBooleanValue(
+        (final List<OutreValue> arguments) async => OutreBooleanValue(
           fn(arguments.first.cast<OutreBooleanValue>().value),
         ),
       );

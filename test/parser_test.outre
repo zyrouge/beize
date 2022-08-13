@@ -26,7 +26,7 @@ groupedIdent := 1 + (2 * 3 / 4)
 trueIdent := true
 falseIdent := false
 nullIdent := null
-fnIdent := fn () return null
+fnIdent := fn () return null;
 boolFnIdent := fn () return falseIdent
 fnNoParamIdent := fn return;
 emptyListIdent := []
@@ -44,12 +44,12 @@ objIdent.world
 objIdent.textIdent
 objIdent['hello']
 objIdent["world"]
-objIdent[textIdent]
+objIdent[textIdent];
 objIdent[0]
 objIdent[1]
 
 dummyIdent1 := 5
-dummyIdent2 := 10
+dummyIdent2 := 10;
 dummyIdent1;
 dummyIdent1 = nullIdent ?? dummyIdent1
 dummyIdent2 = objIdent.non?.existing?.prop ?? dummyIdent2
@@ -58,7 +58,7 @@ ternaryLike1Ident := objIdent["hello"] ? "hello" : "world"
 ternaryLike2Ident := objIdent[objIdent["hello"] ? 0 : 1]
 assignUseIdent := (dummyIdent1 = (dummyIdent2 = 15))
 
-fnCallIdent := boolFnIdent() ? "hello" : "world"
+fnCallIdent := boolFnIdent() ? "hello" : "world";
 fnNoParamIdent();
 
 (fn return;)();
@@ -70,6 +70,10 @@ if (trueIdent) {
 
 while (trueIdent) {
     break
-}
+};
 
-(fn return "the end")()
+try {
+    throw 'test';
+} catch (err, stackTrace) {}
+
+(fn return "the end")();

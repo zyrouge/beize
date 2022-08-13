@@ -17,22 +17,20 @@ class OutreStringValue extends OutreValue {
   };
 
   late final OutreFunctionValue _plus = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) => OutreStringValue(
+    (final List<OutreValue> arguments) async => OutreStringValue(
       value +
-          arguments.first
-              .cast<OutreValue>()
-              .getPropertyOfKey(OutreValueProperties.kToString)
-              .cast<OutreFunctionValue>()
-              .call(<OutreValue>[])
+          (await arguments.first
+                  .cast<OutreValue>()
+                  .getPropertyOfKey(OutreValueProperties.kToString)
+                  .cast<OutreFunctionValue>()
+                  .call(<OutreValue>[]))
               .cast<OutreStringValue>()
               .value,
     ),
   );
 
   late final OutreFunctionValue _asterisk = OutreFunctionValue(
-    1,
-    (final List<OutreValue> arguments) => OutreStringValue(
+    (final List<OutreValue> arguments) async => OutreStringValue(
       value * arguments.first.cast<OutreNumberValue>().value.toInt(),
     ),
   );

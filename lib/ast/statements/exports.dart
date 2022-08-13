@@ -5,4 +5,6 @@ export 'expression.dart';
 export 'if.dart';
 export 'return.dart';
 export 'statement.dart';
+export 'throw.dart';
+export 'try_catch.dart';
 export 'while.dart';
