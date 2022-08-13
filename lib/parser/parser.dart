@@ -33,9 +33,7 @@ class OutreParser {
 
   OutreToken advance() {
     final OutreToken token = peek();
-    if (index + 1 < length) {
-      index++;
-    }
+    index++;
     return token;
   }
 

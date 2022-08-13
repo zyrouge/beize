@@ -1,3 +1,4 @@
+import '../../lexer/exports.dart';
 import '../../node/exports.dart';
 import 'expression.dart';
 
@@ -23,4 +24,7 @@ class OutreTernaryExpression extends OutreExpression {
         'whenTrue': whenFalse.toJson(),
         'whenFalse': whenFalse.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(condition.span.start, whenFalse.span.end);
 }

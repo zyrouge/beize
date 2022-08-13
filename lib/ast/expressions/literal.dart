@@ -13,4 +13,7 @@ abstract class OutreLiteralExpression<T> extends OutreExpression {
         ...super.toJson(),
         'token': token.toJson(),
       };
+
+  @override
+  OutreSpan get span => token.span;
 }

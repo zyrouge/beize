@@ -24,4 +24,7 @@ class OutreGroupingExpression extends OutreExpression {
         'expression': expression.toJson(),
         'end': start.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(start.span.start, end.span.end);
 }

@@ -24,4 +24,7 @@ class OutreDeclareExpression extends OutreExpression {
         'operator': operator.toJson(),
         'right': right.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(left.span.start, right.span.end);
 }

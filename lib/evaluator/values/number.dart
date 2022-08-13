@@ -21,19 +21,38 @@ class OutreNumberValue extends OutreValue {
   @override
   late final Map<OutreValuePropertyKey, OutreValue> properties =
       <OutreValuePropertyKey, OutreValue>{
-    OutreValueProperties.kAdd: _binary((final double other) => value + other),
+    OutreValueProperties.kAdd:
+        _binaryDouble((final double other) => value + other),
     OutreValueProperties.kSubtract:
-        _binary((final double other) => value - other),
+        _binaryDouble((final double other) => value - other),
     OutreValueProperties.kMultiply:
-        _binary((final double other) => value * other),
+        _binaryDouble((final double other) => value * other),
     OutreValueProperties.kPow:
-        _binary((final double other) => pow(value, other).toDouble()),
+        _binaryDouble((final double other) => pow(value, other).toDouble()),
     OutreValueProperties.kDivide:
-        _binary((final double other) => value / other),
+        _binaryDouble((final double other) => value / other),
     OutreValueProperties.kFloorDivide:
-        _binary((final double other) => (value / other).floorToDouble()),
+        _binaryDouble((final double other) => (value ~/ other).toDouble()),
     OutreValueProperties.kModulo:
-        _binary((final double other) => value % other),
+        _binaryDouble((final double other) => value % other),
+    OutreValueProperties.kBitwiseAnd: _binaryDouble(
+      (final double other) => (value.toInt() & other.toInt()).toDouble(),
+    ),
+    OutreValueProperties.kBitwiseOr: _binaryDouble(
+      (final double other) => (value.toInt() | other.toInt()).toDouble(),
+    ),
+    OutreValueProperties.kBitwiseXor: _binaryDouble(
+      (final double other) => (value.toInt() ^ other.toInt()).toDouble(),
+    ),
+    OutreValueProperties.kLesserThan:
+        _binaryBoolean((final double other) => value < other),
+    OutreValueProperties.kLesserThanEqual:
+        _binaryBoolean((final double other) => value <= other),
+    OutreValueProperties.kGreaterThan:
+        _binaryBoolean((final double other) => value > other),
+    OutreValueProperties.kGreaterThanEqual:
+        _binaryBoolean((final double other) => value >= other),
+    OutreValueProperties.kBitwiseInvert: _staticDouble(-(value + 1)),
     OutreValueProperties.kUnaryPlus: _staticDouble(value),
     OutreValueProperties.kUnaryMinus: _staticDouble(-value),
     OutreNumberValueProperties.kCeil: _staticDouble(value.ceilToDouble()),
@@ -55,12 +74,23 @@ class OutreNumberValue extends OutreValue {
   OutreFunctionValue _staticBoolean(final bool value) =>
       OutreBooleanValue(value).asOutreFunctionValue();
 
-  OutreFunctionValue _binary(
+  OutreFunctionValue _binaryDouble(
     final double Function(double) fn,
   ) =>
       OutreFunctionValue(
         1,
-        (final List<OutreValue> arguments) =>
-            OutreNumberValue(fn(arguments.first.cast())),
+        (final List<OutreValue> arguments) => OutreNumberValue(
+          fn(arguments.first.cast<OutreNumberValue>().value),
+        ),
+      );
+
+  OutreFunctionValue _binaryBoolean(
+    final bool Function(double) fn,
+  ) =>
+      OutreFunctionValue(
+        1,
+        (final List<OutreValue> arguments) => OutreBooleanValue(
+          fn(arguments.first.cast<OutreNumberValue>().value),
+        ),
       );
 }

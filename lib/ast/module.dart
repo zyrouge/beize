@@ -1,4 +1,5 @@
 import '../errors/exports.dart';
+import '../lexer/exports.dart';
 import '../node/exports.dart';
 import 'statements/exports.dart';
 
@@ -28,4 +29,13 @@ class OutreModule extends OutreNode {
       };
 
   bool get hasErrors => errors.isNotEmpty;
+
+  @override
+  OutreSpan get span {
+    const OutreSpanPoint start = OutreSpanPoint();
+    return OutreSpan(
+      start,
+      statements.isNotEmpty ? statements.last.span.end : start,
+    );
+  }
 }

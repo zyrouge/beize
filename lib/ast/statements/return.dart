@@ -22,4 +22,8 @@ class OutreReturnStatement extends OutreStatement {
         'keyword': keyword.toJson(),
         'expression': expression?.toJson(),
       };
+
+  @override
+  OutreSpan get span =>
+      OutreSpan(keyword.span.start, expression?.span.end ?? keyword.span.end);
 }

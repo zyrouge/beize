@@ -24,4 +24,7 @@ class OutreBlockStatement extends OutreStatement {
         'statements': OutreNode.toJsonList(statements),
         'end': end.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(start.span.start, end.span.end);
 }

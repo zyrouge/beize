@@ -43,7 +43,9 @@ abstract class OutreExpressionPrecedence {
     OutreTokens.modulo: factor,
     OutreTokens.exponent: exponent,
     OutreTokens.parenLeft: call,
+    OutreTokens.dot: call,
     OutreTokens.nullAccess: call,
+    OutreTokens.bracketLeft: call,
   };
 
   static int of(final OutreTokens token) => precedence[token] ?? none;

@@ -25,4 +25,7 @@ class OutreWhileStatement extends OutreStatement {
         'condition': condition.toJson(),
         'body': body.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(keyword.span.start, body.span.end);
 }

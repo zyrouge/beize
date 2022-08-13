@@ -31,6 +31,9 @@ class OutreObjectExpression extends OutreExpression {
         'properties': OutreNode.toJsonList(properties),
         'end': end.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(keyword.span.start, end.span.end);
 }
 
 class OutreObjectExpressionProperty extends OutreExpression {
@@ -57,4 +60,7 @@ class OutreObjectExpressionProperty extends OutreExpression {
         'operator': operator.toJson(),
         'value': value.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(key.span.start, value.span.end);
 }

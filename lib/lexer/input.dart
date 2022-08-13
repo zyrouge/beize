@@ -1,4 +1,4 @@
-import 'span.dart';
+import 'tokens/span.dart';
 import 'utils.dart';
 
 class OutreInputIteration {
@@ -32,7 +32,7 @@ class OutreInput {
   OutreInputIteration peek() =>
       OutreInputIteration(charAt(point.position), point);
 
-  bool isEndOfLine() => peek().char == '\n';
+  bool isEndOfLine() => isEndOfFile() || peek().char == '\n';
   bool isEndOfFile() => !hasCharAt(point.position);
 
   bool hasCharAt(final int position) => position < length;

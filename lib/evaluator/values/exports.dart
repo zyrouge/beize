@@ -1,3 +1,4 @@
+export 'array.dart';
 export 'boolean.dart';
 export 'break.dart';
 export 'continue.dart';
@@ -7,4 +8,4 @@ export 'number.dart';
 export 'object.dart';
 export 'return.dart';
 export 'string.dart';
-export 'values.dart';
+export 'value.dart';

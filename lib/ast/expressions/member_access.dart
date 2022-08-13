@@ -2,12 +2,17 @@ import '../../lexer/exports.dart';
 import '../../node/exports.dart';
 import 'expression.dart';
 
-class OutreBinaryExpression extends OutreExpression {
-  const OutreBinaryExpression(this.left, this.operator, this.right)
-      : super(OutreNodes.binaryExpr);
+class OutreMemberAccessExpression extends OutreExpression {
+  const OutreMemberAccessExpression(
+    this.left,
+    this.operator,
+    this.right,
+  ) : super(OutreNodes.memberAccessExpr);
 
-  factory OutreBinaryExpression.fromJson(final Map<dynamic, dynamic> json) =>
-      OutreBinaryExpression(
+  factory OutreMemberAccessExpression.fromJson(
+    final Map<dynamic, dynamic> json,
+  ) =>
+      OutreMemberAccessExpression(
         OutreNode.fromJson(json['left']),
         OutreNode.fromJson(json['operator']),
         OutreNode.fromJson(json['right']),

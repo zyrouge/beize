@@ -36,7 +36,7 @@ class OutreArrayValue extends OutreValue {
     1,
     (final List<OutreValue> arguments) {
       values.add(arguments.first.cast<OutreValue>());
-      return OutreNullValue.value;
+      return OutreNullValue();
     },
   );
 
@@ -44,7 +44,7 @@ class OutreArrayValue extends OutreValue {
     1,
     (final List<OutreValue> arguments) {
       values.addAll(arguments.first.cast<OutreArrayValue>().values);
-      return OutreNullValue.value;
+      return OutreNullValue();
     },
   );
 }

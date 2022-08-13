@@ -15,4 +15,7 @@ class OutreContinueStatement extends OutreStatement {
         ...super.toJson(),
         'keyword': keyword.toJson(),
       };
+
+  @override
+  OutreSpan get span => keyword.span;
 }

@@ -1,4 +1,4 @@
-import '../node/exports.dart';
+import '../../node/exports.dart';
 
 class OutreSpanPoint extends OutreNode {
   const OutreSpanPoint({
@@ -49,6 +49,8 @@ class OutreSpanPoint extends OutreNode {
         column: column ?? this.column,
       );
 
+  OutreSpan toOutreSpan() => OutreSpan(this, this);
+
   String toPositionString() => '${row + 1}:${column + 1}@${position + 1}';
 
   @override
@@ -58,6 +60,9 @@ class OutreSpanPoint extends OutreNode {
         'row': row,
         'column': column,
       };
+
+  @override
+  OutreSpan get span => toOutreSpan();
 }
 
 class OutreSpan extends OutreNode {
@@ -86,4 +91,7 @@ class OutreSpan extends OutreNode {
         'start': start.toJson(),
         'end': end.toJson(),
       };
+
+  @override
+  OutreSpan get span => this;
 }

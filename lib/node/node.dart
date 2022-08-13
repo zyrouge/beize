@@ -18,6 +18,8 @@ abstract class OutreNode {
         'kind': kind.stringify,
       };
 
+  OutreSpan get span;
+
   static const Map<OutreNodes, OutreNodeFromJsonFn> fromJsonFns =
       <OutreNodes, OutreNodeFromJsonFn>{
     OutreNodes.span: OutreSpan.fromJson,
@@ -41,6 +43,9 @@ abstract class OutreNode {
     OutreNodes.objectPropExpr: OutreObjectExpressionProperty.fromJson,
     OutreNodes.ternaryExpr: OutreTernaryExpression.fromJson,
     OutreNodes.unaryExpr: OutreUnaryExpression.fromJson,
+    OutreNodes.indexAccessExpr: OutreIndexAccessExpression.fromJson,
+    OutreNodes.memberAccessExpr: OutreMemberAccessExpression.fromJson,
+    OutreNodes.nullMemberAccessExpr: OutreNullMemberAccessExpression.fromJson,
     OutreNodes.blockStmt: OutreBlockStatement.fromJson,
     OutreNodes.expressionStmt: OutreExpressionStatement.fromJson,
     OutreNodes.ifStmt: OutreIfStatement.fromJson,

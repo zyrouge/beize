@@ -46,5 +46,5 @@ class OutreIllegalExpressionError extends Error {
   final String text;
 
   @override
-  String toString() => 'IllegalExpressionError: $text';
+  String toString() => 'OutreIllegalExpressionError: $text';
 }

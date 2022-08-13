@@ -27,6 +27,7 @@ trueIdent := true
 falseIdent := false
 nullIdent := null
 fnIdent := fn () return null
+boolFnIdent := fn () return falseIdent
 fnNoParamIdent := fn return;
 emptyListIdent := []
 listIdent := [true, 1, "hello"]
@@ -34,17 +35,30 @@ emptyObjIdent := obj {}
 objIdent := obj {
     'hello': true,
     'world': '',
-    textIndent: fn return;,
+    textIdent: fn return;,
+    0: 'hello',
+    1: 'world',
 }
+objIdent.hello
+objIdent.world
+objIdent.textIdent
+objIdent['hello']
+objIdent["world"]
+objIdent[textIdent]
+objIdent[0]
+objIdent[1]
 
 dummyIdent1 := 5
 dummyIdent2 := 10
 dummyIdent1;
 dummyIdent1 = nullIdent ?? dummyIdent1
+dummyIdent2 = objIdent.non?.existing?.prop ?? dummyIdent2
 ternaryLikeIdent := trueIdent ? "hello" : "world"
-assignUseIdent := dummyIdent1 = dummyIdent2 = 15
+ternaryLike1Ident := objIdent["hello"] ? "hello" : "world"
+ternaryLike2Ident := objIdent[objIdent["hello"] ? 0 : 1]
+assignUseIdent := (dummyIdent1 = (dummyIdent2 = 15))
 
-fnCallIdent = fnIdent() ? "hello" : "world"
+fnCallIdent := boolFnIdent() ? "hello" : "world"
 fnNoParamIdent();
 
 (fn return;)();
@@ -56,4 +70,6 @@ if (trueIdent) {
 
 while (trueIdent) {
     break
-};
+}
+
+(fn return "the end")()

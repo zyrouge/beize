@@ -1,3 +1,4 @@
+import '../../lexer/exports.dart';
 import '../../node/exports.dart';
 import '../expressions/exports.dart';
 import 'statement.dart';
@@ -16,4 +17,7 @@ class OutreExpressionStatement extends OutreStatement {
         ...super.toJson(),
         'expression': expression.toJson(),
       };
+
+  @override
+  OutreSpan get span => expression.span;
 }

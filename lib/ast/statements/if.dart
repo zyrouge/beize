@@ -32,4 +32,8 @@ class OutreIfStatement extends OutreStatement {
         'whenTrue': whenTrue.toJson(),
         'whenFalse': whenFalse?.toJson(),
       };
+
+  @override
+  OutreSpan get span =>
+      OutreSpan(keyword.span.start, whenFalse?.span.end ?? whenTrue.span.end);
 }

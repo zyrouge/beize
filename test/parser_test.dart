@@ -9,36 +9,21 @@ import 'utils.dart';
 
 Future<void> main() async {
   test('Hello World!', () async {
-    // final String inputFile =
-    //     path.join(OutreTestPaths.testDir, 'parser_test.outre');
-    // final String source = await File(inputFile).readAsString();
+    final String inputFile =
+        path.join(OutreTestPaths.testDir, 'parser_test.outre');
+    final String source = await File(inputFile).readAsString();
 
-    final OutreInput input = OutreInput('false ? "hello" : "world"');
-    print('input: done');
-
+    final OutreInput input = OutreInput(source);
     final OutreScanner scanner = OutreScanner(input);
-    print('scanner: done');
 
     final OutreScannerResult result = scanner.scan();
     if (result.hasErrors) {
       print('Exiting as scanner returned errors');
       exit(1);
     }
-    print('result: done');
 
     final OutreParser parser = OutreParser(result.tokens);
-    print('parser: done');
     final OutreModule module = parser.parse();
-    print('parse: done');
-
-    final OutreExpressionStatement statement = module.statements.first.cast();
-    print(
-      OutreEvaluator.evaluate(
-        OutreEnvironment(null),
-        statement.expression,
-      ).cast<OutreStringValue>().value,
-    );
-    return;
 
     final dynamic jsonAst = module.toJson();
     final String prettyAst =
@@ -55,5 +40,13 @@ Future<void> main() async {
     final String unprettyAstFile =
         path.join(OutreTestPaths.testDataDir, 'parser_test_unpretty_ast.json');
     await File(unprettyAstFile).writeAsString(unprettyAst);
+
+    print(
+      OutreEvaluator.evaluate(
+        OutreContext(),
+        OutreEnvironment(null, frameName: '<script>', file: inputFile),
+        module,
+      ),
+    );
   });
 }

@@ -15,14 +15,17 @@ class OutreCallExpression extends OutreExpression {
   final OutreExpression callee;
   final OutreCallExpressionArguments arguments;
 
-  int get arity => arguments.arguments.length;
-
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         ...super.toJson(),
         'callee': callee.toJson(),
         'arguments': arguments.toJson(),
       };
+
+  int get arity => arguments.arguments.length;
+
+  @override
+  OutreSpan get span => OutreSpan(callee.span.start, arguments.span.end);
 }
 
 class OutreCallExpressionArguments extends OutreNode {
@@ -49,4 +52,7 @@ class OutreCallExpressionArguments extends OutreNode {
         'arguments': OutreNode.toJsonList(arguments),
         'end': end.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(start.span.start, end.span.end);
 }

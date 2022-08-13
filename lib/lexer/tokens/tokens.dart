@@ -56,6 +56,8 @@ enum OutreTokens {
   breakKw, // break
   continueKw, // continue
   objKw, // obj
+  asyncKw, // async
+  awaitKw, // await
 }
 
 const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
@@ -111,6 +113,8 @@ const Map<OutreTokens, String> _tokensCodeMap = <OutreTokens, String>{
   OutreTokens.breakKw: 'break',
   OutreTokens.continueKw: 'continue',
   OutreTokens.objKw: 'obj',
+  OutreTokens.asyncKw: 'async',
+  OutreTokens.awaitKw: 'await',
 };
 
 extension OutreTokensUtils on OutreTokens {

@@ -9,5 +9,5 @@ class OutreIdentifierExpression extends OutreLiteralExpression<String> {
   factory OutreIdentifierExpression.fromJson(
     final Map<dynamic, dynamic> json,
   ) =>
-      OutreIdentifierExpression(OutreNode.fromJson(json['name']));
+      OutreIdentifierExpression(OutreNode.fromJson(json['token']));
 }

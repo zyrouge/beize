@@ -1,6 +1,7 @@
 import '../ast/exports.dart';
 import '../errors/exports.dart';
 import '../lexer/exports.dart';
+import '../node/exports.dart';
 import 'parser.dart';
 import 'precedence.dart';
 import 'statement.dart';
@@ -38,8 +39,11 @@ abstract class OutreExpressionParser {
   static final Map<OutreTokens, OutreInfixExpressionParseFn> infixParseFns =
       <OutreTokens, OutreInfixExpressionParseFn>{
     OutreTokens.parenLeft: parseCallExpression,
+    OutreTokens.bracketLeft: parseIndexAccessExpression,
     OutreTokens.question: parseTernaryExpression,
     OutreTokens.nullOr: parseInfixExpression,
+    OutreTokens.dot: parseMemberAccessExpression,
+    OutreTokens.nullAccess: parseNullMemberAccessExpression,
     OutreTokens.assign: parseAssignExpression,
     OutreTokens.declare: parseDeclareExpression,
     OutreTokens.plus: parseInfixExpression,
@@ -87,14 +91,17 @@ abstract class OutreExpressionParser {
     }
 
     OutreExpression expression = prefixFn(parser, token);
+    OutreToken nToken = parser.peek();
     while (!parser.isEndOfStatement() &&
-        precedence < OutreExpressionPrecedence.of(parser.peek().type)) {
-      final OutreToken token = parser.peek();
-      final OutreInfixExpressionParseFn? infixFn = infixParseFns[token.type];
-      if (infixFn == null) break;
+        precedence < OutreExpressionPrecedence.of(nToken.type)) {
+      final OutreInfixExpressionParseFn? infixFn = infixParseFns[nToken.type];
+      if (infixFn == null) {
+        break;
+      }
 
       parser.advance();
-      expression = infixFn(parser, expression, token);
+      expression = infixFn(parser, expression, nToken);
+      nToken = parser.peek();
     }
     return expression;
   }
@@ -209,6 +216,19 @@ abstract class OutreExpressionParser {
     );
   }
 
+  static OutreExpression parseIndexAccessExpression(
+    final OutreParser parser,
+    final OutreExpression left,
+    final OutreToken start,
+  ) {
+    final OutreExpression index = parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.of(OutreTokens.bracketRight),
+    );
+    final OutreToken end = parser.consume(OutreTokens.bracketRight);
+    return OutreIndexAccessExpression(left, start, index, end);
+  }
+
   static OutreExpression parseArrayLiteral(
     final OutreParser parser,
     final OutreToken start,
@@ -245,13 +265,55 @@ abstract class OutreExpressionParser {
     return OutreTernaryExpression(condition, whenTrue, whenFalse);
   }
 
+  static OutreExpression parseMemberAccessExpression(
+    final OutreParser parser,
+    final OutreExpression left,
+    final OutreToken operator,
+  ) {
+    final OutreExpression right = parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.of(operator.type),
+    );
+    if (right is! OutreIdentifierExpression) {
+      throw OutreIllegalExpressionError.expectedXButReceivedX(
+        OutreNodes.identifierExpr.code,
+        right.kind.code,
+        right.span.toPositionString(),
+      );
+    }
+    return OutreMemberAccessExpression(left, operator, right);
+  }
+
+  static OutreExpression parseNullMemberAccessExpression(
+    final OutreParser parser,
+    final OutreExpression left,
+    final OutreToken operator,
+  ) {
+    final OutreExpression right = parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.of(operator.type),
+    );
+    if (right is! OutreIdentifierExpression) {
+      throw OutreIllegalExpressionError.expectedXButReceivedX(
+        OutreNodes.identifierExpr.code,
+        right.kind.code,
+        right.span.toPositionString(),
+      );
+    }
+    return OutreNullMemberAccessExpression(left, operator, right);
+  }
+
   static OutreExpression parseAssignExpression(
     final OutreParser parser,
     final OutreExpression left,
     final OutreToken operator,
   ) {
-    if (OutreExpression is! OutreIdentifierExpression) {
-      throw Exception('Left hand side must be an identifer');
+    if (left is! OutreIdentifierExpression) {
+      throw OutreIllegalExpressionError.expectedXButReceivedX(
+        OutreNodes.identifierExpr.code,
+        left.kind.code,
+        left.span.toPositionString(),
+      );
     }
 
     final OutreExpression right = parseExpression(
@@ -266,11 +328,19 @@ abstract class OutreExpressionParser {
     final OutreExpression left,
     final OutreToken operator,
   ) {
+    if (left is! OutreIdentifierExpression) {
+      throw OutreIllegalExpressionError.expectedXButReceivedX(
+        OutreNodes.identifierExpr.code,
+        left.kind.code,
+        left.span.toPositionString(),
+      );
+    }
+
     final OutreExpression right = parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.of(operator.type),
     );
-    return OutreAssignExpression(left, operator, right);
+    return OutreDeclareExpression(left, operator, right);
   }
 
   static OutreExpression parseObjectExpression(

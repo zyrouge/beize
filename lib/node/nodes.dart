@@ -22,6 +22,9 @@ enum OutreNodes {
   objectExpr,
   objectPropExpr,
   ternaryExpr,
+  indexAccessExpr,
+  memberAccessExpr,
+  nullMemberAccessExpr,
   blockStmt,
   expressionStmt,
   ifStmt,
@@ -35,6 +38,7 @@ enum OutreNodes {
 
 extension OutreNodesUtils on OutreNodes {
   String get stringify => OutreUtils.pascalToKebabCase(name);
+  String get code => stringify.replaceFirst(RegExp('-(stmt|expr)'), '');
 }
 
 OutreNodes parseOutreNodes(final String value) => OutreUtils.findEnum(

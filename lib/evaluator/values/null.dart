@@ -3,6 +3,8 @@ import 'exports.dart';
 abstract class OutreNullValueProperties {}
 
 class OutreNullValue extends OutreValue {
+  factory OutreNullValue() => _value;
+
   OutreNullValue._() : super(OutreValues.nullValue);
 
   @override
@@ -12,5 +14,5 @@ class OutreNullValue extends OutreValue {
         OutreStringValue('null').asOutreFunctionValue(),
   };
 
-  static final OutreNullValue value = OutreNullValue._();
+  static final OutreNullValue _value = OutreNullValue._();
 }

@@ -23,7 +23,6 @@ class OutreScanner {
 
   OutreScannerResult scan() {
     while (true) {
-      input.skipWhitespace();
       final OutreToken token = readToken();
       addToken(token);
       if (token.type == OutreTokens.eof) break;
@@ -32,6 +31,7 @@ class OutreScanner {
   }
 
   OutreToken readToken() {
+    input.skipWhitespace();
     final OutreInputIteration current = input.advance();
     return OutreScannerRules.scan(this, current);
   }

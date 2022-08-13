@@ -1,5 +1,5 @@
 import '../../node/exports.dart';
-import '../span.dart';
+import 'span.dart';
 import 'tokens.dart';
 
 class OutreToken extends OutreNode {
@@ -21,6 +21,7 @@ class OutreToken extends OutreNode {
 
   final OutreTokens type;
   final dynamic literal;
+  @override
   final OutreSpan span;
 
   final String? error;

@@ -7,7 +7,7 @@ abstract class OutreIdentifierScanner {
   static const OutreScannerCustomRule rule =
       OutreScannerCustomRule(matches, readIdentifier);
 
-  static const List<OutreTokens> keywords = <OutreTokens>[
+  static const Set<OutreTokens> keywords = <OutreTokens>{
     OutreTokens.trueKw,
     OutreTokens.falseKw,
     OutreTokens.ifKw,
@@ -19,9 +19,11 @@ abstract class OutreIdentifierScanner {
     OutreTokens.breakKw,
     OutreTokens.continueKw,
     OutreTokens.objKw,
-  ];
+    OutreTokens.asyncKw,
+    OutreTokens.awaitKw,
+  };
 
-  static final Map<String, OutreTokens> keywordsMap = keywords.asMap().map(
+  static final Map<String, OutreTokens> keywordsMap = keywords.asNameMap().map(
         (final _, final OutreTokens x) =>
             MapEntry<String, OutreTokens>(x.code, x),
       );

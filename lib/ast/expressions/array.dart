@@ -24,4 +24,7 @@ class OutreArrayExpression extends OutreExpression {
         'elements': OutreNode.toJsonList(elements),
         'end': end.toJson(),
       };
+
+  @override
+  OutreSpan get span => OutreSpan(start.span.start, end.span.end);
 }
