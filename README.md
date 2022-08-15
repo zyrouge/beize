@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./media/banner.png" width="100%">
+    <img src="https://github.com/outre-lang/media/blob/main/banner.png?raw=true" width="100%">
 </p>
 
 # Outre
