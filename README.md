@@ -4,7 +4,7 @@
 
 # Outre
 
-A highly dynamic multi-paradigm language.
+A is highly dynamic multi-paradigm programming language.
 
 # Links
 
