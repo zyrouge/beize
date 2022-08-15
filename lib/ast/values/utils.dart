@@ -16,7 +16,7 @@ abstract class OutreValueUtils {
       final OutreValue result = await object
           .getPropertyOfKey(OutreValueProperties.kToString)
           .cast<OutreFunctionValue>()
-          .call(<OutreValue>[]);
+          .call(OutreFunctionValueCall.empty);
       return result.cast<OutreStringValue>().value;
     }
     return object.toString();

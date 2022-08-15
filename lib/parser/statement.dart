@@ -22,6 +22,7 @@ abstract class OutreStatementParser {
     OutreTokens.continueKw: parseContinueStatement,
     OutreTokens.tryKw: parseTryCatchStatement,
     OutreTokens.throwKw: parseThrowStatement,
+    OutreTokens.importKw: parseImportStatement,
   };
 
   static OutreStatement parseStatement(final OutreParser parser) {
@@ -42,11 +43,11 @@ abstract class OutreStatementParser {
       precedence: OutreExpressionPrecedence.none,
     );
     parser.consume(OutreTokens.parenRight);
-    final OutreStatement whenTrue = OutreStatementParser.parseStatement(parser);
+    final OutreStatement whenTrue = parseStatement(parser);
     OutreStatement? whenFalse;
     if (parser.check(OutreTokens.elseKw)) {
       parser.advance();
-      whenFalse = OutreStatementParser.parseStatement(parser);
+      whenFalse = parseStatement(parser);
     }
     return OutreIfStatement(keyword, condition, whenTrue, whenFalse);
   }
@@ -56,14 +57,12 @@ abstract class OutreStatementParser {
     final OutreToken keyword,
   ) {
     parser.consume(OutreTokens.parenLeft);
-
     final OutreExpression condition = OutreExpressionParser.parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.none,
     );
     parser.consume(OutreTokens.parenRight);
-
-    final OutreStatement body = OutreStatementParser.parseStatement(parser);
+    final OutreStatement body = parseStatement(parser);
     return OutreWhileStatement(keyword, condition, body);
   }
 
@@ -137,7 +136,7 @@ abstract class OutreStatementParser {
       seperator: OutreTokens.comma,
       delimitier: OutreTokens.parenRight,
     );
-    OutreParserUtils.assertNodeTypes(
+    OutreParserUtils.assertNodesType(
       OutreNodes.identifierExpr,
       catchParameters,
     );
@@ -162,5 +161,24 @@ abstract class OutreStatementParser {
     );
     parser.maybeConsume(OutreTokens.semi);
     return OutreThrowStatement(keyword, expression);
+  }
+
+  static OutreStatement parseImportStatement(
+    final OutreParser parser,
+    final OutreToken importKw,
+  ) {
+    final OutreExpression path = OutreExpressionParser.parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.none,
+    );
+    OutreParserUtils.assertNodeType(OutreNodes.stringExpr, path);
+    final OutreToken asKw = parser.consume(OutreTokens.asKw);
+    final OutreExpression name = OutreExpressionParser.parseExpression(
+      parser,
+      precedence: OutreExpressionPrecedence.none,
+    );
+    OutreParserUtils.assertNodeType(OutreNodes.identifierExpr, name);
+    parser.maybeConsume(OutreTokens.semi);
+    return OutreImportStatement(importKw, path, asKw, name);
   }
 }

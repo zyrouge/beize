@@ -5,38 +5,38 @@ import 'statement.dart';
 
 class OutreTryCatchStatement extends OutreStatement {
   const OutreTryCatchStatement(
-    this.tryKeyword,
+    this.tryKw,
     this.tryBlock,
-    this.catchKeyword,
-    this.catchParameters,
+    this.catchKw,
+    this.catchParams,
     this.catchBlock,
   ) : super(OutreNodes.tryCatchStmt);
 
   factory OutreTryCatchStatement.fromJson(final Map<dynamic, dynamic> json) =>
       OutreTryCatchStatement(
-        OutreNode.fromJson(json['tryKeyword']),
+        OutreNode.fromJson(json['tryKw']),
         OutreNode.fromJson(json['tryBlock']),
-        OutreNode.fromJson(json['catchKeyword']),
-        OutreNode.fromJsonList(json['catchParameters']),
+        OutreNode.fromJson(json['catchKw']),
+        OutreNode.fromJsonList(json['catchParams']),
         OutreNode.fromJson(json['catchBlock']),
       );
 
-  final OutreToken tryKeyword;
+  final OutreToken tryKw;
   final OutreStatement tryBlock;
-  final OutreToken catchKeyword;
-  final List<OutreExpression> catchParameters;
+  final OutreToken catchKw;
+  final List<OutreExpression> catchParams;
   final OutreStatement catchBlock;
 
   @override
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         ...super.toJson(),
-        'tryKeyword': tryKeyword.toJson(),
+        'tryKw': tryKw.toJson(),
         'tryBlock': tryBlock.toJson(),
-        'catchKeyword': catchKeyword.toJson(),
-        'catchParameters': OutreNode.toJsonList(catchParameters),
+        'catchKw': catchKw.toJson(),
+        'catchParams': OutreNode.toJsonList(catchParams),
         'catchBlock': catchBlock.toJson(),
       };
 
   @override
-  OutreSpan get span => OutreSpan(tryKeyword.span.start, catchBlock.span.end);
+  OutreSpan get span => OutreSpan(tryKw.span.start, catchBlock.span.end);
 }

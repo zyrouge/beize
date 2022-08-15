@@ -1,21 +1,19 @@
 import '../ast/exports.dart';
 import '../lexer/exports.dart';
 import '../node/exports.dart';
-import '../utils/exports.dart';
 import 'context.dart';
 import 'environment.dart';
 import 'statement.dart';
-import 'values/exports.dart';
 
 typedef OutreExpressionEvaluatorEvaluateFn = Future<OutreValue> Function(
-  OutreContext context,
+  OutreEvaluatorContext context,
   OutreEnvironment environment,
   OutreExpression expression,
 );
 
 typedef OutreExpressionEvaluatorCustomBinaryOperationFn = Future<OutreValue>
     Function(
-  OutreContext context,
+  OutreEvaluatorContext context,
   OutreEnvironment environment,
   OutreBinaryExpression expression,
 );
@@ -38,20 +36,20 @@ abstract class OutreExpressionEvaluator {
     OutreNodes.unaryExpr: evaluateUnaryExpression,
     OutreNodes.binaryExpr: evaluateBinaryExpression,
     OutreNodes.ternaryExpr: evaluateTernaryExpression,
-    OutreNodes.indexAccessExpr: evaluateIndexAccessExpression,
+    OutreNodes.indexAccessExpr: evaluateIndexAccessGetExpression,
     OutreNodes.memberAccessExpr: evaluateMemberAccessExpression,
     OutreNodes.nullMemberAccessExpr: evaluateNullMemberAccessExpression,
   };
 
   static Future<T> evaluateExpressionAndCast<T extends OutreValue>(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async =>
       (await evaluateExpression(context, environment, expression)).cast<T>();
 
   static Future<OutreValue> evaluateExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -68,7 +66,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<List<OutreValue>> evaluateExpressions(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final List<OutreExpression> expressions,
   ) async {
@@ -80,11 +78,19 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateAssignExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
     final OutreAssignExpression casted = expression.cast();
+    if (casted.left is OutreIndexAccessExpression) {
+      return evaluateIndexAccessSetExpression(
+        context,
+        environment,
+        casted.left.cast(),
+        casted.right,
+      );
+    }
     final OutreIdentifierExpression name = casted.left.cast();
     final OutreValue value = await evaluateExpression(
       context,
@@ -95,8 +101,36 @@ abstract class OutreExpressionEvaluator {
     return value;
   }
 
+  static Future<OutreValue> evaluateIndexAccessSetExpression(
+    final OutreEvaluatorContext context,
+    final OutreEnvironment environment,
+    final OutreIndexAccessExpression left,
+    final OutreExpression right,
+  ) async {
+    final OutreValue lValue = await evaluateExpression(
+      context,
+      environment,
+      left.left,
+    );
+    final OutreValue iValue = await evaluateExpression(
+      context,
+      environment,
+      left.index,
+    );
+    final OutreValue rValue = await evaluateExpression(
+      context,
+      environment,
+      right,
+    );
+    lValue
+        .getPropertyOfKey(OutreValueProperties.kIndexAccessSet)
+        .cast<OutreFunctionValue>()
+        .call(OutreFunctionValueCall(<OutreValue>[iValue, rValue]));
+    return rValue;
+  }
+
   static Future<OutreValue> evaluateDeclareExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -112,7 +146,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateArrayExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -126,7 +160,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateGroupExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async =>
@@ -137,7 +171,7 @@ abstract class OutreExpressionEvaluator {
       );
 
   static Future<OutreValue> evaluateIdentifierExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -146,7 +180,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateStringExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -155,7 +189,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateNumberExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -164,7 +198,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateBooleanExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -173,7 +207,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateNullExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -182,7 +216,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateObjectExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -201,7 +235,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateCallExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -213,47 +247,45 @@ abstract class OutreExpressionEvaluator {
       environment,
       casted.arguments.arguments,
     );
-    final OutreValue value = await callee.call(arguments);
-    return value is OutreReturnValue ? value.value : OutreNullValue();
+    return callee.call(OutreFunctionValueCall(arguments));
   }
 
   static Future<OutreValue> evaluateFunctionExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
     final OutreFunctionExpression casted = expression.cast();
     return OutreFunctionValue(
-      (final List<OutreValue> arguments) {
-        final OutreEnvironment nEnvironment = environment.wrap();
+      (final OutreFunctionValueCall call) async {
+        final OutreEnvironment nEnvironment = environment.wrap(
+          frameName: '<${casted.keyword.type.code}>',
+          isInsideFunction: true,
+        );
         if (casted.hasParameters) {
           final List<OutreIdentifierExpression> parameters =
               casted.parameters!.parameters.cast();
 
           int i = 0;
           for (final OutreIdentifierExpression x in parameters) {
-            nEnvironment.declare(
-              x.value,
-              OutreUtils.getListIndexNullable(arguments, i) ?? OutreNullValue(),
-            );
+            nEnvironment.declare(x.value, call.argAt(i));
             i++;
           }
         }
 
-        return OutreStatementEvaluator.evaluateStatement(
+        final OutreValue result =
+            await OutreStatementEvaluator.evaluateStatement(
           context,
-          environment.wrap(
-            frameName: '<${casted.keyword.type.code}>',
-            isInsideFunction: true,
-          ),
+          nEnvironment,
           casted.body,
         );
+        return result is OutreReturnValue ? result.value : OutreNullValue();
       },
     );
   }
 
-  static Future<OutreValue> evaluateIndexAccessExpression(
-    final OutreContext context,
+  static Future<OutreValue> evaluateIndexAccessGetExpression(
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -268,11 +300,14 @@ abstract class OutreExpressionEvaluator {
       environment,
       casted.index,
     );
-    return left.getPropertyOfOutreValue(right);
+    return left
+        .getPropertyOfKey(OutreValueProperties.kIndexAccessGet)
+        .cast<OutreFunctionValue>()
+        .call(OutreFunctionValueCall(<OutreValue>[right]));
   }
 
   static Future<OutreValue> evaluateMemberAccessExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -287,7 +322,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateNullMemberAccessExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -314,7 +349,7 @@ abstract class OutreExpressionEvaluator {
   };
 
   static Future<OutreValue> evaluateUnaryExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -324,7 +359,7 @@ abstract class OutreExpressionEvaluator {
     return right
         .getPropertyOfKey(unaryOperationProperties[casted.operator.type])
         .cast<OutreFunctionValue>()
-        .call(<OutreValue>[]);
+        .call(OutreFunctionValueCall.empty);
   }
 
   static final Map<OutreTokens, OutreValuePropertyKey>
@@ -356,7 +391,7 @@ abstract class OutreExpressionEvaluator {
   };
 
   static Future<OutreValue> evaluateBinaryExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {
@@ -382,11 +417,11 @@ abstract class OutreExpressionEvaluator {
     return left
         .getPropertyOfKey(binaryOperationProperties[casted.operator.type])
         .cast<OutreFunctionValue>()
-        .call(<OutreValue>[right]);
+        .call(OutreFunctionValueCall(<OutreValue>[right]));
   }
 
   static Future<OutreValue> evaluateNullOrExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreBinaryExpression expression,
   ) async {
@@ -407,7 +442,7 @@ abstract class OutreExpressionEvaluator {
   }
 
   static Future<OutreValue> evaluateTernaryExpression(
-    final OutreContext context,
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreExpression expression,
   ) async {

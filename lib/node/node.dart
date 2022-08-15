@@ -55,6 +55,7 @@ abstract class OutreNode {
     OutreNodes.continueStmt: OutreContinueStatement.fromJson,
     OutreNodes.tryCatchStmt: OutreTryCatchStatement.fromJson,
     OutreNodes.throwStmt: OutreThrowStatement.fromJson,
+    OutreNodes.importStmt: OutreImportStatement.fromJson,
     OutreNodes.module: OutreModule.fromJson,
   };
 

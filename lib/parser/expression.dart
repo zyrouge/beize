@@ -186,7 +186,7 @@ abstract class OutreExpressionParser {
         seperator: OutreTokens.comma,
         delimitier: OutreTokens.parenRight,
       );
-      OutreParserUtils.assertNodeTypes(OutreNodes.identifierExpr, elements);
+      OutreParserUtils.assertNodesType(OutreNodes.identifierExpr, elements);
       final OutreToken end = parser.consume(OutreTokens.parenRight);
       parameters = OutreFunctionExpressionParameters(start, elements, end);
     }
@@ -285,7 +285,7 @@ abstract class OutreExpressionParser {
     final OutreExpression left,
     final OutreToken operator,
   ) {
-    OutreParserUtils.assertNodeType(OutreNodes.identifierExpr, left);
+    OutreParserUtils.assertAssignableNode(left);
     final OutreExpression right = parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.of(operator.type),
@@ -298,7 +298,7 @@ abstract class OutreExpressionParser {
     final OutreExpression left,
     final OutreToken operator,
   ) {
-    OutreParserUtils.assertNodeType(OutreNodes.identifierExpr, left);
+    OutreParserUtils.assertAssignableNode(left);
     final OutreExpression right = parseExpression(
       parser,
       precedence: OutreExpressionPrecedence.of(operator.type),

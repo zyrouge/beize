@@ -19,11 +19,11 @@ abstract class OutreIdentifierScanner {
     OutreTokens.breakKw,
     OutreTokens.continueKw,
     OutreTokens.objKw,
-    OutreTokens.asyncKw,
-    OutreTokens.awaitKw,
     OutreTokens.tryKw,
     OutreTokens.catchKw,
     OutreTokens.throwKw,
+    OutreTokens.importKw,
+    OutreTokens.asKw,
   };
 
   static final Map<String, OutreTokens> keywordsMap = keywords.asNameMap().map(

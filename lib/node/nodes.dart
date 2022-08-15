@@ -34,6 +34,7 @@ enum OutreNodes {
   continueStmt,
   tryCatchStmt,
   throwStmt,
+  importStmt,
   illegalStmt,
   module,
 }

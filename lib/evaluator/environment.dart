@@ -1,6 +1,7 @@
+import '../ast/exports.dart';
+import '../libraries/exports.dart';
 import '../node/exports.dart';
 import 'stack_trace.dart';
-import 'values/exports.dart';
 
 class OutreEnvironment {
   OutreEnvironment(
@@ -9,7 +10,12 @@ class OutreEnvironment {
     required this.file,
     this.isInsideFunction = false,
     this.isInsideLoop = false,
-  });
+    final bool withGlobalValues = false,
+  }) {
+    if (withGlobalValues) {
+      addGlobalValues(this);
+    }
+  }
 
   final OutreEnvironment? outer;
   final String frameName;
@@ -62,11 +68,26 @@ class OutreEnvironment {
       return values[name]!;
     }
     if (outer == null) {
-      throw Exception('Variable not found');
+      throw Exception('Variable not found: $name');
     }
     return outer!.get(name);
   }
 
   OutreStackFrame createStackFrameFromOutreNode(final OutreNode node) =>
       OutreStackFrame(frameName, file, node.span);
+
+  static void addGlobalValues(final OutreEnvironment environment) {
+    environment.declare(
+      OutreGlobalPromiseValue.name,
+      OutreGlobalPromiseValue.value,
+    );
+    environment.declare(
+      OutreGlobalObjectValue.name,
+      OutreGlobalObjectValue.value,
+    );
+    environment.declare(
+      OutreGlobalDateTimeValue.name,
+      OutreGlobalDateTimeValue.value,
+    );
+  }
 }

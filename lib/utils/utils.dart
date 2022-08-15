@@ -36,10 +36,4 @@ abstract class OutreUtils {
         RegExp(r'-(\w{1})'),
         (final Match x) => x.group(1)!.toUpperCase(),
       );
-
-  static T? getListIndexNullable<T>(
-    final List<T> elements,
-    final int index,
-  ) =>
-      index < elements.length ? elements[index] : null;
 }

@@ -2,7 +2,7 @@ import 'exports.dart';
 
 abstract class OutreStringValueProperties {}
 
-class OutreStringValue extends OutreValue {
+class OutreStringValue extends OutreValueFromProperties {
   OutreStringValue(this.value) : super(OutreValues.stringValue);
 
   final String value;
@@ -17,21 +17,14 @@ class OutreStringValue extends OutreValue {
   };
 
   late final OutreFunctionValue _plus = OutreFunctionValue(
-    (final List<OutreValue> arguments) async => OutreStringValue(
-      value +
-          (await arguments.first
-                  .cast<OutreValue>()
-                  .getPropertyOfKey(OutreValueProperties.kToString)
-                  .cast<OutreFunctionValue>()
-                  .call(<OutreValue>[]))
-              .cast<OutreStringValue>()
-              .value,
+    (final OutreFunctionValueCall call) async => OutreStringValue(
+      value + call.argAt(0).cast<OutreStringValue>().value,
     ),
   );
 
   late final OutreFunctionValue _asterisk = OutreFunctionValue(
-    (final List<OutreValue> arguments) async => OutreStringValue(
-      value * arguments.first.cast<OutreNumberValue>().value.toInt(),
+    (final OutreFunctionValueCall call) async => OutreStringValue(
+      value * call.argAt(0).cast<OutreNumberValue>().value.toInt(),
     ),
   );
 }

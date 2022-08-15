@@ -1,7 +1,7 @@
 import 'exports.dart';
 
-class OutreContinueValue extends OutreValue {
-  OutreContinueValue() : super(OutreValues.interalContinueValue);
+class OutreBreakValue extends OutreValueFromProperties {
+  OutreBreakValue() : super(OutreValues.internalBreakValue);
 
   @override
   late final Map<OutreValuePropertyKey, OutreValue> properties =

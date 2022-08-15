@@ -1,15 +1,40 @@
+import 'package:path/path.dart' as p;
 import '../ast/exports.dart';
 import '../errors/runtime_exception.dart';
 import '../node/exports.dart';
+import '../parser/exports.dart';
 import 'context.dart';
 import 'environment.dart';
 import 'expression.dart';
 import 'statement.dart';
-import 'values/exports.dart';
 
 abstract class OutreEvaluator {
-  static Future<OutreValue> evaluate(
-    final OutreContext context,
+  static Future<OutreMirroredValue> evaluateFile(
+    final String path, {
+    final OutreEvaluatorContext? context,
+    final OutreEnvironment? environment,
+    final String frameName = '<script>',
+  }) async {
+    final OutreEvaluatorContext nContext =
+        context ?? OutreEvaluatorContext(rootDir: p.dirname(path));
+    final OutreEnvironment nEnvironment = environment ??
+        OutreEnvironment(
+          null,
+          frameName: frameName,
+          file: path,
+          withGlobalValues: true,
+        );
+
+    final OutreModule module = await OutreParser.parseFile(path);
+    if (module.hasErrors) {
+      throw Exception('Module had errors');
+    }
+
+    return evaluateModule(nContext, nEnvironment, module);
+  }
+
+  static Future<OutreValue> evaluateNode(
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreNode node,
   ) async {
@@ -50,14 +75,26 @@ abstract class OutreEvaluator {
     return result;
   }
 
-  static Future<OutreValue> evaluateModule(
-    final OutreContext context,
+  static Future<OutreMirroredValue> evaluateModule(
+    final OutreEvaluatorContext context,
     final OutreEnvironment environment,
     final OutreModule program,
-  ) async =>
-      OutreStatementEvaluator.evaluateStatements(
-        context,
-        environment,
-        program.statements,
-      );
+  ) async {
+    final OutreMirroredValue value = OutreMirroredValue(
+      get: (final OutreValuePropertyKey key) {
+        if (key is! String) return null;
+        return environment.get(key);
+      },
+      set: (final OutreValuePropertyKey key, final OutreValue value) {
+        if (key is! String) return;
+        return environment.assign(key, value);
+      },
+    );
+    await OutreStatementEvaluator.evaluateStatements(
+      context,
+      environment,
+      program.statements,
+    );
+    return value;
+  }
 }

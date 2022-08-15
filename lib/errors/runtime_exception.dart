@@ -1,3 +1,4 @@
+import '../ast/exports.dart';
 import '../evaluator/exports.dart';
 
 class OutreCustomRuntimeException extends OutreRuntimeException {

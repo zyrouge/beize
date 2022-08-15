@@ -3,6 +3,7 @@ export 'break.dart';
 export 'continue.dart';
 export 'expression.dart';
 export 'if.dart';
+export 'import.dart';
 export 'return.dart';
 export 'statement.dart';
 export 'throw.dart';

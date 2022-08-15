@@ -2,7 +2,7 @@ import 'exports.dart';
 
 abstract class OutreBooleanValueProperties {}
 
-class OutreBooleanValue extends OutreValue {
+class OutreBooleanValue extends OutreValueFromProperties {
   // ignore: avoid_positional_boolean_parameters
   factory OutreBooleanValue(final bool value) =>
       value ? _trueValue : _falseValue;
@@ -29,8 +29,8 @@ class OutreBooleanValue extends OutreValue {
     final bool Function(bool) fn,
   ) =>
       OutreFunctionValue(
-        (final List<OutreValue> arguments) async => OutreBooleanValue(
-          fn(arguments.first.cast<OutreBooleanValue>().value),
+        (final OutreFunctionValueCall call) async => OutreBooleanValue(
+          fn(call.argAt(0).cast<OutreBooleanValue>().value),
         ),
       );
 

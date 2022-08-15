@@ -1,6 +1,6 @@
 import 'value.dart';
 
-class OutreObjectValue extends OutreValue {
+class OutreObjectValue extends OutreValueFromProperties {
   OutreObjectValue(this.properties) : super(OutreValues.objectValue);
 
   @override

@@ -2,7 +2,7 @@ import 'exports.dart';
 
 abstract class OutreNullValueProperties {}
 
-class OutreNullValue extends OutreValue {
+class OutreNullValue extends OutreValueFromProperties {
   factory OutreNullValue() => _value;
 
   OutreNullValue._() : super(OutreValues.nullValue);

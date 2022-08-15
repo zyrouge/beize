@@ -1,6 +1,8 @@
+import 'dart:io';
 import '../ast/exports.dart';
 import '../errors/exports.dart';
 import '../lexer/exports.dart';
+import '../scanner/exports.dart';
 import '../utils/exports.dart';
 import 'statement.dart';
 
@@ -62,4 +64,19 @@ class OutreParser {
 
   bool isEndOfFile() => check(OutreTokens.eof);
   bool isEndOfStatement() => check(OutreTokens.semi);
+
+  static OutreModule parseSource(final String source) {
+    final OutreInput input = OutreInput(source);
+    final OutreScannerResult sResult = OutreScanner(input).scan();
+    if (sResult.hasErrors) {
+      throw Exception('Exiting as scanner returned errors');
+    }
+    final OutreParser parser = OutreParser(sResult.tokens);
+    return parser.parse();
+  }
+
+  static Future<OutreModule> parseFile(final String path) async {
+    final File file = File(path);
+    return parseSource(await file.readAsString());
+  }
 }

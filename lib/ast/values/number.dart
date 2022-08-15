@@ -13,7 +13,7 @@ abstract class OutreNumberValueProperties {
   static const OutreValuePropertyKey kSign = 'sign';
 }
 
-class OutreNumberValue extends OutreValue {
+class OutreNumberValue extends OutreValueFromProperties {
   OutreNumberValue(this.value) : super(OutreValues.numberValue);
 
   final double value;
@@ -78,8 +78,8 @@ class OutreNumberValue extends OutreValue {
     final double Function(double) fn,
   ) =>
       OutreFunctionValue(
-        (final List<OutreValue> arguments) async => OutreNumberValue(
-          fn(arguments.first.cast<OutreNumberValue>().value),
+        (final OutreFunctionValueCall call) async => OutreNumberValue(
+          fn(call.argAt(0).cast<OutreNumberValue>().value),
         ),
       );
 
@@ -87,8 +87,8 @@ class OutreNumberValue extends OutreValue {
     final bool Function(double) fn,
   ) =>
       OutreFunctionValue(
-        (final List<OutreValue> arguments) async => OutreBooleanValue(
-          fn(arguments.first.cast<OutreNumberValue>().value),
+        (final OutreFunctionValueCall call) async => OutreBooleanValue(
+          fn(call.argAt(0).cast<OutreNumberValue>().value),
         ),
       );
 }
