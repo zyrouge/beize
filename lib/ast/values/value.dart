@@ -1,3 +1,4 @@
+import '../../errors/exports.dart';
 import '../../lexer/exports.dart';
 import 'exports.dart';
 
@@ -144,7 +145,9 @@ abstract class OutreValue {
         return name.cast<OutreStringValue>().value;
 
       default:
-        throw Exception('Invalid key type');
+        throw OutreUntracedRuntimeException(
+          'Cannot convert "${name.kind}" to key',
+        );
     }
   }
 
@@ -160,7 +163,9 @@ abstract class OutreValue {
     if (key is String) {
       return OutreStringValue(key);
     }
-    throw Exception('Invalid key type');
+    throw OutreUntracedRuntimeException(
+      'Cannot convert "${key.runtimeType}" to key',
+    );
   }
 
   static List<OutreValue> getKeysFromOutreObjectProperties(

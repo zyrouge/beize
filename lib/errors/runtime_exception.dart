@@ -1,8 +1,14 @@
 import '../ast/exports.dart';
 import '../evaluator/exports.dart';
 
-class OutreCustomRuntimeException extends OutreRuntimeException {
-  OutreCustomRuntimeException(
+class OutreUntracedRuntimeException extends Error {
+  OutreUntracedRuntimeException(this.message);
+
+  final String message;
+}
+
+class OutreInterropedRuntimeException extends OutreRuntimeException {
+  OutreInterropedRuntimeException(
     super.message,
     this.value,
     super.outreStackTrace, [
@@ -44,7 +50,9 @@ class OutreRuntimeException extends Error with OutreConvertableValue {
         'OutreRuntimeException: $message',
         'Outre Stack Trace:',
         outreStackTrace.toString(),
-        'Dart Stack Trace:',
-        stackTrace.toString(),
+        if (stackTrace != null) ...<String>[
+          'Dart Stack Trace:',
+          stackTrace.toString(),
+        ],
       ].join('\n');
 }

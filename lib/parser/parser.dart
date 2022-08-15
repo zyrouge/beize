@@ -67,11 +67,14 @@ class OutreParser {
 
   static OutreModule parseSource(final String source) {
     final OutreInput input = OutreInput(source);
-    final OutreScannerResult sResult = OutreScanner(input).scan();
-    if (sResult.hasErrors) {
-      throw Exception('Exiting as scanner returned errors');
+    final OutreScannerResult result = OutreScanner(input).scan();
+    if (result.hasErrors) {
+      throw OutreParserException.withIllegalExpressions(
+        'Scanner failed with errors',
+        result.errors,
+      );
     }
-    final OutreParser parser = OutreParser(sResult.tokens);
+    final OutreParser parser = OutreParser(result.tokens);
     return parser.parse();
   }
 

@@ -1,6 +1,6 @@
 import 'package:path/path.dart' as p;
 import '../ast/exports.dart';
-import '../errors/runtime_exception.dart';
+import '../errors/exports.dart';
 import '../node/exports.dart';
 import '../parser/exports.dart';
 import 'context.dart';
@@ -27,10 +27,15 @@ abstract class OutreEvaluator {
 
     final OutreModule module = await OutreParser.parseFile(path);
     if (module.hasErrors) {
-      throw Exception('Module had errors');
+      throw OutreParserException.withIllegalExpressions(
+        'Module "$path" has errors',
+        module.errors,
+      );
     }
 
-    return evaluateModule(nContext, nEnvironment, module);
+    final OutreValue result =
+        await evaluateNode(nContext, nEnvironment, module);
+    return result.cast();
   }
 
   static Future<OutreValue> evaluateNode(
@@ -58,7 +63,10 @@ abstract class OutreEvaluator {
           node,
         );
       } else {
-        throw Exception('Unexpected node');
+        throw OutreRuntimeException(
+          'Cannot evaluate unexpected node of kind "${node.kind}"',
+          context.stackTrace,
+        );
       }
     } catch (err, stackTrace) {
       if (err is OutreRuntimeException) {

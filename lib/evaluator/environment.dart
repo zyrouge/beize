@@ -1,4 +1,5 @@
 import '../ast/exports.dart';
+import '../errors/exports.dart';
 import '../libraries/exports.dart';
 import '../node/exports.dart';
 import 'stack_trace.dart';
@@ -41,7 +42,7 @@ class OutreEnvironment {
 
   void declare(final String name, final OutreValue value) {
     if (values.containsKey(name)) {
-      throw Exception('Already declared: $name');
+      throw OutreUntracedRuntimeException('Cannot redeclare variable "$name"');
     }
     values[name] = value;
   }
@@ -58,7 +59,9 @@ class OutreEnvironment {
       return;
     }
     if (outer == null) {
-      throw Exception('Variable not found: $name');
+      throw OutreUntracedRuntimeException(
+        'Cannot assign to unknown variable "$name"',
+      );
     }
     outer!.assign(name, value);
   }
@@ -68,7 +71,9 @@ class OutreEnvironment {
       return values[name]!;
     }
     if (outer == null) {
-      throw Exception('Variable not found: $name');
+      throw OutreUntracedRuntimeException(
+        'Cannot access unknown variable "$name"',
+      );
     }
     return outer!.get(name);
   }

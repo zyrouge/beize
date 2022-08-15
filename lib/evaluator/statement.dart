@@ -1,6 +1,6 @@
 import 'package:path/path.dart' as p;
 import '../ast/exports.dart';
-import '../errors/runtime_exception.dart';
+import '../errors/exports.dart';
 import '../lexer/exports.dart';
 import '../node/exports.dart';
 import 'context.dart';
@@ -37,7 +37,7 @@ abstract class OutreStatementEvaluator {
     context.pushStackFrame(
       environment.createStackFrameFromOutreNode(statement),
     );
-    final OutreValue result = await evaluateStatementFns[statement.kind]!(
+    final OutreValue result = await evaluateStatementWithoutTrace(
       context,
       environment,
       statement,
@@ -46,6 +46,17 @@ abstract class OutreStatementEvaluator {
     return result;
   }
 
+  static Future<OutreValue> evaluateStatementWithoutTrace(
+    final OutreEvaluatorContext context,
+    final OutreEnvironment environment,
+    final OutreStatement statement,
+  ) async =>
+      evaluateStatementFns[statement.kind]!(
+        context,
+        environment,
+        statement,
+      );
+
   static Future<OutreValue> evaluateStatements(
     final OutreEvaluatorContext context,
     final OutreEnvironment environment,
@@ -53,19 +64,30 @@ abstract class OutreStatementEvaluator {
   ) async {
     OutreValue value = OutreNullValue();
     for (final OutreStatement x in statements) {
-      value = await evaluateStatement(context, environment, x);
+      context.pushStackFrame(environment.createStackFrameFromOutreNode(x));
+      value = await evaluateStatementWithoutTrace(context, environment, x);
       if (value is OutreReturnValue) {
         if (environment.isInsideFunction) break;
-        throw Exception('only return on function');
+        throw OutreRuntimeException(
+          'Cannot use "return" outside a function',
+          context.stackTrace,
+        );
       }
       if (value is OutreBreakValue) {
         if (environment.isInsideLoop) break;
-        throw Exception('only break on loop');
+        throw OutreRuntimeException(
+          'Cannot use "break" outside a loop',
+          context.stackTrace,
+        );
       }
-      if (value is OutreContinueStatement) {
+      if (value is OutreContinueValue) {
         if (environment.isInsideLoop) break;
-        throw Exception('only continue on loop');
+        throw OutreRuntimeException(
+          'Cannot use "continue" outside a loop',
+          context.stackTrace,
+        );
       }
+      context.popStackFrame();
     }
     return value;
   }
@@ -221,7 +243,7 @@ abstract class OutreStatementEvaluator {
       environment,
       casted.expression,
     );
-    throw OutreCustomRuntimeException(
+    throw OutreInterropedRuntimeException(
       await OutreValueUtils.stringify(value),
       value,
       context.stackTrace,
