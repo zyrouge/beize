@@ -106,6 +106,110 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'find':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              for (final FubukiValue x in elements) {
+                final FubukiValue result =
+                    await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+                if (result.isTruthy) return x;
+              }
+              return FubukiNullValue.value;
+            },
+          );
+
+        case 'findIndex':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              for (int i = 0; i < elements.length; i++) {
+                final FubukiValue x = elements[i];
+                final FubukiValue result =
+                    await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+                if (result.isTruthy) {
+                  return FubukiNumberValue(i.toDouble());
+                }
+              }
+              return FubukiNumberValue(-1);
+            },
+          );
+
+        case 'findLastIndex':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              for (int i = elements.length - 1; i >= 0; i--) {
+                final FubukiValue x = elements[i];
+                final FubukiValue result =
+                    await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+                if (result.isTruthy) {
+                  return FubukiNumberValue(i.toDouble());
+                }
+              }
+              return FubukiNumberValue(-1);
+            },
+          );
+
+        case 'map':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiListValue nValue = FubukiListValue();
+              for (final FubukiValue x in elements) {
+                final FubukiValue result =
+                    await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+                nValue.push(result);
+              }
+              return nValue;
+            },
+          );
+
+        case 'where':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiListValue nValue = FubukiListValue();
+              for (final FubukiValue x in elements) {
+                final FubukiValue result =
+                    await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+                if (result.isTruthy) {
+                  nValue.push(result);
+                }
+              }
+              return nValue;
+            },
+          );
+
+        // TODO: finish this
+        // case 'sort':
+        //   return FubukiNativeFunctionValue.async(
+        //     (
+        //       final FubukiNativeFunctionCall call
+        //     ) {
+        //       final FubukiValue predicate = call.argumentAt(0);
+        //       final List<FubukiValue> sorted = elements.toList();
+        //       sorted.sort(
+        //         (final FubukiValue a, final FubukiValue b) => predicate
+        //             .callInVM(call.vm, <FubukiValue>[a, b])
+        //             .cast<FubukiNumberValue>()
+        //             .intValue,
+        //       );
+        //       return FubukiListValue(sorted);
+        //     },
+        //   );
+
+        case 'forEach':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              for (final FubukiValue x in elements) {
+                await predicate.callInVMAsync(call.vm, <FubukiValue>[x]);
+              }
+              return FubukiNullValue.value;
+            },
+          );
+
         default:
       }
     }

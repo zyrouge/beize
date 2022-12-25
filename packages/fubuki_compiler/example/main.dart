@@ -5,7 +5,9 @@ Future<void> main() async {
   final FubukiInput input = FubukiInput(
     '''
 hi := list [1, 2, 3];
-print hi;
+hi.forEach(fun (x) {
+  print x;
+});
 ''',
   );
   final FubukiScanner scanner = FubukiScanner(input);

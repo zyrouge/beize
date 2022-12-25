@@ -117,4 +117,20 @@ extension FubukiInterpreterValueUtils on FubukiValue {
     final FubukiInterpreterCompleter completer,
   ) =>
       vm.callValue(this, arguments, completer);
+
+  Future<FubukiValue> callInVMAsync(
+    final FubukiVM vm,
+    final List<FubukiValue> arguments,
+  ) {
+    final Completer<FubukiValue> completer = Completer<FubukiValue>();
+    vm.callValue(
+      this,
+      arguments,
+      FubukiInterpreterCompleter(
+        onComplete: completer.complete,
+        onFail: completer.completeError,
+      ),
+    );
+    return completer.future;
+  }
 }
