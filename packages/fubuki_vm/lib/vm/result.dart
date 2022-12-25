@@ -1,0 +1,4 @@
+enum FubukiInterpreterResult {
+  success,
+  error,
+}

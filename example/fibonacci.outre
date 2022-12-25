@@ -5,7 +5,9 @@ import "outre:console" as console;
 #   return fib(n - 1) + fib(n - 2);
 # }
 
-fib := fn (n) return n <= 1 ? 1 : fib(n - 1) + fib(n - 2);
+fib := fn (n) {
+    return n <= 1 ? 1 : fib(n - 1) + fib(n - 2);
+}
 
 started := DateTime.now().asMilliseconds();
 fib(20);

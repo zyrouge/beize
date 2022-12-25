@@ -1,0 +1,24 @@
+name: fubuki_compiler
+description: Compiler of Fubuki.
+version: 0.0.0
+
+publish_to: none
+
+environment:
+    sdk: ">=2.19.0-43.0.dev <3.0.0"
+
+dependencies:
+    fubuki_vm:
+        git:
+            url: https://github.com/yukino-org/fubuki
+            path: packages/fubuki_vm
+
+dependency_overrides:
+    fubuki_vm:
+        path: ../fubuki_vm
+
+dev_dependencies:
+    test: ^1.16.0
+    zlint:
+        git:
+            url: https://github.com/zyrouge/dart_zlint
