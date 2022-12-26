@@ -31,6 +31,37 @@ abstract class FubukiListNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('generate'),
+      FubukiNativeFunctionValue.async(
+        (final FubukiNativeFunctionCall call) async {
+          final int length = call.argumentAt<FubukiNumberValue>(0).intValue;
+          final FubukiValue predicate = call.argumentAt(1);
+          final FubukiListValue result = FubukiListValue();
+          for (int i = 0; i < length; i++) {
+            result.push(
+              await predicate.callInVMAsync(
+                call.vm,
+                <FubukiValue>[FubukiNumberValue(i.toDouble())],
+              ),
+            );
+          }
+          return result;
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('filled'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final int length = call.argumentAt<FubukiNumberValue>(0).intValue;
+          final FubukiValue value = call.argumentAt(1);
+          final FubukiListValue result =
+              FubukiListValue(List<FubukiValue>.filled(length, value));
+          return result;
+        },
+      ),
+    );
     namespace.declare('List', value);
   }
 }

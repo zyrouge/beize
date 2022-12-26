@@ -249,7 +249,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
     return FubukiNullValue.value;
   }
 
-  int get length => values.length;
+  int get length => elements.length;
 
   @override
   final FubukiValueKind kind = FubukiValueKind.list;

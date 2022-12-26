@@ -8,13 +8,18 @@ abstract class FubukiValue {
   bool kEquals(final FubukiValue other) => other.kHashCode == kHashCode;
 
   T cast<T extends FubukiValue>() {
-    if (T == FubukiValue) return this as T;
+    if (canCast<T>()) return this as T;
+    throw FubukiRuntimeExpection.cannotCastTo(getKindFromType(T), kind);
+  }
+
+  bool canCast<T extends FubukiValue>() {
+    if (T == FubukiValue) return true;
     if (T == FubukiPrimitiveObjectValue && this is FubukiPrimitiveObjectValue) {
-      return this as T;
+      return true;
     }
     final FubukiValueKind to = getKindFromType(T);
-    if (kind == to) return this as T;
-    throw FubukiRuntimeExpection.cannotCastTo(to, kind);
+    if (kind == to) return true;
+    return false;
   }
 
   bool get isTruthy;

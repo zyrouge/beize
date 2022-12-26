@@ -1,9 +1,12 @@
 import 'dart:math';
 import '../bytecode/exports.dart';
+import '../errors/exports.dart';
 import '../errors/runtime_exception.dart';
 import '../values/exports.dart';
 import 'call_frame.dart';
 import 'namespace.dart';
+import 'natives/exports.dart';
+import 'try_frame.dart';
 import 'vm.dart';
 
 enum FubukiInterpreterState {
@@ -19,6 +22,11 @@ class FubukiInterpreterCompleter {
     required this.onComplete,
     required this.onFail,
   });
+
+  factory FubukiInterpreterCompleter.empty() => FubukiInterpreterCompleter(
+        onComplete: (final _) {},
+        onFail: (final _) {},
+      );
 
   final FubukiInterpreterCompleterCallback onComplete;
   final FubukiInterpreterCompleterCallback onFail;
@@ -54,6 +62,22 @@ class FubukiInterpreter {
   }
 
   void next() {
+    try {
+      nextUnsafe();
+    } catch (err, stackTrace) {
+      print(err);
+      print(stackTrace);
+      propagateError(
+        FubukiExceptionNatives.newExceptionNative(
+          'FubukiRuntimeException: $err',
+          vm.getCurrentStackTrace(),
+        ),
+        'next',
+      );
+    }
+  }
+
+  void nextUnsafe() {
     if (frame.ip >= chunk.length) {
       state = FubukiInterpreterState.finished;
       completer.complete(resultValue);
@@ -64,10 +88,12 @@ class FubukiInterpreter {
     frame.ip++;
     switch (opCode) {
       case FubukiOpCodes.opBeginScope:
+        frame.scopeDepth++;
         namespace = namespace.enclosed;
         return next();
 
       case FubukiOpCodes.opEndScope:
+        frame.scopeDepth--;
         namespace = namespace.parent!;
         return next();
 
@@ -141,8 +167,7 @@ class FubukiInterpreter {
               vm.stack.push(result);
               next();
             },
-            // TODO: do this
-            onFail: (final _) {},
+            onFail: (x) => propagateError(x, 'fn'),
           ),
         );
 
@@ -284,19 +309,42 @@ class FubukiInterpreter {
         vm.stack.push(value);
         return next();
 
-      case FubukiOpCodes.opAwait:
-        final FubukiValue value = vm.stack.top();
-        if (value is FubukiFutureValue) {
-          vm.stack.pop();
-          value.value.then((final FubukiValue x) {
-            vm.stack.push(x);
-            next();
-          });
-        }
-        return;
+      case FubukiOpCodes.opBeginTry:
+        final int offset = chunk.codeAt(frame.ip);
+        frame.ip++;
+        frame.tryFrames.add(
+          FubukiTryFrame(offset: offset, scopeDepth: frame.scopeDepth),
+        );
+        return next();
+
+      case FubukiOpCodes.opEndTry:
+        frame.tryFrames.removeLast();
+        return next();
+
+      case FubukiOpCodes.opThrow:
+        return propagateError(vm.stack.pop(), 'throw');
 
       default:
         throw FubukiRuntimeExpection.unknownOpCode(opCode);
     }
+  }
+
+  void propagateError(
+    final FubukiValue error,
+    final String source,
+  ) {
+    if (frame.tryFrames.isEmpty) {
+      return completer.fail(error);
+    }
+    final FubukiTryFrame tryFrame = frame.tryFrames.removeLast();
+    final int scopeDiff = frame.scopeDepth - tryFrame.scopeDepth - 1;
+    if (scopeDiff > 0) {
+      for (int i = 0; i < scopeDiff; i++) {
+        namespace = namespace.parent!;
+      }
+    }
+    frame.ip = tryFrame.offset;
+    vm.stack.push(error);
+    next();
   }
 }

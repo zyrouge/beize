@@ -14,10 +14,16 @@ class FubukiCompiler {
   FubukiCompiler(
     this.scanner, {
     required this.mode,
+    required this.rootDir,
+    required this.module,
+    this.parent,
   });
 
+  final FubukiCompiler? parent;
   final FubukiScanner scanner;
   final FubukiCompilerMode mode;
+  final String rootDir;
+  final String module;
 
   late FubukiToken previousToken;
   late FubukiToken currentToken;
@@ -26,18 +32,40 @@ class FubukiCompiler {
   late int scopeDepth;
   late List<FubukiCompilerLoopState> loops;
 
-  void prepare({
-    final bool updateCurrentToken = true,
-  }) {
+  void prepare() {
     currentFunction = FubukiFunctionConstant(
       arguments: <String>[],
-      chunk: FubukiChunk.empty(),
+      chunk: FubukiChunk.empty(module),
     );
     scopeDepth = 0;
     loops = <FubukiCompilerLoopState>[];
-    if (updateCurrentToken) {
+    if (parent != null) {
+      copyTokenState(parent!);
+    } else {
       currentToken = scanner.readToken();
     }
+  }
+
+  FubukiCompiler createFunctionCompiler() {
+    final FubukiCompiler derived = FubukiCompiler(
+      scanner,
+      mode: FubukiCompilerMode.function,
+      rootDir: rootDir,
+      module: module,
+    );
+    derived.prepare();
+    return derived;
+  }
+
+  FubukiCompiler createModuleCompiler() {
+    final FubukiCompiler derived = FubukiCompiler(
+      scanner,
+      mode: FubukiCompilerMode.script,
+      rootDir: rootDir,
+      module: module,
+    );
+    derived.prepare();
+    return derived;
   }
 
   FubukiFunctionConstant compile() {
@@ -103,6 +131,11 @@ class FubukiCompiler {
 
   void patchJump(final int offset) {
     final int jump = currentChunk.length - offset - 1;
+    currentChunk.codes[offset] = jump;
+  }
+
+  void patchAbsoluteJump(final int offset) {
+    final int jump = currentChunk.length;
     currentChunk.codes[offset] = jump;
   }
 

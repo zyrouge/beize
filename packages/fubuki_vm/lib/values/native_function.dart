@@ -1,4 +1,6 @@
+import '../errors/runtime_exception.dart';
 import '../vm/exports.dart';
+import '../vm/natives/exports.dart';
 import 'exports.dart';
 
 typedef FubukiNativeFunctionFn = void Function(
@@ -23,8 +25,16 @@ class FubukiNativeFunctionCall {
   final FubukiVM vm;
   final List<FubukiValue> arguments;
 
-  T argumentAt<T extends FubukiValue>(final int index) =>
-      arguments[index].cast<T>();
+  T argumentAt<T extends FubukiValue>(final int index) {
+    final FubukiValue value =
+        index < arguments.length ? arguments[index] : FubukiNullValue.value;
+    if (!value.canCast<T>()) {
+      throw FubukiRuntimeExpection(
+        'Cannot cast argument at $index to "${FubukiValue.getKindFromType(T).code}"',
+      );
+    }
+    return value as T;
+  }
 }
 
 class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
@@ -40,9 +50,8 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
         ) {
           try {
             completer.complete(syncFn(call));
-          } catch (err) {
-            // TODO: better
-            completer.fail(FubukiStringValue(err.toString()));
+          } catch (err, stackTrace) {
+            completer.failNativeCall(call, err, stackTrace);
           }
         },
       );
@@ -57,8 +66,8 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
         ) {
           asyncSyncFn(call).then((final FubukiValue value) {
             completer.complete(value);
-          }).catchError((final Object err) {
-            completer.fail(FubukiStringValue(err.toString()));
+          }).catchError((final Object err, final StackTrace stackTrace) {
+            completer.failNativeCall(call, err, stackTrace);
           });
         },
       );
@@ -86,4 +95,19 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
 
   @override
   int get kHashCode => call.hashCode;
+}
+
+extension on FubukiInterpreterCompleter {
+  void failNativeCall(
+    final FubukiNativeFunctionCall call,
+    final Object err,
+    final StackTrace stackTrace,
+  ) {
+    fail(
+      FubukiExceptionNatives.newExceptionNative(
+        err.toString(),
+        '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
+      ),
+    );
+  }
 }

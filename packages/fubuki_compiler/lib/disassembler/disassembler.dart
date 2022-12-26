@@ -49,6 +49,7 @@ class FubukiDisassembler {
       case FubukiOpCodes.opCall:
       case FubukiOpCodes.opList:
       case FubukiOpCodes.opObject:
+      case FubukiOpCodes.opBeginTry:
         final int offset = chunk.codeAt(ip + 1);
         writeInstruction(
           opCode,

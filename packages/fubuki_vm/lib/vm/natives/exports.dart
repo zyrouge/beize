@@ -1,5 +1,7 @@
 export 'boolean.dart';
+export 'exception.dart';
 export 'function.dart';
+export 'future.dart';
 export 'list.dart';
 export 'natives.dart';
 export 'number.dart';

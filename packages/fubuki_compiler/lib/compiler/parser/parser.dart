@@ -33,6 +33,12 @@ abstract class FubukiParser {
     if (compiler.match(FubukiTokens.throwKw)) {
       return parseThrowStatement(compiler);
     }
+    if (compiler.match(FubukiTokens.tryKw)) {
+      return parseTryCatchStatement(compiler);
+    }
+    if (compiler.match(FubukiTokens.importKw)) {
+      return parseImportStatement(compiler);
+    }
     parseExpressionStatement(compiler);
   }
 
@@ -107,6 +113,40 @@ abstract class FubukiParser {
     parseExpression(compiler);
     compiler.consume(FubukiTokens.semi);
     compiler.emitOpCode(FubukiOpCodes.opThrow);
+  }
+
+  static void parseTryCatchStatement(final FubukiCompiler compiler) {
+    compiler.consume(FubukiTokens.braceLeft);
+    final int tryJump = compiler.emitJump(FubukiOpCodes.opBeginTry);
+    parseBlockStatement(compiler);
+    compiler.emitOpCode(FubukiOpCodes.opEndTry);
+    final int catchJump = compiler.emitJump(FubukiOpCodes.opJump);
+    compiler.patchAbsoluteJump(tryJump);
+    compiler.consume(FubukiTokens.catchKw);
+    compiler.consume(FubukiTokens.parenLeft);
+    compiler.consume(FubukiTokens.identifier);
+    final int index = parseIdentifierConstant(compiler);
+    compiler.consume(FubukiTokens.parenRight);
+    compiler.emitOpCode(FubukiOpCodes.opBeginScope);
+    compiler.emitOpCode(FubukiOpCodes.opDeclare);
+    compiler.emitCode(index);
+    compiler.consume(FubukiTokens.braceLeft);
+    parseBlockStatement(compiler);
+    compiler.emitOpCode(FubukiOpCodes.opEndScope);
+    compiler.patchJump(catchJump);
+  }
+
+  static void parseImportStatement(final FubukiCompiler compiler) {
+    compiler.consume(FubukiTokens.string);
+    final String modulePath = compiler.previousToken.literal as String;
+    final FubukiCompiler moduleCompiler;
+    compiler.consume(FubukiTokens.asKw);
+    compiler.consume(FubukiTokens.identifier);
+    final int moduleIndex = compiler.makeConstant(modulePath);
+    final int asIndex = parseIdentifierConstant(compiler);
+    compiler.emitOpCode(FubukiOpCodes.opModule);
+    compiler.emitCode(moduleIndex);
+    compiler.emitCode(asIndex);
   }
 
   static int parseIdentifierConstant(final FubukiCompiler compiler) {
@@ -288,11 +328,7 @@ abstract class FubukiParser {
   }
 
   static void parseFunction(final FubukiCompiler compiler) {
-    final FubukiCompiler functionCompiler = FubukiCompiler(
-      compiler.scanner,
-      mode: FubukiCompilerMode.function,
-    );
-    functionCompiler.prepare(updateCurrentToken: false);
+    final FubukiCompiler functionCompiler = compiler.createFunctionCompiler();
     if (compiler.match(FubukiTokens.parenLeft)) {
       if (!compiler.check(FubukiTokens.parenRight)) {
         do {

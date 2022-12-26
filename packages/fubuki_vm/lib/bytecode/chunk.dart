@@ -6,17 +6,20 @@ class FubukiChunk {
     required this.codes,
     required this.constants,
     required this.positions,
+    required this.module,
   });
 
-  factory FubukiChunk.empty() => FubukiChunk(
+  factory FubukiChunk.empty(final String module) => FubukiChunk(
         codes: <int>[],
         constants: <FubukiConstant>[],
         positions: <String>[],
+        module: module,
       );
 
   final List<int> codes;
   final List<FubukiConstant> constants;
   final List<String> positions;
+  final String module;
 
   int addOpCode(final FubukiOpCodes opCode, final String position) =>
       addCode(opCode.index, position);

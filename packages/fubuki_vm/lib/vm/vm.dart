@@ -5,6 +5,7 @@ import '../values/exports.dart';
 import 'call_frame.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
+import 'natives/exports.dart';
 import 'stack.dart';
 
 enum FubukiVMState {
@@ -32,13 +33,26 @@ class FubukiVM {
     );
     frames.add(frame);
     FubukiInterpreter(frame).run(
-      // TODO: do this
       FubukiInterpreterCompleter(
-        onComplete: (final _) {},
-        onFail: (final _) {},
+        onComplete: (final _) {
+          completer.complete();
+        },
+        onFail: (final FubukiValue value) {
+          completer.completeError(FubukiUnhandledExpection(value.kToString()));
+        },
       ),
     );
     return completer.future;
+  }
+
+  String getCurrentStackTrace() {
+    final StringBuffer stackTrace = StringBuffer();
+    int i = 0;
+    for (final FubukiCallFrame x in frames.reversed) {
+      stackTrace.writeln('#$i  at ${x.toStackTraceLine()}');
+      i++;
+    }
+    return stackTrace.toString();
   }
 
   void callValue(
@@ -60,8 +74,11 @@ class FubukiVM {
         return callValue(callable, arguments, completer);
       }
     }
-    throw FubukiRuntimeExpection(
-      'Value "${value.kToString()}" is not callable',
+    completer.fail(
+      FubukiExceptionNatives.newExceptionNative(
+        'Value "${value.kToString()}" is not callable',
+        getCurrentStackTrace(),
+      ),
     );
   }
 

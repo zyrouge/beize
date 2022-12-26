@@ -34,5 +34,5 @@ enum FubukiOpCodes {
   opThrow,
   opBeginTry,
   opEndTry,
-  opAwait,
+  opModule,
 }
