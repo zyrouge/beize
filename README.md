@@ -12,6 +12,13 @@ The language syntax is a mix of Go and JavaScript. It is also highly dynamic wit
 
 But is it fast? The performance is reasonable for a mere scripting language. It can do `100000` iterations and function calls in less than 1.5 seconds. I would say, it's pretty freaking good.
 
+## Things to remember
+
+- Each expression must end with a semi-colon. Even functions are considers as expressions and must end with a semi-colon.
+- Trailing commas are allowed in function arguments, function calls, object, list and map declarations.
+- Comments are denoted by `#`. Any characters after `#` is ignored.
+- Never leave instances of `Future`s unawaited. Unawaited futures are ignored by the virtual machine.
+
 ## Variables and Data Types
 
 ```
