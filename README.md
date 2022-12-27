@@ -73,7 +73,7 @@ function_name();
 object := obj {
     prop1: value,
     prop2: value,
-}
+};
 
 # object get and sets
 object.prop1;
