@@ -1,12 +1,10 @@
 <p align="center">
-    <img src="https://github.com/outre-lang/media/blob/main/banner.png?raw=true" width="100%">
+    <img src="https://github.com/yukino-org/media/blob/main/images/subbanners/gh-fubuki-banner.png?raw=true" width="100%">
 </p>
 
-# Outre
+# Fubuki
 
-A highly dynamic multi-paradigm programming language.
-
-# Links
+A hand-crafted scripting language excusively made for Tenka modules.
 
 # License
 
