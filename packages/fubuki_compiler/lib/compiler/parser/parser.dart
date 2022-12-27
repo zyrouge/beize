@@ -74,6 +74,7 @@ abstract class FubukiParser {
     parseStatement(compiler);
     compiler.emitLoop(start);
     compiler.endLoop();
+    compiler.emitOpCode(FubukiOpCodes.opPop);
   }
 
   static void parseBreakStatement(final FubukiCompiler compiler) {
@@ -457,5 +458,17 @@ abstract class FubukiParser {
 
   static void parseBracketCall(final FubukiCompiler compiler) {
     parsePropertyCall(compiler);
+  }
+
+  static void parseTernary(final FubukiCompiler compiler) {
+    final int thenJump = compiler.emitJump(FubukiOpCodes.opJumpIfFalse);
+    compiler.emitOpCode(FubukiOpCodes.opPop);
+    parseExpression(compiler);
+    final int elseJump = compiler.emitJump(FubukiOpCodes.opJump);
+    compiler.patchJump(thenJump);
+    compiler.emitOpCode(FubukiOpCodes.opPop);
+    compiler.consume(FubukiTokens.colon);
+    parseExpression(compiler);
+    compiler.patchJump(elseJump);
   }
 }

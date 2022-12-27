@@ -33,6 +33,10 @@ class FubukiParseRule {
       infix: FubukiParser.parseBracketCall,
       precedence: FubukiPrecedence.call,
     ),
+    FubukiTokens.question: FubukiParseRule(
+      infix: FubukiParser.parseTernary,
+      precedence: FubukiPrecedence.assignment,
+    ),
     FubukiTokens.bang:
         FubukiParseRule(prefix: FubukiParser.parseUnaryExpression),
     FubukiTokens.equal: FubukiParseRule(

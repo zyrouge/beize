@@ -181,23 +181,30 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
-        // TODO: finish this
-        // case 'sort':
-        //   return FubukiNativeFunctionValue.async(
-        //     (
-        //       final FubukiNativeFunctionCall call
-        //     ) {
-        //       final FubukiValue predicate = call.argumentAt(0);
-        //       final List<FubukiValue> sorted = elements.toList();
-        //       sorted.sort(
-        //         (final FubukiValue a, final FubukiValue b) => predicate
-        //             .callInVM(call.vm, <FubukiValue>[a, b])
-        //             .cast<FubukiNumberValue>()
-        //             .intValue,
-        //       );
-        //       return FubukiListValue(sorted);
-        //     },
-        //   );
+        case 'sort':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiValue predicate = call.argumentAt(0);
+              final List<FubukiValue> sorted = elements.toList();
+              for (int i = 0; i < sorted.length; i++) {
+                bool swapped = false;
+                for (int j = 0; j < sorted.length - i - 1; j++) {
+                  final FubukiValue a = sorted[j];
+                  final FubukiValue b = sorted[j + 1];
+                  final FubukiValue pDiff = await predicate
+                      .callInVM(call.vm, <FubukiValue>[a, b]).unwrapUnsafe();
+                  final double diff = pDiff.cast<FubukiNumberValue>().value;
+                  if (diff > 0) {
+                    sorted[j] = b;
+                    sorted[j + 1] = a;
+                    swapped = true;
+                  }
+                }
+                if (!swapped) break;
+              }
+              return FubukiListValue(sorted);
+            },
+          );
 
         case 'forEach':
           return FubukiNativeFunctionValue.async(

@@ -17,6 +17,7 @@ But is it fast? The performance is reasonable for a mere scripting language. It 
 - Each expression must end with a semi-colon. Even functions are considers as expressions and must end with a semi-colon.
 - Trailing commas are allowed in function arguments, function calls, object, list and map declarations.
 - Comments are start with `#`. Any characters after `#` is ignored.
+- Strings are multiline by default.
 - Never leave instances of `Future`s unawaited. Unawaited futures are ignored by the virtual machine.
 
 ## Variables and Data Types
@@ -93,6 +94,9 @@ object.prop2 = value;
 ## Control Structures
 
 ```
+# ternary
+condition ? trueValue : falseValue;
+
 # if
 if (condition) {
     # do something
