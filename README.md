@@ -16,7 +16,7 @@ But is it fast? The performance is reasonable for a mere scripting language. It 
 
 - Each expression must end with a semi-colon. Even functions are considers as expressions and must end with a semi-colon.
 - Trailing commas are allowed in function arguments, function calls, object, list and map declarations.
-- Comments are denoted by `#`. Any characters after `#` is ignored.
+- Comments are start with `#`. Any characters after `#` is ignored.
 - Never leave instances of `Future`s unawaited. Unawaited futures are ignored by the virtual machine.
 
 ## Variables and Data Types
