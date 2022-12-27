@@ -1,5 +1,0 @@
-include: package:zlint/analysis_options.yaml
-
-linter:
-    rules:
-        prefer_relative_imports: true

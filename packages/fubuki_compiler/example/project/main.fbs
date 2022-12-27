@@ -3,14 +3,11 @@ import "./benchmark.fbs" as benchmark;
 benchmarker := benchmark.createBenchmarker();
 benchmarker.start();
 
-kek := fun {
-    Future.wait(10).await();
-};
+increment := fun (i) { return i + 1; };
 
 i := 0;
-while (i < 10) {
-    kek();
-    i = i + 1;
+while (i < 100000) {
+    i = increment();
 }
 
 benchmarker.end();
