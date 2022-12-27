@@ -24,7 +24,7 @@ class FubukiVM {
   final Map<String, FubukiModuleValue> modules = <String, FubukiModuleValue>{};
   final FubukiStack stack = FubukiStack();
   final List<FubukiCallFrame> frames = <FubukiCallFrame>[];
-  final List<String> calls = <String>[];
+  final void Function(FubukiValue)? onUncaughtError = null;
 
   Future<void> run() async {
     final FubukiInterpreterResult result = await loadModule(program.entrypoint);

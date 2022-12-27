@@ -77,11 +77,23 @@ abstract class FubukiParser {
   }
 
   static void parseBreakStatement(final FubukiCompiler compiler) {
+    if (compiler.loops.isEmpty) {
+      throw FubukiCompilationException.cannotBreakContinueOutsideLoop(
+        compiler.module,
+        compiler.previousToken,
+      );
+    }
     compiler.consume(FubukiTokens.semi);
     compiler.emitBreak();
   }
 
   static void parseContinueStatement(final FubukiCompiler compiler) {
+    if (compiler.loops.isEmpty) {
+      throw FubukiCompilationException.cannotBreakContinueOutsideLoop(
+        compiler.module,
+        compiler.previousToken,
+      );
+    }
     compiler.consume(FubukiTokens.semi);
     compiler.emitContinue();
   }
@@ -98,7 +110,8 @@ abstract class FubukiParser {
 
   static void parseReturnStatement(final FubukiCompiler compiler) {
     if (compiler.mode != FubukiCompilerMode.function) {
-      throw FubukiIllegalExpressionError.cannotReturnInsideScript(
+      throw FubukiCompilationException.cannotReturnInsideScript(
+        compiler.module,
         compiler.previousToken,
       );
     }
@@ -184,7 +197,8 @@ abstract class FubukiParser {
         FubukiParseRule.of(compiler.previousToken.type);
     if (rule.prefix == null) {
       // TODO: dont throw
-      throw FubukiIllegalExpressionError.expectedXButReceivedToken(
+      throw FubukiCompilationException.expectedXButReceivedToken(
+        compiler.module,
         'expression',
         compiler.previousToken.type,
         compiler.previousToken.span,
@@ -216,7 +230,7 @@ abstract class FubukiParser {
         break;
 
       default:
-        throw UnreachableError();
+        throw UnreachableException();
     }
   }
 
@@ -278,7 +292,7 @@ abstract class FubukiParser {
         break;
 
       default:
-        throw UnreachableError();
+        throw UnreachableException();
     }
   }
 

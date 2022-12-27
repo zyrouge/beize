@@ -99,9 +99,33 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
     final StackTrace stackTrace,
   ) =>
       FubukiInterpreterResult.fail(
-        FubukiExceptionNatives.newExceptionNative(
-          err.toString(),
-          '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
-        ),
+        createValueFromException(call, err, stackTrace),
       );
+
+  static FubukiValue createValueFromException(
+    final FubukiNativeFunctionCall call,
+    final Object err,
+    final StackTrace stackTrace,
+  ) {
+    if (err is FubukiValue) return err;
+    return FubukiExceptionNatives.newExceptionNative(
+      err.toString(),
+      '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
+    );
+  }
+}
+
+extension FubukiValueInterpreterResultUtils on FubukiInterpreterResult {
+  FubukiValue unwrapUnsafe() {
+    if (isFailure) throw value;
+    return value;
+  }
+}
+
+extension FubukiValueFutureInterpreterResultUtils
+    on Future<FubukiInterpreterResult> {
+  Future<FubukiValue> unwrapUnsafe() async {
+    final FubukiInterpreterResult result = await this;
+    return result.unwrapUnsafe();
+  }
 }

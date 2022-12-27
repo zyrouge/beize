@@ -24,7 +24,7 @@ abstract class FubukiNumberScanner {
     bool hasDot = false;
     while (!scanner.input.isEndOfLine()) {
       current = scanner.input.peek();
-      if (!FubukiLexerUtils.isNumeric(current.char)) break;
+      if (!FubukiLexerUtils.isNumericContent(current.char)) break;
       if (current.char == FubukiTokens.dot.code) {
         if (hasDot) break;
         hasDot = true;

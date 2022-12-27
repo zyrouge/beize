@@ -140,7 +140,6 @@ class FubukiInterpreter {
 
         case FubukiOpCodes.opCall:
           final int count = chunk.codeAt(frame.ip);
-          vm.calls.add(frame.toStackTraceLine());
           frame.ip++;
           final List<FubukiValue> arguments =
               List<FubukiValue>.filled(count, FubukiNullValue.value);
@@ -153,7 +152,6 @@ class FubukiInterpreter {
           if (result.isFailure) {
             return handleError(result.value);
           }
-          vm.calls.removeLast();
           vm.stack.push(result.value);
           break;
 

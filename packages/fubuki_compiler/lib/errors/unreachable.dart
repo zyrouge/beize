@@ -1,4 +1,4 @@
-class UnreachableError extends Error {
+class UnreachableException implements Exception {
   @override
-  String toString() => 'UnreachableError: Reached unreachable';
+  String toString() => 'UnreachableException: Reached unreachable';
 }

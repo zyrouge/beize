@@ -95,8 +95,7 @@ class FubukiCompiler {
     previousToken = currentToken;
     currentToken = scanner.readToken();
     if (currentToken.type == FubukiTokens.illegal) {
-      // TODO: dont throw
-      throw FubukiIllegalExpressionError.illegalToken(currentToken);
+      throw FubukiCompilationException.illegalToken(module, currentToken);
     }
     return currentToken;
   }
@@ -112,7 +111,8 @@ class FubukiCompiler {
   void ensure(final FubukiTokens type) {
     if (!check(type)) {
       // TODO: dont throw
-      throw FubukiIllegalExpressionError.expectedTokenButReceivedToken(
+      throw FubukiCompilationException.expectedTokenButReceivedToken(
+        module,
         type,
         currentToken.type,
         currentToken.span,
@@ -190,9 +190,6 @@ class FubukiCompiler {
   }
 
   void emitContinue() {
-    if (loops.isEmpty) {
-      throw Exception('No loops bro');
-    }
     emitLoop(loops.last.start);
   }
 
