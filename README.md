@@ -46,10 +46,10 @@ g := map {
 h := list [value1, value2, value3];
 
 # function or closures
-i := fn (p1) {
+i := fun (p1) {
     return value;
 };
-j := fn {
+j := fun {
     return value;
 };
 ```
@@ -58,7 +58,7 @@ j := fn {
 
 ```
 # function declaration
-function_name := fn {
+function_name := fun {
     return value;
 }
 
@@ -147,13 +147,13 @@ print "Hello World!";
 
 ```
 square := obj {
-    area: fn (side) {
+    area: fun (side) {
         return side * side;
     },
 };
 
 rectangle := obj {
-    area: fn (length, breadth) {
+    area: fun (length, breadth) {
         return length * breadth;
     },
 };
