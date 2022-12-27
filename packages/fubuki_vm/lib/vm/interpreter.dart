@@ -58,12 +58,13 @@ class FubukiInterpreter {
   Future<FubukiInterpreterResult> run() async {
     state = FubukiInterpreterState.running;
     try {
-      return interpret();
-    } catch (err) {
+      final FubukiInterpreterResult result = await interpret();
+      return result;
+    } catch (err, stackTrace) {
       return FubukiInterpreterResult.fail(
         FubukiExceptionNatives.newExceptionNative(
           'FubukiRuntimeException: $err',
-          vm.getCurrentStackTrace(),
+          '${vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
         ),
       );
     }
