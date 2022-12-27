@@ -87,6 +87,15 @@ abstract class FubukiPrimitiveObjectValue extends FubukiValue {
         case kCloneProperty:
           return FubukiNativeFunctionValue.sync((final _) => kClone());
 
+        case kDeleteProperty:
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) {
+              final FubukiValue value = call.argumentAt(0);
+              delete(value);
+              return FubukiNullValue.value;
+            },
+          );
+
         default:
       }
     }
@@ -102,4 +111,5 @@ abstract class FubukiPrimitiveObjectValue extends FubukiValue {
   static const String kValuesProperty = '__values__';
   static const String kTypeProperty = '__type__';
   static const String kCloneProperty = '__clone__';
+  static const String kDeleteProperty = '__delete__';
 }

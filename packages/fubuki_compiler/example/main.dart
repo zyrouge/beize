@@ -1,22 +1,13 @@
 import 'package:fubuki_compiler/exports.dart';
 import 'package:fubuki_vm/exports.dart';
+import 'package:path/path.dart' as path;
 
 Future<void> main() async {
-  final FubukiInput input = FubukiInput(
-    '''
-values := list [1.2, 2];
-print values[0.2];
-''',
+  final FubukiProgramConstant program = await FubukiCompiler.compileProject(
+    root: path.join(path.current, 'example/project'),
+    entrypoint: 'main.fbs',
   );
-  final FubukiScanner scanner = FubukiScanner(input);
-  final FubukiCompiler compiler = FubukiCompiler(
-    scanner,
-    mode: FubukiCompilerMode.script,
-    module: '<script>',
-  );
-  compiler.prepare();
-  final FubukiFunctionConstant program = compiler.compile();
-  FubukiDisassembler.printDissassembled(program);
+  FubukiDisassembler.disassembleProgram(program);
   final FubukiVM vm = FubukiVM(program);
   await vm.run();
 }

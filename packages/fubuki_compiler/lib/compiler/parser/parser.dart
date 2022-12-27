@@ -6,7 +6,7 @@ import 'precedence.dart';
 import 'rules.dart';
 
 abstract class FubukiParser {
-  static void parseStatement(final FubukiCompiler compiler) {
+  static Future<void> parseStatement(final FubukiCompiler compiler) async {
     if (compiler.currentToken.type == FubukiTokens.identifier &&
         compiler.currentToken.literal == 'print') {
       compiler.advance();
@@ -39,7 +39,7 @@ abstract class FubukiParser {
     if (compiler.match(FubukiTokens.importKw)) {
       return parseImportStatement(compiler);
     }
-    parseExpressionStatement(compiler);
+    return parseExpressionStatement(compiler);
   }
 
   static void parsePrintStatement(final FubukiCompiler compiler) {
@@ -136,17 +136,27 @@ abstract class FubukiParser {
     compiler.patchJump(catchJump);
   }
 
-  static void parseImportStatement(final FubukiCompiler compiler) {
+  static Future<void> parseImportStatement(
+    final FubukiCompiler compiler,
+  ) async {
     compiler.consume(FubukiTokens.string);
-    final String modulePath = compiler.previousToken.literal as String;
-    final FubukiCompiler moduleCompiler;
+    final String importPath =
+        compiler.resolveImportPath(compiler.previousToken.literal as String);
+    final String modulePath = compiler.resolveImportPath(importPath);
+    final int moduleIndex = compiler.makeConstant(modulePath);
     compiler.consume(FubukiTokens.asKw);
     compiler.consume(FubukiTokens.identifier);
-    final int moduleIndex = compiler.makeConstant(modulePath);
     final int asIndex = parseIdentifierConstant(compiler);
+    compiler.consume(FubukiTokens.semi);
     compiler.emitOpCode(FubukiOpCodes.opModule);
     compiler.emitCode(moduleIndex);
     compiler.emitCode(asIndex);
+    if (!compiler.modules.containsKey(modulePath)) {
+      final FubukiCompiler moduleCompiler =
+          await compiler.createModuleCompiler(importPath);
+      compiler.modules[modulePath] = moduleCompiler.currentFunction;
+      await moduleCompiler.compile();
+    }
   }
 
   static int parseIdentifierConstant(final FubukiCompiler compiler) {
@@ -329,18 +339,15 @@ abstract class FubukiParser {
 
   static void parseFunction(final FubukiCompiler compiler) {
     final FubukiCompiler functionCompiler = compiler.createFunctionCompiler();
-    if (compiler.match(FubukiTokens.parenLeft)) {
-      if (!compiler.check(FubukiTokens.parenRight)) {
-        do {
-          compiler.consume(FubukiTokens.identifier);
-          final String arg = compiler.previousToken.literal as String;
-          functionCompiler.currentFunction.arguments.add(arg);
-        } while (compiler.match(FubukiTokens.comma));
+    if (functionCompiler.match(FubukiTokens.parenLeft)) {
+      while (!functionCompiler.match(FubukiTokens.parenRight)) {
+        functionCompiler.consume(FubukiTokens.identifier);
+        final String arg = functionCompiler.previousToken.literal as String;
+        functionCompiler.currentFunction.arguments.add(arg);
+        functionCompiler.match(FubukiTokens.comma);
       }
-      compiler.consume(FubukiTokens.parenRight);
     }
-    compiler.consume(FubukiTokens.braceLeft);
-    functionCompiler.copyTokenState(compiler);
+    functionCompiler.consume(FubukiTokens.braceLeft);
     parseBlockStatement(functionCompiler);
     compiler.emitConstant(functionCompiler.currentFunction);
     compiler.copyTokenState(functionCompiler);

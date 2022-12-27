@@ -64,15 +64,12 @@ class FubukiInterpreter {
   void next() {
     try {
       nextUnsafe();
-    } catch (err, stackTrace) {
-      print(err);
-      print(stackTrace);
+    } catch (err) {
       propagateError(
         FubukiExceptionNatives.newExceptionNative(
           'FubukiRuntimeException: $err',
           vm.getCurrentStackTrace(),
         ),
-        'next',
       );
     }
   }
@@ -167,7 +164,7 @@ class FubukiInterpreter {
               vm.stack.push(result);
               next();
             },
-            onFail: (x) => propagateError(x, 'fn'),
+            onFail: propagateError,
           ),
         );
 
@@ -322,19 +319,32 @@ class FubukiInterpreter {
         return next();
 
       case FubukiOpCodes.opThrow:
-        return propagateError(vm.stack.pop(), 'throw');
+        return propagateError(vm.stack.pop());
+
+      case FubukiOpCodes.opModule:
+        final String module = frame.readConstantAt(frame.ip) as String;
+        final String name = frame.readConstantAt(frame.ip + 1) as String;
+        frame.ip += 2;
+        return vm.loadModule(
+          module,
+          FubukiInterpreterCompleter(
+            onComplete: (final FubukiValue value) {
+              namespace.declare(name, value);
+              next();
+            },
+            onFail: propagateError,
+          ),
+        );
 
       default:
         throw FubukiRuntimeExpection.unknownOpCode(opCode);
     }
   }
 
-  void propagateError(
-    final FubukiValue error,
-    final String source,
-  ) {
+  void propagateError(final FubukiValue error) {
     if (frame.tryFrames.isEmpty) {
-      return completer.fail(error);
+      completer.fail(error);
+      return;
     }
     final FubukiTryFrame tryFrame = frame.tryFrames.removeLast();
     final int scopeDiff = frame.scopeDepth - tryFrame.scopeDepth - 1;

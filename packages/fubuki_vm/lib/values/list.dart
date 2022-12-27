@@ -262,8 +262,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
       '[${elements.map((final FubukiValue x) => x.kToString()).join(', ')}]';
 
   @override
-  bool get isTruthy => values.isNotEmpty;
+  bool get isTruthy => elements.isNotEmpty;
 
   @override
-  int get kHashCode => values.hashCode;
+  int get kHashCode => elements.hashCode;
 }

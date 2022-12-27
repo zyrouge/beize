@@ -36,7 +36,7 @@ class FubukiDisassembler {
           '{so}(constant = ${stringifyConstant(constant)})',
         );
         if (constant is FubukiFunctionConstant) {
-          output.write('->');
+          output.write('-> (${constant.arguments.join(', ')})');
           FubukiDisassembler(constant.chunk, output.nested)
               .dissassemble(printHeader: false);
           output.write('<-');
@@ -81,10 +81,15 @@ class FubukiDisassembler {
   static const String _space = '  |  ';
   static const String _spaceOnly = '  ';
 
-  static void printDissassembled(final FubukiFunctionConstant program) {
-    final FubukiDisassembler disassembler =
-        FubukiDisassembler(program.chunk, FubukiDisassemblerConsoleOutput());
-    disassembler.dissassemble();
+  static void disassembleProgram(final FubukiProgramConstant program) {
+    final FubukiDisassemblerOutput output = FubukiDisassemblerConsoleOutput();
+    for (final String x in program.modules.keys) {
+      output.write('> $x ${program.entrypoint == x ? "(entrypoint)" : ""}');
+      final FubukiDisassembler disassembler =
+          FubukiDisassembler(program.modules[x]!.chunk, output);
+      disassembler.dissassemble();
+      output.write('---');
+    }
   }
 
   static String stringifyConstant(final FubukiConstant constant) {

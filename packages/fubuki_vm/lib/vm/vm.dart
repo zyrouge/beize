@@ -19,20 +19,17 @@ typedef FubukiVMOnCallFinishFn = void Function();
 class FubukiVM {
   FubukiVM(this.program);
 
-  final FubukiFunctionConstant program;
+  final FubukiProgramConstant program;
 
+  final FubukiNamespace globalNamespace = FubukiNamespace.withNatives();
+  final Map<String, FubukiModuleValue> modules = <String, FubukiModuleValue>{};
   final FubukiStack stack = FubukiStack();
   final List<FubukiCallFrame> frames = <FubukiCallFrame>[];
 
   Future<void> run() async {
     final Completer<void> completer = Completer<void>();
-    final FubukiCallFrame frame = FubukiCallFrame(
-      vm: this,
-      function: program,
-      namespace: FubukiNamespace.withNatives(),
-    );
-    frames.add(frame);
-    FubukiInterpreter(frame).run(
+    loadModule(
+      program.entrypoint,
       FubukiInterpreterCompleter(
         onComplete: (final _) {
           completer.complete();
@@ -53,6 +50,36 @@ class FubukiVM {
       i++;
     }
     return stackTrace.toString();
+  }
+
+  void loadModule(
+    final String module,
+    final FubukiInterpreterCompleter completer,
+  ) {
+    if (modules.containsKey(module)) {
+      return completer.complete(modules[module]!);
+    }
+    final FubukiNamespace namespace = globalNamespace.enclosed;
+    final FubukiModuleValue value = FubukiModuleValue(namespace);
+    modules[module] = value;
+    final FubukiCallFrame frame = FubukiCallFrame(
+      vm: this,
+      function: program.modules[module]!,
+      namespace: namespace,
+    );
+    frames.add(frame);
+    FubukiInterpreter(frame).run(
+      FubukiInterpreterCompleter(
+        onComplete: (final _) {
+          frames.removeLast();
+          completer.complete(value);
+        },
+        onFail: (final FubukiValue value) {
+          frames.removeLast();
+          completer.fail(value);
+        },
+      ),
+    );
   }
 
   void callValue(

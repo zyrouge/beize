@@ -9,6 +9,7 @@ enum FubukiValueKind {
   object,
   list,
   future,
+  module,
 }
 
 final Map<FubukiValueKind, String> _kindCodeMap = <FubukiValueKind, String>{
@@ -22,6 +23,7 @@ final Map<FubukiValueKind, String> _kindCodeMap = <FubukiValueKind, String>{
   FubukiValueKind.object: 'Object',
   FubukiValueKind.list: 'List',
   FubukiValueKind.future: 'Future',
+  FubukiValueKind.module: 'Module',
 };
 
 extension FubukiValueKindUtils on FubukiValueKind {

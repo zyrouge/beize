@@ -24,6 +24,9 @@ class FubukiNamespace {
     return values[name]!;
   }
 
+  FubukiValue? lookupOrNull(final String name) =>
+      values[name] ?? parent?.lookup(name);
+
   void declare(final String name, final FubukiValue value) {
     if (values.containsKey(name)) {
       throw FubukiRuntimeExpection.cannotRedecalreVariable(name);

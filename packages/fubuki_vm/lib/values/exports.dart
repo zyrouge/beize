@@ -3,6 +3,7 @@ export 'function.dart';
 export 'future.dart';
 export 'kind.dart';
 export 'list.dart';
+export 'module.dart';
 export 'native_function.dart';
 export 'null.dart';
 export 'number.dart';

@@ -1,11 +1,11 @@
-import '../chunk.dart';
+import 'function.dart';
 
 class FubukiProgramConstant {
   FubukiProgramConstant({
-    required this.main,
     required this.modules,
+    required this.entrypoint,
   });
 
-  final Map<String, FubukiChunk> modules;
-  final FubukiChunk main;
+  final Map<String, FubukiFunctionConstant> modules;
+  final String entrypoint;
 }

@@ -1,0 +1,11 @@
+import "./benchmark.fbs" as benchmark;
+
+benchmarker := benchmark.createBenchmarker();
+benchmarker.start();
+
+i := 0;
+while (i < 10000) {
+    i = i + 1;
+}
+
+benchmarker.end();

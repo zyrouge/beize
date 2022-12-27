@@ -12,6 +12,7 @@ dependencies:
         git:
             url: https://github.com/yukino-org/fubuki
             path: packages/fubuki_vm
+    path: ^1.8.3
 
 dependency_overrides:
     fubuki_vm:

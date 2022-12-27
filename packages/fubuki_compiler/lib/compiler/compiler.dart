@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:fubuki_vm/exports.dart';
+import 'package:path/path.dart' as path;
 import '../errors/exports.dart';
+import '../lexer/exports.dart';
 import '../scanner/exports.dart';
 import '../token/exports.dart';
 import 'parser/exports.dart';
@@ -11,10 +14,11 @@ enum FubukiCompilerMode {
 }
 
 class FubukiCompiler {
-  FubukiCompiler(
+  FubukiCompiler._(
     this.scanner, {
     required this.mode,
-    required this.rootDir,
+    required this.root,
+    required this.modules,
     required this.module,
     this.parent,
   });
@@ -22,7 +26,8 @@ class FubukiCompiler {
   final FubukiCompiler? parent;
   final FubukiScanner scanner;
   final FubukiCompilerMode mode;
-  final String rootDir;
+  final String root;
+  final Map<String, FubukiFunctionConstant> modules;
   final String module;
 
   late FubukiToken previousToken;
@@ -47,30 +52,41 @@ class FubukiCompiler {
   }
 
   FubukiCompiler createFunctionCompiler() {
-    final FubukiCompiler derived = FubukiCompiler(
+    final FubukiCompiler derived = FubukiCompiler._(
       scanner,
       mode: FubukiCompilerMode.function,
-      rootDir: rootDir,
+      root: root,
+      modules: modules,
       module: module,
+      parent: this,
     );
     derived.prepare();
     return derived;
   }
 
-  FubukiCompiler createModuleCompiler() {
-    final FubukiCompiler derived = FubukiCompiler(
-      scanner,
+  Future<FubukiCompiler> createModuleCompiler(final String module) async {
+    final File file = File(path.join(root, module));
+    final FubukiInput input = await FubukiInput.fromFile(file);
+    final FubukiCompiler derived = FubukiCompiler._(
+      FubukiScanner(input),
       mode: FubukiCompilerMode.script,
-      rootDir: rootDir,
+      root: root,
+      modules: modules,
       module: module,
     );
     derived.prepare();
     return derived;
   }
 
-  FubukiFunctionConstant compile() {
+  String resolveImportPath(final String importPath) {
+    final String importDir = path.dirname(path.join(root, module));
+    final String absolutePath = path.join(importDir, importPath);
+    return path.relative(path.normalize(absolutePath), from: root);
+  }
+
+  Future<FubukiFunctionConstant> compile() async {
     while (!isEndOfFile()) {
-      FubukiParser.parseStatement(this);
+      await FubukiParser.parseStatement(this);
     }
     return currentFunction;
   }
@@ -196,4 +212,30 @@ class FubukiCompiler {
   bool isEndOfFile() => currentToken.type == FubukiTokens.eof;
 
   FubukiChunk get currentChunk => currentFunction.chunk;
+
+  static Future<FubukiProgramConstant> compileProject({
+    required final String root,
+    required final String entrypoint,
+  }) async {
+    final File file = File(path.join(root, entrypoint));
+    final FubukiInput input = await FubukiInput.fromFile(file);
+    final FubukiCompiler derived = FubukiCompiler._(
+      FubukiScanner(input),
+      mode: FubukiCompilerMode.script,
+      root: root,
+      modules: <String, FubukiFunctionConstant>{},
+      module: entrypoint,
+    );
+    derived.prepare();
+    // NOTE: dummy chunk
+    derived.modules[entrypoint] = FubukiFunctionConstant(
+      arguments: <String>[],
+      chunk: FubukiChunk.empty(entrypoint),
+    );
+    derived.modules[entrypoint] = await derived.compile();
+    return FubukiProgramConstant(
+      modules: derived.modules,
+      entrypoint: entrypoint,
+    );
+  }
 }

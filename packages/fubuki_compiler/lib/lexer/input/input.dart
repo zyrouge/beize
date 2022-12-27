@@ -1,3 +1,4 @@
+import 'dart:io';
 import '../cursor.dart';
 import '../utils.dart';
 import 'iteration.dart';
@@ -44,4 +45,9 @@ class FubukiInput {
   }
 
   int get length => source.length;
+
+  static Future<FubukiInput> fromFile(final File file) async {
+    final String source = await file.readAsString();
+    return FubukiInput(source);
+  }
 }
