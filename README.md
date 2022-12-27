@@ -119,7 +119,7 @@ try {
 }
 ```
 
-## Asynchronous
+## Asynchronous using Future
 
 ```
 # creates a future
