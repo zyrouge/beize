@@ -22,8 +22,6 @@ But is it fast? The performance is reasonable for a mere scripting language. It 
 ## Variables and Data Types
 
 ```
-# oh, remember that comments are made using `#`
-
 # declaration
 x := value;
 
