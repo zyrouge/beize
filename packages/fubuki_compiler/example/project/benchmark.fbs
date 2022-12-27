@@ -7,10 +7,8 @@ createBenchmarker := fun {
         },
         end: fun {
             benchmarker.endedAt = DateTime.now().millisecondsSinceEpoch;
-            print 'Took ' + benchmarker.endedAt - benchmarker.startedAt + 'ms';
+            print 'Took ' + (benchmarker.endedAt - benchmarker.startedAt) + 'ms';
         },
     };
     return benchmarker;
 };
-
-

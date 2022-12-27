@@ -45,11 +45,8 @@ abstract class FubukiPrimitiveObjectValue extends FubukiValue {
       switch (key.value) {
         case kCallProperty:
           return FubukiNativeFunctionValue(
-            (
-              final FubukiNativeFunctionCall call,
-              final FubukiInterpreterCompleter completer,
-            ) =>
-                callInVM(call.vm, call.arguments, completer),
+            (final FubukiNativeFunctionCall call) =>
+                callInVM(call.vm, call.arguments),
           );
 
         case kStrProperty:

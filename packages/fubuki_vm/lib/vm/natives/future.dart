@@ -1,6 +1,5 @@
 import 'dart:async';
 import '../../values/exports.dart';
-import '../interpreter.dart';
 import '../namespace.dart';
 
 abstract class FubukiFutureNatives {
@@ -19,16 +18,26 @@ abstract class FubukiFutureNatives {
     );
     value.set(
       FubukiStringValue('maybeAwait'),
-      FubukiNativeFunctionValue(
-        (
-          final FubukiNativeFunctionCall call,
-          final FubukiInterpreterCompleter completer,
-        ) {
+      FubukiNativeFunctionValue.async(
+        (final FubukiNativeFunctionCall call) async {
           final FubukiValue value = call.argumentAt(0);
           if (value is FubukiFutureValue) {
-            return value.bindToCompleter(completer);
+            return value.value;
           }
-          return completer.complete(value);
+          return value;
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('wait'),
+      FubukiNativeFunctionValue.async(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiNumberValue value = call.argumentAt(0);
+          final Future<FubukiValue> future = Future<FubukiValue>.delayed(
+            Duration(milliseconds: value.unsafeIntValue),
+            () => FubukiNullValue.value,
+          );
+          return FubukiFutureValue(future);
         },
       ),
     );

@@ -59,13 +59,10 @@ abstract class FubukiObjectNatives {
     value.set(
       FubukiStringValue(name),
       FubukiNativeFunctionValue(
-        (
-          final FubukiNativeFunctionCall call,
-          final FubukiInterpreterCompleter completer,
-        ) {
+        (final FubukiNativeFunctionCall call) {
           final FubukiPrimitiveObjectValue obj = call.argumentAt(0);
           final FubukiValue fn = obj.get(FubukiStringValue(to));
-          fn.callInVM(call.vm, <FubukiValue>[], completer);
+          return fn.callInVM(call.vm, <FubukiValue>[]);
         },
       ),
     );

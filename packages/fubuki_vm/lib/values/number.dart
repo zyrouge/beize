@@ -6,6 +6,8 @@ class FubukiNumberValue extends FubukiPrimitiveObjectValue {
 
   final double value;
 
+  int get unsafeIntValue => value.toInt();
+
   int get intValue {
     if (value % 1 == 0) return value.toInt();
     throw FubukiRuntimeExpection('Cannot convert "$value" to integer');

@@ -1,11 +1,9 @@
 import '../errors/runtime_exception.dart';
 import '../vm/exports.dart';
-import '../vm/natives/exports.dart';
 import 'exports.dart';
 
-typedef FubukiNativeFunctionFn = void Function(
+typedef FubukiNativeFunctionFn = Future<FubukiInterpreterResult> Function(
   FubukiNativeFunctionCall call,
-  FubukiInterpreterCompleter completer,
 );
 
 typedef FubukiNativeFunctionSyncFn = FubukiValue Function(
@@ -44,41 +42,40 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
     final FubukiNativeFunctionSyncFn syncFn,
   ) =>
       FubukiNativeFunctionValue(
-        (
-          final FubukiNativeFunctionCall call,
-          final FubukiInterpreterCompleter completer,
-        ) {
+        (final FubukiNativeFunctionCall call) async {
           try {
-            completer.complete(syncFn(call));
+            final FubukiValue value = syncFn(call);
+            return FubukiInterpreterResult.success(value);
           } catch (err, stackTrace) {
-            completer.failNativeCall(call, err, stackTrace);
+            return createResultFromException(call, err, stackTrace);
           }
         },
       );
 
   factory FubukiNativeFunctionValue.async(
-    final FubukiNativeFunctionAsyncFn asyncSyncFn,
+    final FubukiNativeFunctionAsyncFn asyncFn,
   ) =>
       FubukiNativeFunctionValue(
-        (
-          final FubukiNativeFunctionCall call,
-          final FubukiInterpreterCompleter completer,
-        ) {
-          asyncSyncFn(call).then((final FubukiValue value) {
-            completer.complete(value);
-          }).catchError((final Object err, final StackTrace stackTrace) {
-            completer.failNativeCall(call, err, stackTrace);
-          });
+        (final FubukiNativeFunctionCall call) async {
+          try {
+            final FubukiValue value = await asyncFn(call);
+            return FubukiInterpreterResult.success(value);
+          } catch (err, stackTrace) {
+            return createResultFromException(call, err, stackTrace);
+          }
         },
       );
 
   final FubukiNativeFunctionFn nativeFn;
 
-  void call(
+  Future<FubukiInterpreterResult> call(
     final FubukiNativeFunctionCall call,
-    final FubukiInterpreterCompleter completer,
-  ) {
-    nativeFn(call, completer);
+  ) async {
+    try {
+      return nativeFn(call);
+    } catch (err, stackTrace) {
+      return createResultFromException(call, err, stackTrace);
+    }
   }
 
   @override
@@ -95,19 +92,16 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
 
   @override
   int get kHashCode => call.hashCode;
-}
 
-extension on FubukiInterpreterCompleter {
-  void failNativeCall(
+  static FubukiInterpreterResult createResultFromException(
     final FubukiNativeFunctionCall call,
     final Object err,
     final StackTrace stackTrace,
-  ) {
-    fail(
-      FubukiExceptionNatives.newExceptionNative(
-        err.toString(),
-        '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
-      ),
-    );
-  }
+  ) =>
+      FubukiInterpreterResult.fail(
+        FubukiExceptionNatives.newExceptionNative(
+          err.toString(),
+          '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
+        ),
+      );
 }

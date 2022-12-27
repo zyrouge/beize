@@ -11,6 +11,7 @@ class FubukiCallFrame {
   });
 
   int ip = 0;
+  int sip = 0;
   int scopeDepth = 0;
   final List<FubukiTryFrame> tryFrames = <FubukiTryFrame>[];
 
@@ -22,5 +23,5 @@ class FubukiCallFrame {
       function.chunk.constantAt(function.chunk.codeAt(index));
 
   String toStackTraceLine() =>
-      '${function.chunk.module} (${function.chunk.positionAt(ip)})';
+      '${function.chunk.module} (${function.chunk.positionAt(sip)})';
 }

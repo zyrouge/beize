@@ -6,6 +6,7 @@ import 'call_frame.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
 import 'natives/exports.dart';
+import 'result.dart';
 import 'stack.dart';
 
 enum FubukiVMState {
@@ -13,8 +14,6 @@ enum FubukiVMState {
   running,
   finished,
 }
-
-typedef FubukiVMOnCallFinishFn = void Function();
 
 class FubukiVM {
   FubukiVM(this.program);
@@ -25,21 +24,13 @@ class FubukiVM {
   final Map<String, FubukiModuleValue> modules = <String, FubukiModuleValue>{};
   final FubukiStack stack = FubukiStack();
   final List<FubukiCallFrame> frames = <FubukiCallFrame>[];
+  final List<String> calls = <String>[];
 
   Future<void> run() async {
-    final Completer<void> completer = Completer<void>();
-    loadModule(
-      program.entrypoint,
-      FubukiInterpreterCompleter(
-        onComplete: (final _) {
-          completer.complete();
-        },
-        onFail: (final FubukiValue value) {
-          completer.completeError(FubukiUnhandledExpection(value.kToString()));
-        },
-      ),
-    );
-    return completer.future;
+    final FubukiInterpreterResult result = await loadModule(program.entrypoint);
+    if (result.isFailure) {
+      throw FubukiUnhandledExpection(result.value.kToString());
+    }
   }
 
   String getCurrentStackTrace() {
@@ -52,12 +43,9 @@ class FubukiVM {
     return stackTrace.toString();
   }
 
-  void loadModule(
-    final String module,
-    final FubukiInterpreterCompleter completer,
-  ) {
+  Future<FubukiInterpreterResult> loadModule(final String module) async {
     if (modules.containsKey(module)) {
-      return completer.complete(modules[module]!);
+      return FubukiInterpreterResult.success(modules[module]!);
     }
     final FubukiNamespace namespace = globalNamespace.enclosed;
     final FubukiModuleValue value = FubukiModuleValue(namespace);
@@ -68,40 +56,31 @@ class FubukiVM {
       namespace: namespace,
     );
     frames.add(frame);
-    FubukiInterpreter(frame).run(
-      FubukiInterpreterCompleter(
-        onComplete: (final _) {
-          frames.removeLast();
-          completer.complete(value);
-        },
-        onFail: (final FubukiValue value) {
-          frames.removeLast();
-          completer.fail(value);
-        },
-      ),
-    );
+    final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
+    frames.removeLast();
+    if (result.isFailure) return result;
+    return FubukiInterpreterResult.success(value);
   }
 
-  void callValue(
+  Future<FubukiInterpreterResult> callValue(
     final FubukiValue value,
     final List<FubukiValue> arguments,
-    final FubukiInterpreterCompleter completer,
-  ) {
+  ) async {
     if (value is FubukiFunctionValue) {
-      return callFunctionValue(value, arguments, completer);
+      return callFunctionValue(value, arguments);
     }
     if (value is FubukiNativeFunctionValue) {
-      return callNativeFunction(value, arguments, completer);
+      return callNativeFunction(value, arguments);
     }
     if (value is FubukiPrimitiveObjectValue) {
       final FubukiValue? callable = value.getOrNull(
         FubukiStringValue(FubukiPrimitiveObjectValue.kCallProperty),
       );
       if (callable != null) {
-        return callValue(callable, arguments, completer);
+        return callValue(callable, arguments);
       }
     }
-    completer.fail(
+    return FubukiInterpreterResult.fail(
       FubukiExceptionNatives.newExceptionNative(
         'Value "${value.kToString()}" is not callable',
         getCurrentStackTrace(),
@@ -109,22 +88,21 @@ class FubukiVM {
     );
   }
 
-  void callNativeFunction(
+  Future<FubukiInterpreterResult> callNativeFunction(
     final FubukiNativeFunctionValue function,
     final List<FubukiValue> arguments,
-    final FubukiInterpreterCompleter completer,
   ) {
-    function.call(
-      FubukiNativeFunctionCall(vm: this, arguments: arguments),
-      completer,
+    final FubukiNativeFunctionCall call = FubukiNativeFunctionCall(
+      vm: this,
+      arguments: arguments,
     );
+    return function.call(call);
   }
 
-  void callFunctionValue(
+  Future<FubukiInterpreterResult> callFunctionValue(
     final FubukiFunctionValue function,
     final List<FubukiValue> arguments,
-    final FubukiInterpreterCompleter completer,
-  ) {
+  ) async {
     final FubukiNamespace namespace = function.namespace.enclosed;
     int i = 0;
     for (final String arg in function.constant.arguments) {
@@ -139,42 +117,16 @@ class FubukiVM {
       namespace: namespace,
     );
     frames.add(frame);
-    FubukiInterpreter(frame).run(
-      FubukiInterpreterCompleter(
-        onComplete: (final FubukiValue result) {
-          frames.removeLast();
-          completer.complete(result);
-        },
-        onFail: (final FubukiValue result) {
-          frames.removeLast();
-          completer.fail(result);
-        },
-      ),
-    );
+    final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
+    frames.removeLast();
+    return result;
   }
 }
 
 extension FubukiInterpreterValueUtils on FubukiValue {
-  void callInVM(
+  Future<FubukiInterpreterResult> callInVM(
     final FubukiVM vm,
     final List<FubukiValue> arguments,
-    final FubukiInterpreterCompleter completer,
   ) =>
-      vm.callValue(this, arguments, completer);
-
-  Future<FubukiValue> callInVMAsync(
-    final FubukiVM vm,
-    final List<FubukiValue> arguments,
-  ) {
-    final Completer<FubukiValue> completer = Completer<FubukiValue>();
-    vm.callValue(
-      this,
-      arguments,
-      FubukiInterpreterCompleter(
-        onComplete: completer.complete,
-        onFail: completer.completeError,
-      ),
-    );
-    return completer.future;
-  }
+      vm.callValue(this, arguments);
 }

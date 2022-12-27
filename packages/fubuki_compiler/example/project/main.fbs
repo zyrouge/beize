@@ -3,8 +3,13 @@ import "./benchmark.fbs" as benchmark;
 benchmarker := benchmark.createBenchmarker();
 benchmarker.start();
 
+kek := fun {
+    Future.wait(10).await();
+};
+
 i := 0;
-while (i < 10000) {
+while (i < 10) {
+    kek();
     i = i + 1;
 }
 
