@@ -62,7 +62,7 @@ j := fun {
 # function declaration
 function_name := fun {
     return value;
-}
+};
 
 # function call
 function_name();
