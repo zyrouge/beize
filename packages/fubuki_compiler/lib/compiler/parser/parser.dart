@@ -196,7 +196,6 @@ abstract class FubukiParser {
     final FubukiParseRule rule =
         FubukiParseRule.of(compiler.previousToken.type);
     if (rule.prefix == null) {
-      // TODO: dont throw
       throw FubukiCompilationException.expectedXButReceivedToken(
         compiler.module,
         'expression',

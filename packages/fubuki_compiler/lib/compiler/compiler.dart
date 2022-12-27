@@ -110,7 +110,6 @@ class FubukiCompiler {
 
   void ensure(final FubukiTokens type) {
     if (!check(type)) {
-      // TODO: dont throw
       throw FubukiCompilationException.expectedTokenButReceivedToken(
         module,
         type,
