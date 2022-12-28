@@ -149,7 +149,23 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opNegate:
-          vm.stack.push(vm.stack.pop<FubukiNumberValue>().negate);
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue) {
+            return handleInvalidUnary(
+              'Cannot perform negate on "${a.kind.code}"',
+            );
+          }
+          vm.stack.push(a.negate);
+          break;
+
+        case FubukiOpCodes.opBitwiseNot:
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue) {
+            return handleInvalidUnary(
+              'Cannot perform bitwise not on "${a.kind.code}"',
+            );
+          }
+          vm.stack.push(FubukiNumberValue((~a.unsafeIntValue).toDouble()));
           break;
 
         case FubukiOpCodes.opEqual:
@@ -167,56 +183,151 @@ class FubukiInterpreter {
           final FubukiValue a = vm.stack.pop();
           if (a is FubukiStringValue || b is FubukiStringValue) {
             vm.stack.push(FubukiStringValue(a.kToString() + b.kToString()));
+          } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
+            vm.stack.push(FubukiNumberValue(a.value + b.value));
           } else {
-            vm.stack.push(
-              FubukiNumberValue(
-                a.cast<FubukiNumberValue>().value +
-                    b.cast<FubukiNumberValue>().value,
-              ),
+            return handleInvalidBinary(
+              'Cannot perform addition between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
           break;
 
         case FubukiOpCodes.opSubtract:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform subtraction between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiNumberValue(a.value - b.value));
           break;
 
         case FubukiOpCodes.opMultiply:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform multiplication between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiNumberValue(a.value * b.value));
           break;
 
         case FubukiOpCodes.opDivide:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform division between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiNumberValue(a.value / b.value));
           break;
 
+        case FubukiOpCodes.opFloor:
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform floor division between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
+          vm.stack.push(FubukiNumberValue((a.value ~/ b.value).toDouble()));
+          break;
+
         case FubukiOpCodes.opModulo:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform remainder between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiNumberValue(a.value % b.value));
           break;
 
         case FubukiOpCodes.opExponent:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform exponentiation between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiNumberValue(pow(a.value, b.value).toDouble()));
           break;
 
         case FubukiOpCodes.opLess:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiBooleanValue(a.value < b.value));
           break;
 
         case FubukiOpCodes.opGreater:
-          final FubukiNumberValue b = vm.stack.pop();
-          final FubukiNumberValue a = vm.stack.pop();
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
+            return handleInvalidBinary(
+              'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           vm.stack.push(FubukiBooleanValue(a.value > b.value));
+          break;
+
+        case FubukiOpCodes.opBitwiseAnd:
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
+            vm.stack.push(FubukiBooleanValue(a.value & b.value));
+          } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
+            vm.stack.push(
+              FubukiNumberValue(
+                (a.unsafeIntValue & b.unsafeIntValue).toDouble(),
+              ),
+            );
+          } else {
+            return handleInvalidBinary(
+              'Cannot perform bitwise AND between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
+          break;
+
+        case FubukiOpCodes.opBitwiseOr:
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
+            vm.stack.push(FubukiBooleanValue(a.value | b.value));
+          } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
+            vm.stack.push(
+              FubukiNumberValue((a.intValue | b.intValue).toDouble()),
+            );
+          } else {
+            return handleInvalidBinary(
+              'Cannot perform bitwise OR between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
+          break;
+
+        case FubukiOpCodes.opBitwiseXor:
+          final FubukiValue b = vm.stack.pop();
+          final FubukiValue a = vm.stack.pop();
+          if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
+            vm.stack.push(FubukiBooleanValue(a.value ^ b.value));
+          } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
+            vm.stack.push(
+              FubukiNumberValue((a.intValue ^ b.intValue).toDouble()),
+            );
+          } else {
+            return handleInvalidBinary(
+              'Cannot perform bitwise XOR between "${a.kind.code}" and "${b.kind.code}"',
+            );
+          }
           break;
 
         case FubukiOpCodes.opDeclare:
@@ -310,6 +421,22 @@ class FubukiInterpreter {
 
     state = FubukiInterpreterState.finished;
     return FubukiInterpreterResult.success(resultValue);
+  }
+
+  Future<FubukiInterpreterResult> handleInvalidUnary(final String message) {
+    final FubukiValue error = FubukiExceptionNatives.newExceptionNative(
+      'FubukiInvalidUnaryOperation: $message',
+      vm.getCurrentStackTrace(),
+    );
+    return handleError(error);
+  }
+
+  Future<FubukiInterpreterResult> handleInvalidBinary(final String message) {
+    final FubukiValue error = FubukiExceptionNatives.newExceptionNative(
+      'FubukiInvalidBinaryOperation: $message',
+      vm.getCurrentStackTrace(),
+    );
+    return handleError(error);
   }
 
   Future<FubukiInterpreterResult> handleError(final FubukiValue error) async {

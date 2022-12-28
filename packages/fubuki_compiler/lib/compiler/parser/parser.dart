@@ -229,6 +229,10 @@ abstract class FubukiParser {
         compiler.emitOpCode(FubukiOpCodes.opNot);
         break;
 
+      case FubukiTokens.tilde:
+        compiler.emitOpCode(FubukiOpCodes.opBitwiseNot);
+        break;
+
       default:
         throw UnreachableException();
     }
@@ -283,12 +287,28 @@ abstract class FubukiParser {
         compiler.emitOpCode(FubukiOpCodes.opDivide);
         break;
 
+      case FubukiTokens.floor:
+        compiler.emitOpCode(FubukiOpCodes.opFloor);
+        break;
+
       case FubukiTokens.modulo:
         compiler.emitOpCode(FubukiOpCodes.opModulo);
         break;
 
       case FubukiTokens.exponent:
         compiler.emitOpCode(FubukiOpCodes.opExponent);
+        break;
+
+      case FubukiTokens.ampersand:
+        compiler.emitOpCode(FubukiOpCodes.opBitwiseAnd);
+        break;
+
+      case FubukiTokens.pipe:
+        compiler.emitOpCode(FubukiOpCodes.opBitwiseOr);
+        break;
+
+      case FubukiTokens.caret:
+        compiler.emitOpCode(FubukiOpCodes.opBitwiseXor);
         break;
 
       default:

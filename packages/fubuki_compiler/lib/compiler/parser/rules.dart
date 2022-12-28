@@ -47,6 +47,8 @@ class FubukiParseRule {
     ),
     FubukiTokens.bang:
         FubukiParseRule(prefix: FubukiParser.parseUnaryExpression),
+    FubukiTokens.tilde:
+        FubukiParseRule(prefix: FubukiParser.parseUnaryExpression),
     FubukiTokens.equal: FubukiParseRule(
       precedence: FubukiPrecedence.equality,
       infix: FubukiParser.parseBinaryExpression,
@@ -89,6 +91,10 @@ class FubukiParseRule {
       precedence: FubukiPrecedence.factor,
       infix: FubukiParser.parseBinaryExpression,
     ),
+    FubukiTokens.floor: FubukiParseRule(
+      precedence: FubukiPrecedence.factor,
+      infix: FubukiParser.parseBinaryExpression,
+    ),
     FubukiTokens.modulo: FubukiParseRule(
       precedence: FubukiPrecedence.factor,
       infix: FubukiParser.parseBinaryExpression,
@@ -104,6 +110,18 @@ class FubukiParseRule {
     FubukiTokens.logicalOr: FubukiParseRule(
       precedence: FubukiPrecedence.or,
       infix: FubukiParser.parseLogicalOr,
+    ),
+    FubukiTokens.ampersand: FubukiParseRule(
+      precedence: FubukiPrecedence.ampersand,
+      infix: FubukiParser.parseBinaryExpression,
+    ),
+    FubukiTokens.pipe: FubukiParseRule(
+      precedence: FubukiPrecedence.pipe,
+      infix: FubukiParser.parseBinaryExpression,
+    ),
+    FubukiTokens.caret: FubukiParseRule(
+      precedence: FubukiPrecedence.caret,
+      infix: FubukiParser.parseBinaryExpression,
     ),
     FubukiTokens.identifier:
         FubukiParseRule(prefix: FubukiParser.parseIdentifier),
