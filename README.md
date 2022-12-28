@@ -111,10 +111,10 @@ Bitwise XOR | `… ^ …` | 5
 Bitwise AND | `… & …` | 6
 Equality | `… == …` | 7
 Inequality | `… != …` | 7
-Lesser Than | `… > …` | 8
-Lesser Than Or Equal | `… >= …` | 8
+Lesser Than | `… < …` | 8
+Lesser Than Or Equal | `… <= …` | 8
 Greater Than | `… > …` | 8
-Greater Than Or Equal | `… > …` | 8
+Greater Than Or Equal | `… >= …` | 8
 Addition | `… + …` | 9
 Subtraction | `… - …` | 9
 Multiplication | `… * …` | 10
