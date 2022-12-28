@@ -68,6 +68,46 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
               }
             },
           );
+
+        case 'any':
+          return FubukiNativeFunctionValue(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiListValue futures = call.argumentAt(0);
+              try {
+                final FubukiValue result =
+                    await Future.any(castListFutures(futures));
+                return FubukiInterpreterResult.success(result);
+              } catch (err, stackTrace) {
+                return FubukiInterpreterResult.fail(
+                  FubukiNativeFunctionValue.createValueFromException(
+                    call,
+                    err.toString(),
+                    stackTrace,
+                  ),
+                );
+              }
+            },
+          );
+
+        case 'awaitAll':
+          return FubukiNativeFunctionValue(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiListValue futures = call.argumentAt(0);
+              try {
+                final List<FubukiValue> result =
+                    await Future.wait(castListFutures(futures));
+                return FubukiInterpreterResult.success(FubukiListValue(result));
+              } catch (err, stackTrace) {
+                return FubukiInterpreterResult.fail(
+                  FubukiNativeFunctionValue.createValueFromException(
+                    call,
+                    err.toString(),
+                    stackTrace,
+                  ),
+                );
+              }
+            },
+          );
       }
     }
     return super.get(key);
@@ -87,4 +127,14 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
 
   @override
   int get kHashCode => value.hashCode;
+
+  static Iterable<Future<FubukiValue>> castListFutures(
+    final FubukiListValue list,
+  ) =>
+      list.elements.map(
+        (final FubukiValue x) async {
+          if (x is FubukiFutureValue) return x.value;
+          return x;
+        },
+      );
 }
