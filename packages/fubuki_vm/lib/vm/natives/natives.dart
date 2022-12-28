@@ -4,6 +4,7 @@ import 'exports.dart';
 abstract class FubukiNatives {
   static void bind(final FubukiNamespace namespace) {
     FubukiBooleanNatives.bind(namespace);
+    FubukiConvertNatives.bind(namespace);
     FubukiDateTimeNatives.bind(namespace);
     FubukiExceptionNatives.bind(namespace);
     FubukiFunctionNatives.bind(namespace);

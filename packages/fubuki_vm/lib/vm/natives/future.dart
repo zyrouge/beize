@@ -44,9 +44,9 @@ abstract class FubukiFutureNatives {
     namespace.declare('Future', value);
   }
 
-  static FubukiObjectValue newCompleter() {
+  static FubukiValue newCompleter() {
     final Completer<FubukiValue> nativeCompleter = Completer<FubukiValue>();
-    final FubukiObjectValue completer = FubukiObjectValue();
+    final FubukiStringValue completer = FubukiStringValue('FutureCompleter');
     completer.set(
       FubukiStringValue('future'),
       FubukiFutureValue(nativeCompleter.future),

@@ -13,6 +13,11 @@ class FubukiNumberValue extends FubukiPrimitiveObjectValue {
     throw FubukiRuntimeExpection('Cannot convert "$value" to integer');
   }
 
+  num get numValue {
+    if (value % 1 == 0) return value.toInt();
+    return value;
+  }
+
   FubukiNumberValue get negate => FubukiNumberValue(-value);
 
   @override

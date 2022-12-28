@@ -1,4 +1,5 @@
 export 'boolean.dart';
+export 'convert.dart';
 export 'datetime.dart';
 export 'exception.dart';
 export 'function.dart';
