@@ -1,7 +1,7 @@
 import 'constants/exports.dart';
 import 'op_codes.dart';
 
-class FubukiChunk {
+class FubukiChunk with FubukiSerializableConstant {
   FubukiChunk({
     required this.codes,
     required this.constants,
@@ -14,6 +14,18 @@ class FubukiChunk {
         constants: <FubukiConstant>[],
         positions: <String>[],
         module: module,
+      );
+
+  factory FubukiChunk.deserialize(
+    final FubukiSerializedConstant serialized,
+  ) =>
+      FubukiChunk(
+        codes: (serialized[kCodes] as List<dynamic>).cast<int>(),
+        constants: (serialized[kConstants] as List<dynamic>)
+            .map(FubukiSerializableConstant.deserialize)
+            .toList(),
+        positions: (serialized[kPositions] as List<dynamic>).cast<String>(),
+        module: serialized[kModule] as String,
       );
 
   final List<int> codes;
@@ -44,5 +56,21 @@ class FubukiChunk {
 
   String positionAt(final int index) => positions[index];
 
+  @override
+  FubukiSerializedConstant serialize() => <dynamic, dynamic>{
+        kCodes: codes,
+        kConstants: constants.map((final FubukiConstant x) {
+          if (x is FubukiSerializableConstant) return x.serialize();
+          return x;
+        }).toList(),
+        kPositions: positions,
+        kModule: module,
+      };
+
   int get length => codes.length;
+
+  static const String kCodes = 'codes';
+  static const String kConstants = 'constants';
+  static const String kPositions = 'positions';
+  static const String kModule = 'module';
 }

@@ -7,7 +7,9 @@ Future<void> main() async {
     root: path.join(path.current, 'example/project'),
     entrypoint: 'main.fbs',
   );
-  FubukiDisassembler.disassembleProgram(program);
-  final FubukiVM vm = FubukiVM(program);
+  final FubukiProgramConstant real =
+      FubukiProgramConstant.deserialize(program.serialize());
+  FubukiDisassembler.disassembleProgram(real);
+  final FubukiVM vm = FubukiVM(real);
   await vm.run();
 }

@@ -13,6 +13,16 @@ enum FubukiCompilerMode {
   script,
 }
 
+class FubukiCompilerOptions {
+  const FubukiCompilerOptions({
+    this.shortenPositions = true,
+  });
+
+  final bool shortenPositions;
+
+  static const FubukiCompilerOptions defaultValue = FubukiCompilerOptions();
+}
+
 class FubukiCompiler {
   FubukiCompiler._(
     this.scanner, {
@@ -20,10 +30,12 @@ class FubukiCompiler {
     required this.root,
     required this.modules,
     required this.module,
+    this.options = FubukiCompilerOptions.defaultValue,
     this.parent,
   });
 
   final FubukiCompiler? parent;
+  final FubukiCompilerOptions options;
   final FubukiScanner scanner;
   final FubukiCompilerMode mode;
   final String root;
@@ -59,6 +71,7 @@ class FubukiCompiler {
       modules: modules,
       module: module,
       parent: this,
+      options: options,
     );
     derived.prepare();
     return derived;
@@ -73,6 +86,7 @@ class FubukiCompiler {
       root: root,
       modules: modules,
       module: module,
+      options: options,
     );
     derived.prepare();
     return derived;
@@ -125,7 +139,10 @@ class FubukiCompiler {
   }
 
   void emitCode(final int code) {
-    currentChunk.addCode(code, previousToken.span.toString());
+    final String position = options.shortenPositions
+        ? previousToken.span.start.row.toString()
+        : previousToken.span.toString();
+    currentChunk.addCode(code, position);
   }
 
   void emitOpCode(final FubukiOpCodes opCode) => emitCode(opCode.index);
