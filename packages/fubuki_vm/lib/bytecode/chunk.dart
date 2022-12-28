@@ -1,7 +1,7 @@
 import 'constants/exports.dart';
 import 'op_codes.dart';
 
-class FubukiChunk with FubukiSerializableConstant {
+class FubukiChunk {
   FubukiChunk({
     required this.codes,
     required this.constants,
@@ -18,12 +18,15 @@ class FubukiChunk with FubukiSerializableConstant {
 
   factory FubukiChunk.deserialize(final FubukiSerializedConstant serialized) =>
       FubukiChunk(
-        codes: (serialized[kCodes] as List<dynamic>).cast<int>(),
-        constants: (serialized[kConstants] as List<dynamic>)
-            .map(FubukiSerializableConstant.deserialize)
-            .toList(),
-        positions: (serialized[kPositions] as List<dynamic>).cast<String>(),
-        module: serialized[kModule] as String,
+        codes: (serialized[0] as List<dynamic>).cast<int>(),
+        constants: (serialized[1] as List<dynamic>).map((final dynamic x) {
+          if (x is List<dynamic>) {
+            return FubukiFunctionConstant.deserialize(x);
+          }
+          return x;
+        }).toList(),
+        positions: (serialized[2] as List<dynamic>).cast<String>(),
+        module: serialized[3] as String,
       );
 
   final List<int> codes;
@@ -56,20 +59,14 @@ class FubukiChunk with FubukiSerializableConstant {
 
   String positionAt(final int index) => positions[index];
 
-  @override
   FubukiSerializedConstant serialize() {
     final FubukiSerializedConstant serializedConstant =
         constants.map((final FubukiConstant x) {
-      if (x is FubukiSerializableConstant) return x.serialize();
+      if (x is FubukiFunctionConstant) return x.serialize();
       return x;
     }).toList();
     return <dynamic>[codes, serializedConstant, positions, module];
   }
 
   int get length => codes.length;
-
-  static const int kCodes = 0;
-  static const int kConstants = 1;
-  static const int kPositions = 2;
-  static const int kModule = 3;
 }
