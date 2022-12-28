@@ -153,6 +153,12 @@ abstract class FubukiParser {
   static Future<void> parseImportStatement(
     final FubukiCompiler compiler,
   ) async {
+    if (compiler.scopeDepth != 0) {
+      throw FubukiCompilationException.topLevelImports(
+        compiler.module,
+        compiler.previousToken,
+      );
+    }
     compiler.consume(FubukiTokens.string);
     final String importPath =
         compiler.resolveImportPath(compiler.previousToken.literal as String);

@@ -71,6 +71,15 @@ class FubukiCompilationException implements Exception {
         'Cannot break or continue outside script ("${token.type.code}" found at ${token.span})',
       );
 
+  factory FubukiCompilationException.topLevelImports(
+    final String module,
+    final FubukiToken token,
+  ) =>
+      FubukiCompilationException(
+        module,
+        'Only top-level imports are allowed ("${token.type.code}" found at ${token.span})',
+      );
+
   final String module;
   final String text;
 
