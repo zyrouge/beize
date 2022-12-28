@@ -5,7 +5,7 @@ version: 0.0.0
 publish_to: none
 
 environment:
-    sdk: ">=2.19.0-43.0.dev <3.0.0"
+    sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
     fubuki_vm:
