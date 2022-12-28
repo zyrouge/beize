@@ -7,6 +7,7 @@ Future<void> main() async {
     root: path.join(path.current, 'example/project'),
     entrypoint: 'main.fbs',
   );
+  print(program.serialize());
   final FubukiProgramConstant real =
       FubukiProgramConstant.deserialize(program.serialize());
   FubukiDisassembler.disassembleProgram(real);

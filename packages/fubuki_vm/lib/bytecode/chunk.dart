@@ -16,9 +16,7 @@ class FubukiChunk with FubukiSerializableConstant {
         module: module,
       );
 
-  factory FubukiChunk.deserialize(
-    final FubukiSerializedConstant serialized,
-  ) =>
+  factory FubukiChunk.deserialize(final FubukiSerializedConstant serialized) =>
       FubukiChunk(
         codes: (serialized[kCodes] as List<dynamic>).cast<int>(),
         constants: (serialized[kConstants] as List<dynamic>)
@@ -43,6 +41,8 @@ class FubukiChunk with FubukiSerializableConstant {
   }
 
   int addConstant(final FubukiConstant value) {
+    final int existingIndex = constants.indexOf(value);
+    if (existingIndex != -1) return existingIndex;
     constants.add(value);
     return constants.length - 1;
   }
@@ -57,20 +57,19 @@ class FubukiChunk with FubukiSerializableConstant {
   String positionAt(final int index) => positions[index];
 
   @override
-  FubukiSerializedConstant serialize() => <dynamic, dynamic>{
-        kCodes: codes,
-        kConstants: constants.map((final FubukiConstant x) {
-          if (x is FubukiSerializableConstant) return x.serialize();
-          return x;
-        }).toList(),
-        kPositions: positions,
-        kModule: module,
-      };
+  FubukiSerializedConstant serialize() {
+    final FubukiSerializedConstant serializedConstant =
+        constants.map((final FubukiConstant x) {
+      if (x is FubukiSerializableConstant) return x.serialize();
+      return x;
+    }).toList();
+    return <dynamic>[codes, serializedConstant, positions, module];
+  }
 
   int get length => codes.length;
 
-  static const String kCodes = 'codes';
-  static const String kConstants = 'constants';
-  static const String kPositions = 'positions';
-  static const String kModule = 'module';
+  static const int kCodes = 0;
+  static const int kConstants = 1;
+  static const int kPositions = 2;
+  static const int kModule = 3;
 }

@@ -21,13 +21,12 @@ class FubukiFunctionConstant with FubukiSerializableConstant {
   final FubukiChunk chunk;
 
   @override
-  FubukiSerializedConstant serialize() => <dynamic, dynamic>{
-        FubukiSerializableConstant.kKind: kKindV,
-        kArguments: arguments,
-        kChunk: chunk.serialize(),
-      };
+  FubukiSerializedConstant serialize() => <dynamic>[
+        FubukiSerializableConstants.function.index,
+        arguments,
+        chunk.serialize()
+      ];
 
-  static const String kKindV = 'kind';
-  static const String kArguments = 'arguments';
-  static const String kChunk = 'chunk';
+  static const int kArguments = 1;
+  static const int kChunk = 2;
 }

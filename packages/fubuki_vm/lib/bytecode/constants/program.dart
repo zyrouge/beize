@@ -16,7 +16,8 @@ class FubukiProgramConstant with FubukiSerializableConstant {
               MapEntry<String, FubukiFunctionConstant>(
             key as String,
             FubukiFunctionConstant.deserialize(
-                value as FubukiSerializedConstant),
+              value as FubukiSerializedConstant,
+            ),
           ),
         ),
         entrypoint: serialized[kEntrypoint] as String,
@@ -26,19 +27,17 @@ class FubukiProgramConstant with FubukiSerializableConstant {
   final String entrypoint;
 
   @override
-  FubukiSerializedConstant serialize() => <dynamic, dynamic>{
-        FubukiSerializableConstant.kKind: kKindV,
-        kModules: modules.map(
-          (final String key, final FubukiFunctionConstant value) =>
-              MapEntry<String, FubukiSerializedConstant>(
-            key,
-            value.serialize(),
-          ),
-        ),
-        kEntrypoint: entrypoint,
-      };
+  FubukiSerializedConstant serialize() {
+    final Map<String, FubukiSerializedConstant> serializedModules = modules.map(
+      (final String key, final FubukiFunctionConstant value) =>
+          MapEntry<String, FubukiSerializedConstant>(
+        key,
+        value.serialize(),
+      ),
+    );
+    return <dynamic>[serializedModules, entrypoint];
+  }
 
-  static const String kKindV = 'program';
-  static const String kModules = 'modules';
-  static const String kEntrypoint = 'entrypoint';
+  static const int kModules = 0;
+  static const int kEntrypoint = 1;
 }
