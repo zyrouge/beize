@@ -13,6 +13,30 @@ abstract class FubukiStringNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('fromCodeUnit'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiNumberValue value = call.argumentAt(0);
+          return FubukiStringValue(String.fromCharCode(value.intValue));
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('fromCodeUnits'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiListValue value = call.argumentAt(0);
+          return FubukiStringValue(
+            String.fromCharCodes(
+              value.elements.map(
+                (final FubukiValue x) => x.cast<FubukiNumberValue>().intValue,
+              ),
+            ),
+          );
+        },
+      ),
+    );
     namespace.declare('String', value);
   }
 }
