@@ -4,7 +4,7 @@
 
 # Fubuki
 
-🖊️  A hand-crafted scripting language exclusively made for Tenka modules.
+🖋️ A hand-crafted scripting language exclusively made for Tenka modules.
 
 # Language Specification
 
