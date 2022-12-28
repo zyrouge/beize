@@ -1,7 +1,7 @@
 enum FubukiPrecedence {
   none,
   assignment, // := = ? :
-  or, // ||
+  or, // || ??
   and, // &&
   pipe, // |
   caret, // ^
@@ -12,7 +12,8 @@ enum FubukiPrecedence {
   factor, // * / // %
   exponent, // **
   unary, // ! ~ + -
-  call, // ()
+  call, // () . ?.
+  grouping, // (...)
 }
 
 extension FubukiPrecedenceUtils on FubukiPrecedence {

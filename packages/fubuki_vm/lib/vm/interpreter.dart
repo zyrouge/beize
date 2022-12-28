@@ -16,31 +16,6 @@ enum FubukiInterpreterState {
   finished,
 }
 
-typedef FubukiInterpreterCompleterCallback = void Function(FubukiValue);
-
-class FubukiInterpreterCompleter {
-  const FubukiInterpreterCompleter({
-    required this.onComplete,
-    required this.onFail,
-  });
-
-  factory FubukiInterpreterCompleter.empty() => FubukiInterpreterCompleter(
-        onComplete: (final _) {},
-        onFail: (final _) {},
-      );
-
-  final FubukiInterpreterCompleterCallback onComplete;
-  final FubukiInterpreterCompleterCallback onFail;
-
-  void complete(final FubukiValue value) {
-    onComplete(value);
-  }
-
-  void fail(final FubukiValue value) {
-    onFail(value);
-  }
-}
-
 class FubukiInterpreter {
   FubukiInterpreter(this.frame)
       : vm = frame.vm,
@@ -119,6 +94,14 @@ class FubukiInterpreter {
 
         case FubukiOpCodes.opPop:
           vm.stack.pop();
+          break;
+
+        case FubukiOpCodes.opJumpIfNull:
+          final int offset = chunk.codeAt(frame.ip);
+          frame.ip++;
+          if (vm.stack.top() is FubukiNullValue) {
+            frame.ip += offset;
+          }
           break;
 
         case FubukiOpCodes.opJumpIfFalse:

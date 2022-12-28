@@ -191,10 +191,9 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
                 for (int j = 0; j < sorted.length - i - 1; j++) {
                   final FubukiValue a = sorted[j];
                   final FubukiValue b = sorted[j + 1];
-                  final FubukiValue pDiff = await predicate
+                  final FubukiValue result = await predicate
                       .callInVM(call.vm, <FubukiValue>[a, b]).unwrapUnsafe();
-                  final double diff = pDiff.cast<FubukiNumberValue>().value;
-                  if (diff > 0) {
+                  if (result.isTruthy) {
                     sorted[j] = b;
                     sorted[j + 1] = a;
                     swapped = true;

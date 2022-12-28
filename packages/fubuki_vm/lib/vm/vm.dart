@@ -31,7 +31,6 @@ class FubukiVM {
     if (result.isFailure) {
       throw FubukiUnhandledExpection(result.value.kToString());
     }
-    print(stack);
   }
 
   String getCurrentStackTrace() {

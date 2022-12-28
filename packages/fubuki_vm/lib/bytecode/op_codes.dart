@@ -35,4 +35,5 @@ enum FubukiOpCodes {
   opBeginTry,
   opEndTry,
   opModule,
+  opJumpIfNull,
 }

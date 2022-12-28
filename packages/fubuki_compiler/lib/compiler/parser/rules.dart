@@ -23,7 +23,7 @@ class FubukiParseRule {
     FubukiTokens.parenLeft: FubukiParseRule(
       prefix: FubukiParser.parseGrouping,
       infix: FubukiParser.parseCall,
-      precedence: FubukiPrecedence.call,
+      precedence: FubukiPrecedence.grouping,
     ),
     FubukiTokens.dot: FubukiParseRule(
       infix: FubukiParser.parseDotCall,
@@ -36,6 +36,14 @@ class FubukiParseRule {
     FubukiTokens.question: FubukiParseRule(
       infix: FubukiParser.parseTernary,
       precedence: FubukiPrecedence.assignment,
+    ),
+    FubukiTokens.nullOr: FubukiParseRule(
+      infix: FubukiParser.parseNullOr,
+      precedence: FubukiPrecedence.or,
+    ),
+    FubukiTokens.nullAccess: FubukiParseRule(
+      infix: FubukiParser.parseNullAccess,
+      precedence: FubukiPrecedence.call,
     ),
     FubukiTokens.bang:
         FubukiParseRule(prefix: FubukiParser.parseUnaryExpression),

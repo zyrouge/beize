@@ -471,4 +471,19 @@ abstract class FubukiParser {
     parseExpression(compiler);
     compiler.patchJump(elseJump);
   }
+
+  static void parseNullOr(final FubukiCompiler compiler) {
+    final int elseJump = compiler.emitJump(FubukiOpCodes.opJumpIfNull);
+    final int endJump = compiler.emitJump(FubukiOpCodes.opJump);
+    compiler.patchJump(elseJump);
+    compiler.emitOpCode(FubukiOpCodes.opPop);
+    parsePrecedence(compiler, FubukiPrecedence.or);
+    compiler.patchJump(endJump);
+  }
+
+  static void parseNullAccess(final FubukiCompiler compiler) {
+    final int exitJump = compiler.emitJump(FubukiOpCodes.opJumpIfNull);
+    parsePropertyCall(compiler, dotCall: true);
+    compiler.patchJump(exitJump);
+  }
 }
