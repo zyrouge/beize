@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../errors/exports.dart';
 import '../../values/exports.dart';
 import '../namespace.dart';
 
@@ -6,11 +7,30 @@ abstract class FubukiConvertNatives {
   static void bind(final FubukiNamespace namespace) {
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
+      FubukiStringValue('newBytesList'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiValue value = call.argumentAt(0);
+          if (value is FubukiNullValue) {
+            return newBytesList(<int>[]);
+          }
+          final FubukiListValue bytes = value.cast();
+          return newBytesList(
+            bytes.elements
+                .map(
+                  (final FubukiValue x) => x.cast<FubukiNumberValue>().intValue,
+                )
+                .toList(),
+          );
+        },
+      ),
+    );
+    value.set(
       FubukiStringValue('encodeAscii'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue input = call.argumentAt(0);
-          return fromBytes(ascii.encode(input.value));
+          return newBytesList(ascii.encode(input.value));
         },
       ),
     );
@@ -18,7 +38,7 @@ abstract class FubukiConvertNatives {
       FubukiStringValue('decodeAscii'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
-          final FubukiListValue input = call.argumentAt(0);
+          final FubukiObjectValue input = call.argumentAt(0);
           return FubukiStringValue(ascii.decode(toBytes(input)));
         },
       ),
@@ -27,7 +47,7 @@ abstract class FubukiConvertNatives {
       FubukiStringValue('encodeBase64'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
-          final FubukiListValue input = call.argumentAt(0);
+          final FubukiObjectValue input = call.argumentAt(0);
           return FubukiStringValue(base64Encode(toBytes(input)));
         },
       ),
@@ -37,7 +57,7 @@ abstract class FubukiConvertNatives {
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue input = call.argumentAt(0);
-          return fromBytes(base64Decode(input.value));
+          return newBytesList(base64Decode(input.value));
         },
       ),
     );
@@ -46,7 +66,7 @@ abstract class FubukiConvertNatives {
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue input = call.argumentAt(0);
-          return fromBytes(latin1.encode(input.value));
+          return newBytesList(latin1.encode(input.value));
         },
       ),
     );
@@ -54,7 +74,7 @@ abstract class FubukiConvertNatives {
       FubukiStringValue('decodeLatin1'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
-          final FubukiListValue input = call.argumentAt(0);
+          final FubukiObjectValue input = call.argumentAt(0);
           return FubukiStringValue(latin1.decode(toBytes(input)));
         },
       ),
@@ -64,7 +84,7 @@ abstract class FubukiConvertNatives {
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue input = call.argumentAt(0);
-          return fromBytes(utf8.encode(input.value));
+          return newBytesList(utf8.encode(input.value));
         },
       ),
     );
@@ -72,7 +92,7 @@ abstract class FubukiConvertNatives {
       FubukiStringValue('decodeUtf8'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
-          final FubukiListValue input = call.argumentAt(0);
+          final FubukiObjectValue input = call.argumentAt(0);
           return FubukiStringValue(utf8.decode(toBytes(input)));
         },
       ),
@@ -98,13 +118,26 @@ abstract class FubukiConvertNatives {
     namespace.declare('Convert', value);
   }
 
-  static FubukiListValue fromBytes(final List<int> bytes) => FubukiListValue(
-        bytes.map((final int x) => FubukiNumberValue(x.toDouble())).toList(),
-      );
+  static List<int> toBytes(final FubukiObjectValue bytesList) {
+    if (bytesList.internals.containsKey('bytes')) {
+      return bytesList.internals['bytes'] as List<int>;
+    }
+    throw FubukiNativeException('Object is not a bytes list');
+  }
 
-  static List<int> toBytes(final FubukiListValue list) => list.elements
-      .map((final FubukiValue x) => x.cast<FubukiNumberValue>().intValue)
-      .toList();
+  static FubukiValue newBytesList(final List<int> bytes) {
+    final FubukiObjectValue bytesList = FubukiObjectValue();
+    bytesList.internals['bytes'] = bytes;
+    bytesList.set(
+      FubukiStringValue('bytes'),
+      FubukiNativeFunctionValue.sync(
+        (final _) => FubukiListValue(
+          bytes.map((final int x) => FubukiNumberValue(x.toDouble())).toList(),
+        ),
+      ),
+    );
+    return bytesList;
+  }
 
   static FubukiValue fromJson(final Object? json) {
     if (json is bool) return FubukiBooleanValue(json);

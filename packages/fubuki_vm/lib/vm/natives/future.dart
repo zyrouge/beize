@@ -46,7 +46,7 @@ abstract class FubukiFutureNatives {
 
   static FubukiValue newCompleter() {
     final Completer<FubukiValue> nativeCompleter = Completer<FubukiValue>();
-    final FubukiStringValue completer = FubukiStringValue('FutureCompleter');
+    final FubukiObjectValue completer = FubukiObjectValue();
     completer.set(
       FubukiStringValue('future'),
       FubukiFutureValue(nativeCompleter.future),

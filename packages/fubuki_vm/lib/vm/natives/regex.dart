@@ -18,8 +18,7 @@ abstract class FubukiRegExpNatives {
 
   static FubukiValue newRegExp(final FubukiStringValue expr) {
     final RegExp regex = RegExp(expr.value);
-    final FubukiStringValue value =
-        FubukiStringValue('RegExp (${expr.kToString()})');
+    final FubukiObjectValue value = FubukiObjectValue();
     value.set(
       FubukiStringValue('isMultiLine'),
       FubukiBooleanValue(regex.isMultiLine),
@@ -109,7 +108,7 @@ abstract class FubukiRegExpNatives {
   }
 
   static FubukiValue newRegExpMatch(final RegExpMatch match) {
-    final FubukiStringValue value = FubukiStringValue('RegExpMatch');
+    final FubukiObjectValue value = FubukiObjectValue();
     value.set(
       FubukiStringValue('input'),
       FubukiStringValue(match.input),

@@ -5,11 +5,14 @@ abstract class FubukiPrimitiveObjectValue extends FubukiValue {
   FubukiPrimitiveObjectValue({
     final Map<int, FubukiValue>? keys,
     final Map<int, FubukiValue>? values,
+    final Map<String, dynamic>? internals,
   })  : keys = keys ?? <int, FubukiValue>{},
-        values = values ?? <int, FubukiValue>{};
+        values = values ?? <int, FubukiValue>{},
+        internals = internals ?? <String, dynamic>{};
 
   final Map<int, FubukiValue> keys;
   final Map<int, FubukiValue> values;
+  final Map<String, dynamic> internals;
 
   bool has(final FubukiValue key) => keys.containsKey(key.kHashCode);
 
