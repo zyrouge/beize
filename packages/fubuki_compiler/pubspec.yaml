@@ -19,7 +19,6 @@ dependency_overrides:
         path: ../fubuki_vm
 
 dev_dependencies:
-    test: ^1.16.0
     zlint:
         git:
             url: https://github.com/zyrouge/dart_zlint

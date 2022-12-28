@@ -1,12 +1,11 @@
 name: fubuki_vm
-description: VM of Fubuki.
+description: Virtual Machine of Fubuki.
 version: 0.0.0
 
 environment:
     sdk: ">=2.19.0-43.0.dev <3.0.0"
 
 dev_dependencies:
-    test: ^1.16.0
     zlint:
         git:
             url: https://github.com/zyrouge/dart_zlint
