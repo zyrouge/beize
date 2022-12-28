@@ -1,5 +1,4 @@
 import '../../values/exports.dart';
-import '../interpreter.dart';
 import '../namespace.dart';
 import '../vm.dart';
 
@@ -25,6 +24,19 @@ abstract class FubukiObjectNatives {
             nValue.set(value.keys[x]!, value.values[x]!);
           }
           return nValue;
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('apply'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue a = call.argumentAt(0);
+          final FubukiPrimitiveObjectValue b = call.argumentAt(0);
+          for (final int x in b.keys.keys) {
+            a.set(b.keys[x]!, b.values[x]!);
+          }
+          return a;
         },
       ),
     );

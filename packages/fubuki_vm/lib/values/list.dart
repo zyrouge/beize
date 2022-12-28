@@ -19,6 +19,14 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'pushAll':
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) {
+              pushAll(call.argumentAt(0));
+              return FubukiNullValue.value;
+            },
+          );
+
         case 'pop':
           return FubukiNativeFunctionValue.sync((final _) => pop());
 
@@ -205,6 +213,34 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'flat':
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) {
+              final FubukiNumberValue level = call.argumentAt(0);
+              return FubukiListValue(flat(level.intValue));
+            },
+          );
+
+        case 'flatDeep':
+          return FubukiNativeFunctionValue.sync(
+            (final _) => FubukiListValue(flatDeep()),
+          );
+
+        case 'unique':
+          return FubukiNativeFunctionValue.sync(
+            (final _) {
+              final FubukiListValue unique = FubukiListValue();
+              final List<int> hashes = <int>[];
+              for (final FubukiValue x in elements) {
+                if (!hashes.contains(x.kHashCode)) {
+                  unique.push(x);
+                  hashes.add(x.kHashCode);
+                }
+              }
+              return unique;
+            },
+          );
+
         case 'forEach':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
@@ -248,11 +284,37 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
     elements.add(value);
   }
 
+  void pushAll(final FubukiListValue value) {
+    elements.addAll(value.elements);
+  }
+
   FubukiValue pop() {
     if (elements.isNotEmpty) {
       return elements.removeLast();
     }
     return FubukiNullValue.value;
+  }
+
+  List<FubukiValue> flat(final int level) {
+    final List<FubukiValue> flat = <FubukiValue>[];
+    for (int i = 0; i < level; i++) {
+      for (final FubukiValue x in elements) {
+        flat.addAll(x.cast<FubukiListValue>().elements);
+      }
+    }
+    return flat;
+  }
+
+  List<FubukiValue> flatDeep() {
+    final List<FubukiValue> flat = <FubukiValue>[];
+    for (final FubukiValue x in elements) {
+      if (x is FubukiListValue) {
+        flat.addAll(x.flatDeep());
+      } else {
+        flat.add(x);
+      }
+    }
+    return flat;
   }
 
   int get length => elements.length;
