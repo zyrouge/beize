@@ -103,10 +103,10 @@ Default | - | 0
 Declaration | `… := …` | 1
 Assignment | `… = …` | 1
 Ternary | `… ? … : …` | 1
-Logical OR | `… || … : …` | 2
-Nullable OR | `… ?? … : …` | 2
+Logical OR | `… \|\| …` | 2
+Nullable OR | `… ?? …` | 2
 Logical AND | `… && …` | 3
-Bitwise OR | `… | …` | 4
+Bitwise OR | `… \| …` | 4
 Bitwise XOR | `… ^ …` | 5
 Bitwise AND | `… & …` | 6
 Equality | `… == …` | 7
