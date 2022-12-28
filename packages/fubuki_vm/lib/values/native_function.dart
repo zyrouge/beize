@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../errors/runtime_exception.dart';
 import '../vm/exports.dart';
 import 'exports.dart';
@@ -60,6 +62,21 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
           try {
             final FubukiValue value = await asyncFn(call);
             return FubukiInterpreterResult.success(value);
+          } catch (err, stackTrace) {
+            return createResultFromException(call, err, stackTrace);
+          }
+        },
+      );
+
+  factory FubukiNativeFunctionValue.asyncReturn(
+    final FubukiNativeFunctionAsyncFn asyncFn,
+  ) =>
+      FubukiNativeFunctionValue(
+        (final FubukiNativeFunctionCall call) async {
+          try {
+            final FubukiFutureValue returnValue =
+                FubukiFutureValue(asyncFn(call));
+            return FubukiInterpreterResult.success(returnValue);
           } catch (err, stackTrace) {
             return createResultFromException(call, err, stackTrace);
           }
