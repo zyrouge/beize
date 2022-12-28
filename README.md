@@ -90,9 +90,11 @@ object.prop1;
 object["prop1"];
 object.prop2 = value;
 
-# null access and assignment operators
+# null safe operators
 nullableObject?.prop3;
+nullableObject?.["prop3"];
 nullableObject?.prop4 = value;
+
 ```
 
 ## Operators
@@ -128,6 +130,7 @@ Unary Plus | `+ …` | 12
 Unary Negation | `- …` | 12
 Call | `… ()` | 13
 Member Access | `… . …` | 13
+Computed Member Access | `… [ … ]` | 13
 Nullable Access | `… ?. …` | 13
 Grouping | `( … )` | 14
 
