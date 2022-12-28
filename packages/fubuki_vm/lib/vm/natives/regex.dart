@@ -71,6 +71,40 @@ abstract class FubukiRegExpNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('allMatches'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiStringValue input = call.argumentAt(0);
+          final Iterable<RegExpMatch> matches = regex.allMatches(input.value);
+          return FubukiListValue(matches.map(newRegExpMatch).toList());
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('replaceFirst'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiStringValue input = call.argumentAt(0);
+          final FubukiStringValue to = call.argumentAt(1);
+          return FubukiStringValue(
+            input.value.replaceFirst(regex, to.value),
+          );
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('replaceAll'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiStringValue input = call.argumentAt(0);
+          final FubukiStringValue to = call.argumentAt(1);
+          return FubukiStringValue(
+            input.value.replaceAll(regex, to.value),
+          );
+        },
+      ),
+    );
     return value;
   }
 

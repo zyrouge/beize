@@ -201,7 +201,9 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
                   final FubukiValue b = sorted[j + 1];
                   final FubukiValue result = await predicate
                       .callInVM(call.vm, <FubukiValue>[a, b]).unwrapUnsafe();
-                  if (result.isTruthy) {
+                  final bool shouldSwap =
+                      result.cast<FubukiNumberValue>().value > 0;
+                  if (shouldSwap) {
                     sorted[j] = b;
                     sorted[j + 1] = a;
                     swapped = true;
