@@ -127,8 +127,8 @@ Bitwise NOT | `~ …` | 12
 Unary Plus | `+ …` | 12
 Unary Negation | `- …` | 12
 Call | `… ()` | 13
-Member Access | `… .` | 13
-Nullable Access | `… ?.` | 13
+Member Access | `… . …` | 13
+Nullable Access | `… ?. …` | 13
 Grouping | `( … )` | 14
 
 ## Control Structures
