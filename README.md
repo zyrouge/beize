@@ -94,7 +94,6 @@ object.prop2 = value;
 nullableObject?.prop3;
 nullableObject?.["prop3"];
 nullableObject?.prop4 = value;
-
 ```
 
 ## Operators
