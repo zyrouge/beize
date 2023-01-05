@@ -123,15 +123,17 @@ Division | `… / …` | 10
 Floor Division | `… // …` | 10
 Remainder | `… % …` | 10
 Exponent | `… ** …` | 11
-Logical NOT | `! …` | 12
-Bitwise NOT | `~ …` | 12
-Unary Plus | `+ …` | 12
-Unary Negation | `- …` | 12
-Call | `… ()` | 13
-Member Access | `… . …` | 13
-Computed Member Access | `… [ … ]` | 13
-Nullable Access | `… ?. …` | 13
-Grouping | `( … )` | 14
+Increment | `… ++` | 12
+Decrement | `… --` | 12
+Logical NOT | `! …` | 13
+Bitwise NOT | `~ …` | 13
+Unary Plus | `+ …` | 13
+Unary Negation | `- …` | 13
+Call | `… ()` | 14
+Member Access | `… . …` | 14
+Computed Member Access | `… [ … ]` | 14
+Nullable Access | `… ?. …` | 14
+Grouping | `( … )` | 15
 
 ## Control Structures
 

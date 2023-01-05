@@ -258,6 +258,16 @@ class FubukiInterpreter {
           vm.stack.push(FubukiNumberValue(pow(a.value, b.value).toDouble()));
           break;
 
+        case FubukiOpCodes.opIncrement:
+          final FubukiNumberValue a = vm.stack.pop();
+          vm.stack.push(FubukiNumberValue(a.value + 1));
+          break;
+
+        case FubukiOpCodes.opDecrement:
+          final FubukiNumberValue a = vm.stack.pop();
+          vm.stack.push(FubukiNumberValue(a.value - 1));
+          break;
+
         case FubukiOpCodes.opLess:
           final FubukiValue b = vm.stack.pop();
           final FubukiValue a = vm.stack.pop();

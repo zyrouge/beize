@@ -14,6 +14,8 @@ enum FubukiOpCodes {
   opFloor,
   opModulo,
   opExponent,
+  opIncrement,
+  opDecrement,
   opNot,
   opEqual,
   opLess,

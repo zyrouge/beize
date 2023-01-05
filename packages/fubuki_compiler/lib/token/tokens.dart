@@ -29,6 +29,8 @@ enum FubukiTokens {
   slash, // /
   floor, // //
   modulo, // %
+  plusPlus, // ++
+  minusMinus, // --
   ampersand, // &
   logicalAnd, // &&
   pipe, // |
@@ -91,6 +93,8 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.exponent: '**',
   FubukiTokens.slash: '/',
   FubukiTokens.floor: '//',
+  FubukiTokens.plusPlus: '++',
+  FubukiTokens.minusMinus: '--',
   FubukiTokens.modulo: '%',
   FubukiTokens.ampersand: '&',
   FubukiTokens.logicalAnd: '&&',

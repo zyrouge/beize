@@ -103,6 +103,14 @@ class FubukiParseRule {
       precedence: FubukiPrecedence.exponent,
       infix: FubukiParser.parseBinaryExpression,
     ),
+    FubukiTokens.plusPlus: FubukiParseRule(
+      precedence: FubukiPrecedence.postfix,
+      infix: FubukiParser.parseUnaryExpression,
+    ),
+    FubukiTokens.minusMinus: FubukiParseRule(
+      precedence: FubukiPrecedence.postfix,
+      infix: FubukiParser.parseUnaryExpression,
+    ),
     FubukiTokens.logicalAnd: FubukiParseRule(
       precedence: FubukiPrecedence.and,
       infix: FubukiParser.parseLogicalAnd,

@@ -239,6 +239,14 @@ abstract class FubukiParser {
         compiler.emitOpCode(FubukiOpCodes.opBitwiseNot);
         break;
 
+      case FubukiTokens.plusPlus:
+        compiler.emitOpCode(FubukiOpCodes.opIncrement);
+        break;
+
+      case FubukiTokens.minusMinus:
+        compiler.emitOpCode(FubukiOpCodes.opDecrement);
+        break;
+
       default:
         throw UnreachableException();
     }
