@@ -11,6 +11,6 @@ Future<void> main() async {
   final FubukiProgramConstant real =
       FubukiProgramConstant.deserialize(program.serialize());
   FubukiDisassembler.disassembleProgram(real);
-  final FubukiVM vm = FubukiVM(real);
+  final FubukiVM vm = FubukiVM(real, FubukiVMOptions());
   await vm.run();
 }

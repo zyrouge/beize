@@ -1,14 +1,13 @@
 createBenchmarker := fun {
-    benchmarker := obj {
+    return obj {
         startedAt: null,
         endedAt: null,
         start: fun {
-            benchmarker.startedAt = DateTime.now().millisecondsSinceEpoch;
+            this.startedAt = DateTime.now().millisecondsSinceEpoch;
         },
         end: fun {
-            benchmarker.endedAt = DateTime.now().millisecondsSinceEpoch;
-            print 'Took ' + (benchmarker.endedAt - benchmarker.startedAt) + 'ms';
+            this.endedAt = DateTime.now().millisecondsSinceEpoch;
+            print 'Took ' + (this.endedAt - this.startedAt) + 'ms';
         },
     };
-    return benchmarker;
 };

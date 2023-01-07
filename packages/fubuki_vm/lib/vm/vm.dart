@@ -15,10 +15,19 @@ enum FubukiVMState {
   finished,
 }
 
+class FubukiVMOptions {
+  FubukiVMOptions({
+    this.disablePrint = false,
+  });
+
+  final bool disablePrint;
+}
+
 class FubukiVM {
-  FubukiVM(this.program);
+  FubukiVM(this.program, this.options);
 
   final FubukiProgramConstant program;
+  final FubukiVMOptions options;
 
   final FubukiNamespace globalNamespace = FubukiNamespace.withNatives();
   final Map<String, FubukiModuleValue> modules = <String, FubukiModuleValue>{};

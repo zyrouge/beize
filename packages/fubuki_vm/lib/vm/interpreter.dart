@@ -65,9 +65,11 @@ class FubukiInterpreter {
           final FubukiConstant constant = frame.readConstantAt(frame.ip);
           final FubukiValue value;
           if (constant is FubukiFunctionConstant) {
+            final FubukiNamespace functionNamespace = namespace.enclosed;
+            functionNamespace.declare('this', FubukiNullValue.value);
             value = FubukiFunctionValue(
               constant: constant,
-              namespace: namespace,
+              namespace: functionNamespace,
             );
           } else if (constant is double) {
             value = FubukiNumberValue(constant);
@@ -378,6 +380,9 @@ class FubukiInterpreter {
           for (int i = 0; i < count; i++) {
             final FubukiValue value = vm.stack.pop();
             final FubukiValue key = vm.stack.pop();
+            if (value is FubukiFunctionValue) {
+              value.namespace.assign('this', obj);
+            }
             obj.set(key, value);
           }
           vm.stack.push(obj);
