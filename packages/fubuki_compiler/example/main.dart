@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 Future<void> main() async {
   final FubukiProgramConstant program = await FubukiCompiler.compileProject(
     root: path.join(path.current, 'example/project'),
-    entrypoint: 'main.fbs',
+    entrypoint: 'dev.fbs',
   );
   print(program.serialize());
   final FubukiProgramConstant real =
@@ -13,4 +13,5 @@ Future<void> main() async {
   FubukiDisassembler.disassembleProgram(real);
   final FubukiVM vm = FubukiVM(real, FubukiVMOptions());
   await vm.run();
+  print(vm.stack);
 }

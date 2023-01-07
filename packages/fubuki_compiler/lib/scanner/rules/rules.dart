@@ -66,8 +66,6 @@ class FubukiScannerRules {
       constructOffset2ScanFn(FubukiTokens.declare),
       constructOffset2ScanFn(FubukiTokens.exponent),
       constructOffset2ScanFn(FubukiTokens.floor),
-      constructOffset2ScanFn(FubukiTokens.plusPlus),
-      constructOffset2ScanFn(FubukiTokens.minusMinus),
       constructOffset2ScanFn(FubukiTokens.logicalAnd),
       constructOffset2ScanFn(FubukiTokens.logicalOr),
       constructOffset2ScanFn(FubukiTokens.equal),

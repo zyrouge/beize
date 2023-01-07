@@ -29,8 +29,6 @@ enum FubukiTokens {
   slash, // /
   floor, // //
   modulo, // %
-  plusPlus, // ++
-  minusMinus, // --
   ampersand, // &
   logicalAnd, // &&
   pipe, // |
@@ -63,6 +61,8 @@ enum FubukiTokens {
   asKw, // as
   listKw, // list
   mapKw, // map
+  whenKw, // when
+  matchKw, // match
 }
 
 const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
@@ -93,8 +93,6 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.exponent: '**',
   FubukiTokens.slash: '/',
   FubukiTokens.floor: '//',
-  FubukiTokens.plusPlus: '++',
-  FubukiTokens.minusMinus: '--',
   FubukiTokens.modulo: '%',
   FubukiTokens.ampersand: '&',
   FubukiTokens.logicalAnd: '&&',
@@ -127,6 +125,8 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.asKw: 'as',
   FubukiTokens.listKw: 'list',
   FubukiTokens.mapKw: 'map',
+  FubukiTokens.whenKw: 'when',
+  FubukiTokens.matchKw: 'match',
 };
 
 extension OutreTokensUtils on FubukiTokens {

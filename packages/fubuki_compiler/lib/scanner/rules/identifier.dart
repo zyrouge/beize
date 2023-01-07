@@ -27,6 +27,8 @@ abstract class FubukiIdentifierScanner {
     FubukiTokens.asKw,
     FubukiTokens.listKw,
     FubukiTokens.mapKw,
+    FubukiTokens.whenKw,
+    FubukiTokens.matchKw,
   };
 
   static final Map<String, FubukiTokens> keywordsMap = keywords.asNameMap().map(

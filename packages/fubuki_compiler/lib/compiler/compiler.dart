@@ -171,10 +171,8 @@ class FubukiCompiler {
     currentChunk.codes[offset] = jump;
   }
 
-  void emitLoop(final int start) {
-    emitOpCode(FubukiOpCodes.opLoop);
-    final int offset = currentChunk.length - start - 1;
-    emitCode(offset);
+  void patchAbsoluteJumpTo(final int offset, final int to) {
+    currentChunk.codes[offset] = to;
   }
 
   void beginLoop(final int start) {
@@ -206,7 +204,8 @@ class FubukiCompiler {
   }
 
   void emitContinue() {
-    emitLoop(loops.last.start);
+    final int jump = emitJump(FubukiOpCodes.opAbsoluteJump);
+    patchAbsoluteJumpTo(jump, loops.last.start);
   }
 
   void beginScope() {
@@ -225,6 +224,8 @@ class FubukiCompiler {
   bool isEndOfFile() => currentToken.type == FubukiTokens.eof;
 
   FubukiChunk get currentChunk => currentFunction.chunk;
+
+  int get currentAbsoluteOffset => currentChunk.length;
 
   static Future<FubukiProgramConstant> compileProject({
     required final String root,

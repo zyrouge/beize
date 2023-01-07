@@ -80,6 +80,15 @@ class FubukiCompilationException implements Exception {
         'Only top-level imports are allowed ("${token.type.code}" found at ${token.span})',
       );
 
+  factory FubukiCompilationException.duplicateElse(
+    final String module,
+    final FubukiToken token,
+  ) =>
+      FubukiCompilationException(
+        module,
+        'Multiple else classes are not allowed ("${token.type.code}" found at ${token.span})',
+      );
+
   final String module;
   final String text;
 

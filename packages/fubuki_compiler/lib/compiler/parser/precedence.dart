@@ -12,7 +12,6 @@ enum FubukiPrecedence {
   factor, // * / // %
   exponent, // **
   unary, // ! ~ + -
-  postfix, // ++ --
   call, // () . [] ?.
   grouping, // (...)
 }

@@ -98,6 +98,10 @@ class FubukiInterpreter {
           vm.stack.pop();
           break;
 
+        case FubukiOpCodes.opTop:
+          vm.stack.push(vm.stack.top());
+          break;
+
         case FubukiOpCodes.opJumpIfNull:
           final int offset = chunk.codeAt(frame.ip);
           frame.ip++;
@@ -119,9 +123,9 @@ class FubukiInterpreter {
           frame.ip += offset + 1;
           break;
 
-        case FubukiOpCodes.opLoop:
+        case FubukiOpCodes.opAbsoluteJump:
           final int offset = chunk.codeAt(frame.ip);
-          frame.ip -= offset + 1;
+          frame.ip = offset;
           break;
 
         case FubukiOpCodes.opCall:
@@ -258,16 +262,6 @@ class FubukiInterpreter {
             );
           }
           vm.stack.push(FubukiNumberValue(pow(a.value, b.value).toDouble()));
-          break;
-
-        case FubukiOpCodes.opIncrement:
-          final FubukiNumberValue a = vm.stack.pop();
-          vm.stack.push(FubukiNumberValue(a.value + 1));
-          break;
-
-        case FubukiOpCodes.opDecrement:
-          final FubukiNumberValue a = vm.stack.pop();
-          vm.stack.push(FubukiNumberValue(a.value - 1));
           break;
 
         case FubukiOpCodes.opLess:

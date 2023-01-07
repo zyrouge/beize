@@ -83,6 +83,10 @@ function_name();
 object := obj {
     prop1: value,
     prop2: value,
+    method1: fun {
+        # do something
+        return this.prop1;
+    },
 };
 
 # object get and sets
@@ -123,17 +127,15 @@ Division | `… / …` | 10
 Floor Division | `… // …` | 10
 Remainder | `… % …` | 10
 Exponent | `… ** …` | 11
-Increment | `… ++` | 12
-Decrement | `… --` | 12
-Logical NOT | `! …` | 13
-Bitwise NOT | `~ …` | 13
-Unary Plus | `+ …` | 13
-Unary Negation | `- …` | 13
-Call | `… ()` | 14
-Member Access | `… . …` | 14
-Computed Member Access | `… [ … ]` | 14
-Nullable Access | `… ?. …` | 14
-Grouping | `( … )` | 15
+Logical NOT | `! …` | 12
+Bitwise NOT | `~ …` | 12
+Unary Plus | `+ …` | 12
+Unary Negation | `- …` | 12
+Call | `… ()` | 13
+Member Access | `… . …` | 13
+Computed Member Access | `… [ … ]` | 13
+Nullable Access | `… ?. …` | 13
+Grouping | `( … )` | 14
 
 ## Control Structures
 
@@ -154,6 +156,44 @@ while (condition) {
     # also supports these
     break;
     continue;
+}
+
+# when (better if-else ladder)
+when {
+    condition1: {
+        # do something if 1
+    }
+    condition2: {
+        # do something if 2
+    }
+    ...
+    conditionN: {
+        # do something if N
+    }
+    
+    # optional else block
+    else: {
+        # else do something
+    }
+}
+
+# match (switch-like)
+match (expression) {
+    value1: {
+        # do something if 1
+    }
+    value2: {
+        # do something if 2
+    }
+    ...
+    valueN: {
+        # do something if N
+    }
+    
+    # optional else block
+    else: {
+        # else do something
+    }
 }
 ```
 
@@ -227,6 +267,7 @@ numbers := list [];
 while (i <= 100) {
     print i;
     numbers.add(i);
+    i = i + 1;
 }
 print numbers;
 ```

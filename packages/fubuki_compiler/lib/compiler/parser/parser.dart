@@ -39,6 +39,12 @@ abstract class FubukiParser {
     if (compiler.match(FubukiTokens.importKw)) {
       return parseImportStatement(compiler);
     }
+    if (compiler.match(FubukiTokens.whenKw)) {
+      return parseWhenStatement(compiler);
+    }
+    if (compiler.match(FubukiTokens.matchKw)) {
+      return parseMatchStatement(compiler);
+    }
     return parseExpressionStatement(compiler);
   }
 
@@ -65,14 +71,15 @@ abstract class FubukiParser {
   }
 
   static void parseWhileStatement(final FubukiCompiler compiler) {
-    final int start = compiler.currentChunk.length;
+    final int start = compiler.currentAbsoluteOffset;
     compiler.consume(FubukiTokens.parenLeft);
     parseExpression(compiler);
     compiler.consume(FubukiTokens.parenRight);
     compiler.beginLoop(start);
     compiler.emitOpCode(FubukiOpCodes.opPop);
     parseStatement(compiler);
-    compiler.emitLoop(start);
+    final int jump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+    compiler.patchAbsoluteJumpTo(jump, start);
     compiler.endLoop();
     compiler.emitOpCode(FubukiOpCodes.opPop);
   }
@@ -179,6 +186,76 @@ abstract class FubukiParser {
     }
   }
 
+  static void parseMatchableStatement(
+    final FubukiCompiler compiler,
+    final void Function() matcher,
+  ) {
+    final List<_FubukiMatchableCase> cases = <_FubukiMatchableCase>[];
+    _FubukiMatchableCase? elseCase;
+    final int startJump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+    compiler.consume(FubukiTokens.braceLeft);
+    while (!compiler.match(FubukiTokens.braceRight)) {
+      final int start = compiler.currentAbsoluteOffset;
+      if (compiler.match(FubukiTokens.elseKw)) {
+        if (elseCase != null) {
+          throw FubukiCompilationException.duplicateElse(
+            compiler.module,
+            compiler.previousToken,
+          );
+        }
+        compiler.consume(FubukiTokens.colon);
+        parseStatement(compiler);
+        final int exitJump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+        elseCase = _FubukiMatchableCase(start, exitJump, -1);
+      } else {
+        matcher();
+        compiler.consume(FubukiTokens.colon);
+        final int localJump = compiler.emitJump(FubukiOpCodes.opJumpIfFalse);
+        parseStatement(compiler);
+        compiler.emitOpCode(FubukiOpCodes.opPop);
+        final int exitJump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+        compiler.patchJump(localJump);
+        compiler.emitOpCode(FubukiOpCodes.opPop);
+        final int thenJump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+        cases.add(_FubukiMatchableCase(start, thenJump, exitJump));
+      }
+    }
+    final int end = compiler.currentAbsoluteOffset;
+    for (int i = 0; i < cases.length; i++) {
+      final _FubukiMatchableCase x = cases[i];
+      compiler.patchAbsoluteJumpTo(
+        x.thenJump,
+        i + 1 < cases.length ? cases[i + 1].start : elseCase?.start ?? end,
+      );
+      compiler.patchAbsoluteJumpTo(x.elseJump, end);
+    }
+    if (elseCase != null) {
+      compiler.patchAbsoluteJumpTo(elseCase.thenJump, end);
+    }
+    compiler.patchAbsoluteJumpTo(
+      startJump,
+      cases.isNotEmpty ? cases.first.start : elseCase?.start ?? end,
+    );
+  }
+
+  static void parseWhenStatement(final FubukiCompiler compiler) {
+    parseMatchableStatement(compiler, () {
+      parseExpression(compiler);
+    });
+  }
+
+  static void parseMatchStatement(final FubukiCompiler compiler) {
+    compiler.consume(FubukiTokens.parenLeft);
+    parseExpression(compiler);
+    compiler.consume(FubukiTokens.parenRight);
+    parseMatchableStatement(compiler, () {
+      compiler.emitOpCode(FubukiOpCodes.opTop);
+      parseExpression(compiler);
+      compiler.emitOpCode(FubukiOpCodes.opEqual);
+    });
+    compiler.emitOpCode(FubukiOpCodes.opPop);
+  }
+
   static int parseIdentifierConstant(final FubukiCompiler compiler) {
     final String name = compiler.previousToken.literal as String;
     final int index = compiler.makeConstant(name);
@@ -239,14 +316,6 @@ abstract class FubukiParser {
         compiler.emitOpCode(FubukiOpCodes.opBitwiseNot);
         break;
 
-      case FubukiTokens.plusPlus:
-        compiler.emitOpCode(FubukiOpCodes.opIncrement);
-        break;
-
-      case FubukiTokens.minusMinus:
-        compiler.emitOpCode(FubukiOpCodes.opDecrement);
-        break;
-
       default:
         throw UnreachableException();
     }
@@ -256,7 +325,6 @@ abstract class FubukiParser {
     final FubukiTokens operator = compiler.previousToken.type;
     final FubukiParseRule rule = FubukiParseRule.of(operator);
     parsePrecedence(compiler, rule.precedence.nextPrecedence);
-
     switch (operator) {
       case FubukiTokens.equal:
         compiler.emitOpCode(FubukiOpCodes.opEqual);
@@ -523,4 +591,12 @@ abstract class FubukiParser {
     );
     compiler.patchJump(exitJump);
   }
+}
+
+class _FubukiMatchableCase {
+  const _FubukiMatchableCase(this.start, this.thenJump, this.elseJump);
+
+  final int start;
+  final int thenJump;
+  final int elseJump;
 }
