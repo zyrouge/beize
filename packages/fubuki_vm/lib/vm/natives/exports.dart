@@ -4,6 +4,7 @@ export 'datetime.dart';
 export 'exception.dart';
 export 'function.dart';
 export 'future.dart';
+export 'globals.dart';
 export 'list.dart';
 export 'natives.dart';
 export 'number.dart';

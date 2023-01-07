@@ -40,43 +40,66 @@ abstract class FubukiObjectNatives {
         },
       ),
     );
-    _bindToNativeFunction(
-      value,
-      'entries',
-      FubukiPrimitiveObjectValue.kEntriesProperty,
+    value.set(
+      FubukiStringValue('entries'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+          return entries(value);
+        },
+      ),
     );
-    _bindToNativeFunction(
-      value,
-      'keys',
-      FubukiPrimitiveObjectValue.kKeysProperty,
+    value.set(
+      FubukiStringValue('keys'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+          return FubukiListValue(value.keys.values.toList());
+        },
+      ),
     );
-    _bindToNativeFunction(
-      value,
-      'values',
-      FubukiPrimitiveObjectValue.kValuesProperty,
+    value.set(
+      FubukiStringValue('values'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+          return FubukiListValue(value.values.values.toList());
+        },
+      ),
     );
-    _bindToNativeFunction(
-      value,
-      'clone',
-      FubukiPrimitiveObjectValue.kCloneProperty,
+    value.set(
+      FubukiStringValue('clone'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+          return value.kClone();
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('deleteProperty'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+          final FubukiValue key = call.argumentAt(1);
+          value.delete(key);
+          return FubukiNullValue.value;
+        },
+      ),
     );
     namespace.declare('Object', value);
   }
 
-  static void _bindToNativeFunction(
-    final FubukiObjectValue value,
-    final String name,
-    final String to,
-  ) {
-    value.set(
-      FubukiStringValue(name),
-      FubukiNativeFunctionValue(
-        (final FubukiNativeFunctionCall call) {
-          final FubukiPrimitiveObjectValue obj = call.argumentAt(0);
-          final FubukiValue fn = obj.get(FubukiStringValue(to));
-          return fn.callInVM(call.vm, <FubukiValue>[]);
-        },
-      ),
-    );
+  static FubukiListValue entries(final FubukiPrimitiveObjectValue value) {
+    final FubukiListValue result = FubukiListValue();
+    for (final int x in value.keys.keys) {
+      result.push(
+        FubukiListValue(<FubukiValue>[
+          value.keys[x]!,
+          value.values[x]!,
+        ]),
+      );
+    }
+    return result;
   }
 }

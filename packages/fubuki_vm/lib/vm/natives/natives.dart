@@ -14,5 +14,6 @@ abstract class FubukiNatives {
     FubukiObjectNatives.bind(namespace);
     FubukiRegExpNatives.bind(namespace);
     FubukiStringNatives.bind(namespace);
+    FubukiGlobalsNatives.bind(namespace);
   }
 }

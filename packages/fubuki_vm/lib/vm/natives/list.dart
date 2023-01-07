@@ -1,26 +1,23 @@
 import '../../errors/exports.dart';
 import '../../values/exports.dart';
 import '../namespace.dart';
-import '../result.dart';
 import '../vm.dart';
+import 'object.dart';
 
 abstract class FubukiListNatives {
   static void bind(final FubukiNamespace namespace) {
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
       FubukiStringValue('from'),
-      FubukiNativeFunctionValue(
-        (final FubukiNativeFunctionCall call) async {
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
           final FubukiValue value = call.argumentAt(0);
           if (value is FubukiListValue) {
-            return FubukiInterpreterResult.success(value.kClone());
+            return value.kClone();
           }
           if (value is FubukiPrimitiveObjectValue) {
             final FubukiPrimitiveObjectValue obj = call.argumentAt(0);
-            final FubukiValue fn = obj.get(
-              FubukiStringValue(FubukiPrimitiveObjectValue.kEntriesProperty),
-            );
-            return fn.callInVM(call.vm, <FubukiValue>[]);
+            return FubukiObjectNatives.entries(obj);
           }
           throw FubukiNativeException(
             'Cannot create list from "${value.kind}"',
