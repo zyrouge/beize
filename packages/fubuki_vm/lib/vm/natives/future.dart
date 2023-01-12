@@ -1,6 +1,7 @@
 import 'dart:async';
 import '../../values/exports.dart';
 import '../namespace.dart';
+import '../result.dart';
 
 abstract class FubukiFutureNatives {
   static void bind(final FubukiNamespace namespace) {
@@ -41,6 +42,48 @@ abstract class FubukiFutureNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('awaitAll'),
+      FubukiNativeFunctionValue(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiListValue futures = call.argumentAt(0);
+          try {
+            final List<FubukiValue> result =
+                await Future.wait(castListFutures(futures));
+            return FubukiInterpreterResult.success(FubukiListValue(result));
+          } catch (err, stackTrace) {
+            return FubukiInterpreterResult.fail(
+              FubukiNativeFunctionValue.createValueFromException(
+                call,
+                err.toString(),
+                stackTrace,
+              ),
+            );
+          }
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('any'),
+      FubukiNativeFunctionValue(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiListValue futures = call.argumentAt(0);
+          try {
+            final FubukiValue result =
+                await Future.any(castListFutures(futures));
+            return FubukiInterpreterResult.success(result);
+          } catch (err, stackTrace) {
+            return FubukiInterpreterResult.fail(
+              FubukiNativeFunctionValue.createValueFromException(
+                call,
+                err.toString(),
+                stackTrace,
+              ),
+            );
+          }
+        },
+      ),
+    );
     namespace.declare('Future', value);
   }
 
@@ -71,4 +114,14 @@ abstract class FubukiFutureNatives {
     );
     return completer;
   }
+
+  static Iterable<Future<FubukiValue>> castListFutures(
+    final FubukiListValue list,
+  ) =>
+      list.elements.map(
+        (final FubukiValue x) async {
+          if (x is FubukiFutureValue) return x.value;
+          return x;
+        },
+      );
 }
