@@ -151,7 +151,10 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opPrint:
-          print('print: ${vm.stack.pop().kToString()}');
+          if (!vm.options.disablePrint) {
+            // ignore: avoid_print
+            print('print: ${vm.stack.pop().kToString()}');
+          }
           break;
 
         case FubukiOpCodes.opNegate:

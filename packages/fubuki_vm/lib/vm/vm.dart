@@ -81,14 +81,6 @@ class FubukiVM {
     if (value is FubukiNativeFunctionValue) {
       return callNativeFunction(value, arguments);
     }
-    if (value is FubukiPrimitiveObjectValue) {
-      final FubukiValue? callable = value.getOrNull(
-        FubukiStringValue(FubukiPrimitiveObjectValue.kCallProperty),
-      );
-      if (callable != null) {
-        return callValue(callable, arguments);
-      }
-    }
     return FubukiInterpreterResult.fail(
       FubukiExceptionNatives.newExceptionNative(
         'Value "${value.kToString()}" is not callable',

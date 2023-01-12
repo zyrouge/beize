@@ -45,10 +45,10 @@ enum FubukiTokens {
 
   trueKw, // true
   falseKw, // false
+  nullKw, // null
   ifKw, // if
   elseKw, // else
   whileKw, // while
-  nullKw, // null
   funKw, // fun
   returnKw, // return
   breakKw, // break

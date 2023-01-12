@@ -25,7 +25,7 @@ abstract class FubukiNumberScanner {
     while (!scanner.input.isEndOfLine()) {
       current = scanner.input.peek();
       if (!FubukiLexerUtils.isNumericContent(current.char)) break;
-      if (current.char == FubukiTokens.dot.code) {
+      if (current.char == '.') {
         if (hasDot) break;
         hasDot = true;
       }
@@ -35,7 +35,7 @@ abstract class FubukiNumberScanner {
 
     return FubukiToken(
       FubukiTokens.number,
-      double.parse(buffer.toString()),
+      num.parse(buffer.toString()).toDouble(),
       FubukiSpan(start.point, current.point),
     );
   }

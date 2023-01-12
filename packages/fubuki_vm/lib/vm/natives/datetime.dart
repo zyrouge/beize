@@ -72,6 +72,14 @@ abstract class FubukiDateTimeNatives {
       FubukiNumberValue(dateTime.millisecondsSinceEpoch.toDouble()),
     );
     value.set(
+      FubukiStringValue('timeZoneName'),
+      FubukiStringValue(dateTime.timeZoneName),
+    );
+    value.set(
+      FubukiStringValue('timeZoneOffset'),
+      FubukiNumberValue(dateTime.timeZoneOffset.inMilliseconds.toDouble()),
+    );
+    value.set(
       FubukiStringValue('iso'),
       FubukiStringValue(dateTime.toIso8601String()),
     );
