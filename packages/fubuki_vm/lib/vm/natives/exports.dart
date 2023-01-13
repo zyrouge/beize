@@ -9,5 +9,5 @@ export 'list.dart';
 export 'natives.dart';
 export 'number.dart';
 export 'object.dart';
-export 'regex.dart';
+export 'regexp.dart';
 export 'string.dart';
