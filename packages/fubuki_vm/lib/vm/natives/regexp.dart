@@ -9,15 +9,27 @@ abstract class FubukiRegExpNatives {
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue value = call.argumentAt(0);
-          return newRegExp(value);
+          final FubukiValue flags = call.argumentAt(1);
+          return newRegExp(
+            value.value,
+            flags is FubukiNullValue
+                ? ''
+                : flags.cast<FubukiStringValue>().value,
+          );
         },
       ),
     );
     namespace.declare('RegExp', value);
   }
 
-  static FubukiValue newRegExp(final FubukiStringValue expr) {
-    final RegExp regex = RegExp(expr.value);
+  static FubukiValue newRegExp(final String patternValue, final String flags) {
+    final RegExp regex = RegExp(
+      patternValue,
+      caseSensitive: !flags.contains('i'),
+      dotAll: flags.contains('s'),
+      multiLine: flags.contains('m'),
+      unicode: flags.contains('u'),
+    );
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
       FubukiStringValue('isMultiLine'),
