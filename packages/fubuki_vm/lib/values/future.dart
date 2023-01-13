@@ -41,7 +41,7 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
         case 'then':
           return FubukiNativeFunctionValue.sync(
             (final FubukiNativeFunctionCall call) {
-              final FubukiValue thenFn = call.argumentAt(0);
+              final FubukiFunctionValue thenFn = call.argumentAt(0);
               value.then((final FubukiValue result) {
                 thenFn.callInVM(call.vm, <FubukiValue>[result]);
               });
@@ -52,7 +52,7 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
         case 'catchError':
           return FubukiNativeFunctionValue.sync(
             (final FubukiNativeFunctionCall call) {
-              final FubukiValue catchFn = call.argumentAt(0);
+              final FubukiFunctionValue catchFn = call.argumentAt(0);
               isHandled = true;
               value.catchError((final Object err, final StackTrace stackTrace) {
                 final FubukiValue value =

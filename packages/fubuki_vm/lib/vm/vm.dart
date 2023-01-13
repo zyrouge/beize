@@ -124,7 +124,7 @@ class FubukiVM {
   }
 }
 
-extension FubukiInterpreterValueUtils on FubukiValue {
+extension FubukiInterpreterValueUtils on FubukiFunctionValue {
   Future<FubukiInterpreterResult> callInVM(
     final FubukiVM vm,
     final List<FubukiValue> arguments,

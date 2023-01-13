@@ -30,7 +30,7 @@ abstract class FubukiListNatives {
       FubukiNativeFunctionValue.async(
         (final FubukiNativeFunctionCall call) async {
           final int length = call.argumentAt<FubukiNumberValue>(0).intValue;
-          final FubukiValue predicate = call.argumentAt(1);
+          final FubukiFunctionValue predicate = call.argumentAt(1);
           final FubukiListValue result = FubukiListValue();
           for (int i = 0; i < length; i++) {
             result.push(

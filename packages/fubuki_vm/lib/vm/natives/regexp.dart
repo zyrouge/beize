@@ -1,5 +1,6 @@
 import '../../values/exports.dart';
 import '../namespace.dart';
+import '../vm.dart';
 
 abstract class FubukiRegExpNatives {
   static void bind(final FubukiNamespace namespace) {
@@ -118,6 +119,24 @@ abstract class FubukiRegExpNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('replaceFirstMapped'),
+      FubukiNativeFunctionValue.async(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiStringValue result = await replaceMapped(regex, call, 1);
+          return result;
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('replaceAllMapped'),
+      FubukiNativeFunctionValue.async(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiStringValue result = await replaceMapped(regex, call);
+          return result;
+        },
+      ),
+    );
     return value;
   }
 
@@ -162,5 +181,26 @@ abstract class FubukiRegExpNatives {
       ),
     );
     return value;
+  }
+
+  static Future<FubukiStringValue> replaceMapped(
+    final RegExp regex,
+    final FubukiNativeFunctionCall call, [
+    final int? count,
+  ]) async {
+    final FubukiStringValue input = call.argumentAt(0);
+    final FubukiFunctionValue mapper = call.argumentAt(1);
+    final String result = await input.replacePatternMapped(
+      regex,
+      (final Match match) async {
+        final FubukiValue result = await mapper.callInVM(
+          call.vm,
+          <FubukiValue>[newRegExpMatch(match as RegExpMatch)],
+        ).unwrapUnsafe();
+        return result.cast<FubukiStringValue>().value;
+      },
+      count: count,
+    );
+    return FubukiStringValue(result);
   }
 }

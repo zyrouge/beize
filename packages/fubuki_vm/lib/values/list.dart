@@ -117,7 +117,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'find':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               for (final FubukiValue x in elements) {
                 final FubukiValue result = await predicate
                     .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
@@ -130,7 +130,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'findIndex':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               for (int i = 0; i < elements.length; i++) {
                 final FubukiValue x = elements[i];
                 final FubukiValue result = await predicate
@@ -146,7 +146,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'findLastIndex':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               for (int i = elements.length - 1; i >= 0; i--) {
                 final FubukiValue x = elements[i];
                 final FubukiValue result = await predicate
@@ -162,7 +162,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'map':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               final FubukiListValue nValue = FubukiListValue();
               for (final FubukiValue x in elements) {
                 final FubukiValue result = await predicate
@@ -176,7 +176,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'where':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               final FubukiListValue nValue = FubukiListValue();
               for (final FubukiValue x in elements) {
                 final FubukiValue result = await predicate
@@ -192,7 +192,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'sort':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               final List<FubukiValue> sorted = elements.toList();
               for (int i = 0; i < sorted.length; i++) {
                 bool swapped = false;
@@ -246,7 +246,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
         case 'forEach':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
-              final FubukiValue predicate = call.argumentAt(0);
+              final FubukiFunctionValue predicate = call.argumentAt(0);
               for (final FubukiValue x in elements) {
                 await predicate.callInVM(call.vm, <FubukiValue>[x]);
               }

@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class FubukiStringValue extends FubukiPrimitiveObjectValue {
@@ -111,6 +112,22 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'replaceFirstMapped':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiStringValue result = await replaceMapped(call, 1);
+              return result;
+            },
+          );
+
+        case 'replaceAllMapped':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiStringValue result = await replaceMapped(call);
+              return result;
+            },
+          );
+
         case 'trim':
           return FubukiNativeFunctionValue.sync(
             (final _) => FubukiStringValue(value.trim()),
@@ -187,6 +204,49 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
       }
     }
     return super.get(key);
+  }
+
+  Future<FubukiStringValue> replaceMapped(
+    final FubukiNativeFunctionCall call, [
+    final int? count,
+  ]) async {
+    final FubukiStringValue pattern = call.argumentAt(0);
+    final FubukiFunctionValue mapper = call.argumentAt(1);
+    final String result = await replacePatternMapped(
+      pattern.value,
+      (final Match match) async {
+        final FubukiValue result = await mapper.callInVM(
+          call.vm,
+          <FubukiValue>[FubukiStringValue(match.group(0)!)],
+        ).unwrapUnsafe();
+        return result.cast<FubukiStringValue>().value;
+      },
+      count: count,
+    );
+    return FubukiStringValue(result);
+  }
+
+  Future<String> replacePatternMapped(
+    final Pattern pattern,
+    final Future<String> Function(Match) mapper, {
+    final int? count,
+  }) async {
+    String result = value;
+    int adjuster = 0;
+    int i = 0;
+    for (final Match x in pattern.allMatches(result)) {
+      if (count != null && i >= count) break;
+      final String by = await mapper(x);
+      final String nResult = result.replaceRange(
+        x.start + adjuster,
+        x.end + adjuster,
+        by,
+      );
+      adjuster = nResult.length - result.length;
+      result = nResult;
+      i++;
+    }
+    return result;
   }
 
   @override
