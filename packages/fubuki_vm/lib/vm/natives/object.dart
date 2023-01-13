@@ -32,7 +32,7 @@ abstract class FubukiObjectNatives {
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiPrimitiveObjectValue a = call.argumentAt(0);
-          final FubukiPrimitiveObjectValue b = call.argumentAt(0);
+          final FubukiPrimitiveObjectValue b = call.argumentAt(1);
           for (final int x in b.keys.keys) {
             a.set(b.keys[x]!, b.values[x]!);
           }
