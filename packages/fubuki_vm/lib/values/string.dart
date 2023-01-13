@@ -130,14 +130,16 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
           return FubukiNativeFunctionValue.sync(
               (final FubukiNativeFunctionCall call) {
             final FubukiNumberValue amount = call.argumentAt(0);
-            return FubukiStringValue(value.padLeft(amount.intValue));
+            final FubukiStringValue by = call.argumentAt(1);
+            return FubukiStringValue(value.padLeft(amount.intValue, by.value));
           });
 
         case 'padRight':
           return FubukiNativeFunctionValue.sync(
               (final FubukiNativeFunctionCall call) {
             final FubukiNumberValue amount = call.argumentAt(0);
-            return FubukiStringValue(value.padRight(amount.intValue));
+            final FubukiStringValue by = call.argumentAt(1);
+            return FubukiStringValue(value.padRight(amount.intValue, by.value));
           });
 
         case 'split':
