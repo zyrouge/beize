@@ -32,8 +32,20 @@ abstract class FubukiRegExpNatives {
     );
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
+      FubukiStringValue('isCaseSensitive'),
+      FubukiBooleanValue(regex.isCaseSensitive),
+    );
+    value.set(
+      FubukiStringValue('isDotAll'),
+      FubukiBooleanValue(regex.isDotAll),
+    );
+    value.set(
       FubukiStringValue('isMultiLine'),
       FubukiBooleanValue(regex.isMultiLine),
+    );
+    value.set(
+      FubukiStringValue('isUnicode'),
+      FubukiBooleanValue(regex.isUnicode),
     );
     value.set(
       FubukiStringValue('pattern'),
