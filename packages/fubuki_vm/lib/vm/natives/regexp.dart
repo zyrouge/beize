@@ -151,7 +151,7 @@ abstract class FubukiRegExpNatives {
       FubukiNumberValue(match.groupCount.toDouble()),
     );
     value.set(
-      FubukiStringValue('groupCount'),
+      FubukiStringValue('groupNames'),
       FubukiListValue(
         match.groupNames.map((final String x) => FubukiStringValue(x)).toList(),
       ),
