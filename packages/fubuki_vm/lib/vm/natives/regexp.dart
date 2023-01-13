@@ -169,7 +169,7 @@ abstract class FubukiRegExpNatives {
       ),
     );
     value.set(
-      FubukiStringValue('namedGroup'),
+      FubukiStringValue('group'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiNumberValue input = call.argumentAt(0);
