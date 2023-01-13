@@ -32,8 +32,8 @@ abstract class FubukiRegExpNatives {
     );
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
-      FubukiStringValue('isCaseSensitive'),
-      FubukiBooleanValue(regex.isCaseSensitive),
+      FubukiStringValue('isCaseInsensitive'),
+      FubukiBooleanValue(!regex.isCaseSensitive),
     );
     value.set(
       FubukiStringValue('isDotAll'),
