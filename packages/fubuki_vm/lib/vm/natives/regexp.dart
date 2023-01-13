@@ -95,16 +95,6 @@ abstract class FubukiRegExpNatives {
       ),
     );
     value.set(
-      FubukiStringValue('allMatches'),
-      FubukiNativeFunctionValue.sync(
-        (final FubukiNativeFunctionCall call) {
-          final FubukiStringValue input = call.argumentAt(0);
-          final Iterable<RegExpMatch> matches = regex.allMatches(input.value);
-          return FubukiListValue(matches.map(newRegExpMatch).toList());
-        },
-      ),
-    );
-    value.set(
       FubukiStringValue('replaceFirst'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
