@@ -1,4 +1,2 @@
-x := {
-    hello: "world",
-};
+x := -> a, b : a + b;
 print x.hello;

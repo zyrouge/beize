@@ -462,11 +462,12 @@ abstract class FubukiParser {
       functionCompiler.currentFunction.arguments.add(arg);
       cont = functionCompiler.match(FubukiTokens.comma);
     }
-    if (functionCompiler.match(FubukiTokens.braceLeft)) {
-      parseBlockStatement(functionCompiler);
-    } else {
+    if (functionCompiler.match(FubukiTokens.colon)) {
       parseExpression(functionCompiler);
       functionCompiler.emitOpCode(FubukiOpCodes.opReturn);
+    } else {
+      functionCompiler.match(FubukiTokens.braceLeft);
+      parseBlockStatement(functionCompiler);
     }
     compiler.emitConstant(functionCompiler.currentFunction);
     compiler.copyTokenState(functionCompiler);
