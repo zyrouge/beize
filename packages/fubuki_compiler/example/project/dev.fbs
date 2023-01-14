@@ -1,2 +1,4 @@
-x := list [1, 2, 3];
+x := map {
+    "hello": "world",
+};
 print x;

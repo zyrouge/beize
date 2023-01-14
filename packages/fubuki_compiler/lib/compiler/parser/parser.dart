@@ -455,18 +455,20 @@ abstract class FubukiParser {
 
   static void parseFunction(final FubukiCompiler compiler) {
     final FubukiCompiler functionCompiler = compiler.createFunctionCompiler();
-    if (functionCompiler.match(FubukiTokens.parenLeft)) {
-      bool cont = true;
-      while (cont && !functionCompiler.check(FubukiTokens.parenRight)) {
-        functionCompiler.consume(FubukiTokens.identifier);
-        final String arg = functionCompiler.previousToken.literal as String;
-        functionCompiler.currentFunction.arguments.add(arg);
-        cont = functionCompiler.match(FubukiTokens.comma);
-      }
-      functionCompiler.consume(FubukiTokens.parenRight);
+    bool cont = true;
+    while (cont && !functionCompiler.check(FubukiTokens.pipe)) {
+      functionCompiler.consume(FubukiTokens.identifier);
+      final String arg = functionCompiler.previousToken.literal as String;
+      functionCompiler.currentFunction.arguments.add(arg);
+      cont = functionCompiler.match(FubukiTokens.comma);
     }
-    functionCompiler.consume(FubukiTokens.braceLeft);
-    parseBlockStatement(functionCompiler);
+    functionCompiler.consume(FubukiTokens.pipe);
+    if (functionCompiler.match(FubukiTokens.braceLeft)) {
+      parseBlockStatement(functionCompiler);
+    } else {
+      parseExpression(functionCompiler);
+      functionCompiler.emitOpCode(FubukiOpCodes.opReturn);
+    }
     compiler.emitConstant(functionCompiler.currentFunction);
     compiler.copyTokenState(functionCompiler);
   }
@@ -502,7 +504,6 @@ abstract class FubukiParser {
     final bool objectMode = false,
   }) {
     int count = 0;
-    compiler.consume(FubukiTokens.braceLeft);
     bool cont = true;
     while (cont && !compiler.check(FubukiTokens.braceRight)) {
       if (!objectMode || compiler.match(FubukiTokens.bracketLeft)) {
@@ -526,6 +527,7 @@ abstract class FubukiParser {
   }
 
   static void parseMap(final FubukiCompiler compiler) {
+    compiler.consume(FubukiTokens.braceLeft);
     parseObjectLike(compiler);
   }
 

@@ -49,11 +49,9 @@ enum FubukiTokens {
   ifKw, // if
   elseKw, // else
   whileKw, // while
-  funKw, // fun
   returnKw, // return
   breakKw, // break
   continueKw, // continue
-  objKw, // obj
   tryKw, // try
   catchKw, // catch
   throwKw, // throw
@@ -112,11 +110,9 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.elseKw: 'else',
   FubukiTokens.whileKw: 'while',
   FubukiTokens.nullKw: 'null',
-  FubukiTokens.funKw: 'fun',
   FubukiTokens.returnKw: 'return',
   FubukiTokens.breakKw: 'break',
   FubukiTokens.continueKw: 'continue',
-  FubukiTokens.objKw: 'obj',
   FubukiTokens.tryKw: 'try',
   FubukiTokens.catchKw: 'catch',
   FubukiTokens.throwKw: 'throw',
