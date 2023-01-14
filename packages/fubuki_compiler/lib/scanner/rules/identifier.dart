@@ -25,7 +25,6 @@ abstract class FubukiIdentifierScanner {
     FubukiTokens.throwKw,
     FubukiTokens.importKw,
     FubukiTokens.asKw,
-    FubukiTokens.listKw,
     FubukiTokens.mapKw,
     FubukiTokens.whenKw,
     FubukiTokens.matchKw,

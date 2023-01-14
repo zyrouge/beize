@@ -30,6 +30,7 @@ class FubukiParseRule {
       precedence: FubukiPrecedence.call,
     ),
     FubukiTokens.bracketLeft: FubukiParseRule(
+      prefix: FubukiParser.parseList,
       infix: FubukiParser.parseBracketCall,
       precedence: FubukiPrecedence.call,
     ),
@@ -132,7 +133,6 @@ class FubukiParseRule {
     FubukiTokens.nullKw: FubukiParseRule(prefix: FubukiParser.parseNull),
     FubukiTokens.funKw: FubukiParseRule(prefix: FubukiParser.parseFunction),
     FubukiTokens.objKw: FubukiParseRule(prefix: FubukiParser.parseObject),
-    FubukiTokens.listKw: FubukiParseRule(prefix: FubukiParser.parseList),
     FubukiTokens.mapKw: FubukiParseRule(prefix: FubukiParser.parseMap),
   };
 

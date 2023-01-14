@@ -486,7 +486,6 @@ abstract class FubukiParser {
 
   static void parseList(final FubukiCompiler compiler) {
     int count = 0;
-    compiler.consume(FubukiTokens.bracketLeft);
     bool cont = true;
     while (cont && !compiler.check(FubukiTokens.bracketRight)) {
       parseExpression(compiler);
