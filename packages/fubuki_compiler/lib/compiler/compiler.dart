@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fubuki_vm/exports.dart';
+import 'package:fubuki_vm/fubuki_vm.dart';
 import 'package:path/path.dart' as path;
 import '../errors/exports.dart';
 import '../lexer/exports.dart';

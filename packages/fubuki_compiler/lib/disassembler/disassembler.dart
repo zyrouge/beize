@@ -1,4 +1,4 @@
-import 'package:fubuki_vm/exports.dart';
+import 'package:fubuki_vm/fubuki_vm.dart';
 import 'output.dart';
 
 class FubukiDisassembler {

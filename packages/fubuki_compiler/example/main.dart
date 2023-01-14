@@ -1,5 +1,5 @@
-import 'package:fubuki_compiler/exports.dart';
-import 'package:fubuki_vm/exports.dart';
+import 'package:fubuki_compiler/fubuki_compiler.dart';
+import 'package:fubuki_vm/fubuki_vm.dart';
 import 'package:path/path.dart' as path;
 
 Future<void> main() async {
