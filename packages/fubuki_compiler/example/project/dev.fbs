@@ -1,2 +1,2 @@
 x := -> a, b : a + b;
-print x.hello;
+print x(1, 2);
