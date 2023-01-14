@@ -23,7 +23,6 @@ abstract class FubukiIdentifierScanner {
     FubukiTokens.throwKw,
     FubukiTokens.importKw,
     FubukiTokens.asKw,
-    FubukiTokens.mapKw,
     FubukiTokens.whenKw,
     FubukiTokens.matchKw,
   };

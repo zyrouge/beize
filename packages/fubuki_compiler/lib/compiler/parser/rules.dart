@@ -35,6 +35,8 @@ class FubukiParseRule {
       precedence: FubukiPrecedence.call,
     ),
     FubukiTokens.braceLeft: FubukiParseRule(prefix: FubukiParser.parseObject),
+    FubukiTokens.rightArrow:
+        FubukiParseRule(prefix: FubukiParser.parseFunction),
     FubukiTokens.question: FubukiParseRule(
       infix: FubukiParser.parseTernary,
       precedence: FubukiPrecedence.assignment,
@@ -118,7 +120,6 @@ class FubukiParseRule {
       infix: FubukiParser.parseBinaryExpression,
     ),
     FubukiTokens.pipe: FubukiParseRule(
-      prefix: FubukiParser.parseFunction,
       precedence: FubukiPrecedence.pipe,
       infix: FubukiParser.parseBinaryExpression,
     ),
@@ -133,7 +134,6 @@ class FubukiParseRule {
     FubukiTokens.trueKw: FubukiParseRule(prefix: FubukiParser.parseBoolean),
     FubukiTokens.falseKw: FubukiParseRule(prefix: FubukiParser.parseBoolean),
     FubukiTokens.nullKw: FubukiParseRule(prefix: FubukiParser.parseNull),
-    FubukiTokens.mapKw: FubukiParseRule(prefix: FubukiParser.parseMap),
   };
 
   static FubukiParseRule of(final FubukiTokens type) => rules[type] ?? none;

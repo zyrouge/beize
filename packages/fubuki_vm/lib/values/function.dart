@@ -1,5 +1,6 @@
 import '../bytecode/exports.dart';
 import '../vm/namespace.dart';
+import '../vm/vm.dart';
 import 'exports.dart';
 
 class FubukiFunctionValue extends FubukiPrimitiveObjectValue {
@@ -10,6 +11,22 @@ class FubukiFunctionValue extends FubukiPrimitiveObjectValue {
 
   final FubukiFunctionConstant constant;
   final FubukiNamespace namespace;
+
+  @override
+  FubukiValue get(final FubukiValue key) {
+    if (key is FubukiStringValue) {
+      switch (key.value) {
+        case 'call':
+          return FubukiNativeFunctionValue(
+            (final FubukiNativeFunctionCall call) {
+              final FubukiListValue arguments = call.argumentAt(0);
+              return callInVM(call.vm, arguments.elements);
+            },
+          );
+      }
+    }
+    return super.get(key);
+  }
 
   @override
   final FubukiValueKind kind = FubukiValueKind.function;

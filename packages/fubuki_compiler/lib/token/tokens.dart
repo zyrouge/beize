@@ -42,6 +42,7 @@ enum FubukiTokens {
   greaterThan, // >
   lesserThanEqual, // <=
   greaterThanEqual, // >=
+  rightArrow, // ->
 
   trueKw, // true
   falseKw, // false
@@ -57,7 +58,6 @@ enum FubukiTokens {
   throwKw, // throw
   importKw, // import
   asKw, // as
-  mapKw, // map
   whenKw, // when
   matchKw, // match
 }
@@ -104,6 +104,7 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.greaterThan: '>',
   FubukiTokens.lesserThanEqual: '<=',
   FubukiTokens.greaterThanEqual: '>=',
+  FubukiTokens.rightArrow: '->',
   FubukiTokens.trueKw: 'true',
   FubukiTokens.falseKw: 'false',
   FubukiTokens.ifKw: 'if',
@@ -118,7 +119,6 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.throwKw: 'throw',
   FubukiTokens.importKw: 'import',
   FubukiTokens.asKw: 'as',
-  FubukiTokens.mapKw: 'map',
   FubukiTokens.whenKw: 'when',
   FubukiTokens.matchKw: 'match',
 };

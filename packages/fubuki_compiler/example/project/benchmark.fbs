@@ -1,11 +1,11 @@
-createBenchmarker := fun {
-    return obj {
+createBenchmarker := -> {
+    return {
         startedAt: null,
         endedAt: null,
-        start: fun {
+        start: -> {
             this.startedAt = DateTime.now().millisecondsSinceEpoch;
         },
-        end: fun {
+        end: -> {
             this.endedAt = DateTime.now().millisecondsSinceEpoch;
             print 'Took ' + (this.endedAt - this.startedAt) + 'ms';
         },

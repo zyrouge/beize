@@ -456,13 +456,12 @@ abstract class FubukiParser {
   static void parseFunction(final FubukiCompiler compiler) {
     final FubukiCompiler functionCompiler = compiler.createFunctionCompiler();
     bool cont = true;
-    while (cont && !functionCompiler.check(FubukiTokens.pipe)) {
+    while (cont && functionCompiler.check(FubukiTokens.identifier)) {
       functionCompiler.consume(FubukiTokens.identifier);
       final String arg = functionCompiler.previousToken.literal as String;
       functionCompiler.currentFunction.arguments.add(arg);
       cont = functionCompiler.match(FubukiTokens.comma);
     }
-    functionCompiler.consume(FubukiTokens.pipe);
     if (functionCompiler.match(FubukiTokens.braceLeft)) {
       parseBlockStatement(functionCompiler);
     } else {
@@ -499,18 +498,13 @@ abstract class FubukiParser {
     compiler.emitCode(count);
   }
 
-  static void parseObjectLike(
-    final FubukiCompiler compiler, {
-    final bool objectMode = false,
-  }) {
+  static void parseObject(final FubukiCompiler compiler) {
     int count = 0;
     bool cont = true;
     while (cont && !compiler.check(FubukiTokens.braceRight)) {
-      if (!objectMode || compiler.match(FubukiTokens.bracketLeft)) {
+      if (compiler.match(FubukiTokens.bracketLeft)) {
         parseExpression(compiler);
-        if (objectMode) {
-          compiler.consume(FubukiTokens.bracketRight);
-        }
+        compiler.consume(FubukiTokens.bracketRight);
       } else {
         compiler.consume(FubukiTokens.identifier);
         final String key = compiler.previousToken.literal as String;
@@ -524,15 +518,6 @@ abstract class FubukiParser {
     compiler.consume(FubukiTokens.braceRight);
     compiler.emitOpCode(FubukiOpCodes.opObject);
     compiler.emitCode(count);
-  }
-
-  static void parseMap(final FubukiCompiler compiler) {
-    compiler.consume(FubukiTokens.braceLeft);
-    parseObjectLike(compiler);
-  }
-
-  static void parseObject(final FubukiCompiler compiler) {
-    parseObjectLike(compiler, objectMode: true);
   }
 
   static void parsePropertyCall(

@@ -3,7 +3,7 @@ import "./benchmark.fbs" as benchmark;
 benchmarker := benchmark.createBenchmarker();
 benchmarker.start();
 
-increment := fun (i) {
+increment := -> (i) {
     return i + 1;
 };
 

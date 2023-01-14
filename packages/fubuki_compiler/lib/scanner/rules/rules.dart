@@ -72,6 +72,7 @@ class FubukiScannerRules {
       constructOffset2ScanFn(FubukiTokens.notEqual),
       constructOffset2ScanFn(FubukiTokens.lesserThanEqual),
       constructOffset2ScanFn(FubukiTokens.greaterThanEqual),
+      constructOffset2ScanFn(FubukiTokens.rightArrow),
     ],
   );
 
