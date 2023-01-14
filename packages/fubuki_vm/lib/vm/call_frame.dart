@@ -23,5 +23,5 @@ class FubukiCallFrame {
       function.chunk.constantAt(function.chunk.codeAt(index));
 
   String toStackTraceLine() =>
-      '${function.chunk.module} (${function.chunk.positionAt(sip)})';
+      '${function.chunk.module} (${function.chunk.lineAt(sip)})';
 }

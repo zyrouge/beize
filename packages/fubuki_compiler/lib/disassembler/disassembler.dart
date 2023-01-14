@@ -32,7 +32,7 @@ class FubukiDisassembler {
         writeInstruction(
           opCode,
           ip,
-          chunk.positionAt(ip),
+          chunk.lineAt(ip),
           '{so}(constant = ${stringifyConstant(constant)})',
         );
         if (constant is FubukiFunctionConstant) {
@@ -54,13 +54,13 @@ class FubukiDisassembler {
         writeInstruction(
           opCode,
           ip,
-          chunk.positionAt(ip),
+          chunk.lineAt(ip),
           '{so}(offset = $offset)',
         );
         return 1;
 
       default:
-        writeInstruction(opCode, ip, chunk.positionAt(ip));
+        writeInstruction(opCode, ip, chunk.lineAt(ip));
         return 0;
     }
   }
@@ -68,10 +68,10 @@ class FubukiDisassembler {
   void writeInstruction(
     final FubukiOpCodes opCode,
     final int offset,
-    final String position, [
+    final int position, [
     final String extra = '',
   ]) {
-    write('$offset{s}${opCode.name}{s}${chunk.positionAt(ip)}$extra');
+    write('$offset{s}${opCode.name}{s}$position$extra');
   }
 
   void write(final String text) {

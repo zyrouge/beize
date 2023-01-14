@@ -14,11 +14,7 @@ enum FubukiCompilerMode {
 }
 
 class FubukiCompilerOptions {
-  const FubukiCompilerOptions({
-    this.shortenPositions = true,
-  });
-
-  final bool shortenPositions;
+  const FubukiCompilerOptions();
 
   static const FubukiCompilerOptions defaultValue = FubukiCompilerOptions();
 }
@@ -139,10 +135,7 @@ class FubukiCompiler {
   }
 
   void emitCode(final int code) {
-    final String position = options.shortenPositions
-        ? previousToken.span.start.row.toString()
-        : previousToken.span.toString();
-    currentChunk.addCode(code, position);
+    currentChunk.addCode(code, previousToken.span.start.row + 1);
   }
 
   void emitOpCode(final FubukiOpCodes opCode) => emitCode(opCode.index);

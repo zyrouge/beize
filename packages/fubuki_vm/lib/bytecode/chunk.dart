@@ -5,14 +5,14 @@ class FubukiChunk {
   FubukiChunk({
     required this.codes,
     required this.constants,
-    required this.positions,
+    required this.lines,
     required this.module,
   });
 
   factory FubukiChunk.empty(final String module) => FubukiChunk(
         codes: <int>[],
         constants: <FubukiConstant>[],
-        positions: <String>[],
+        lines: <int>[],
         module: module,
       );
 
@@ -25,21 +25,21 @@ class FubukiChunk {
           }
           return x;
         }).toList(),
-        positions: (serialized[2] as List<dynamic>).cast<String>(),
+        lines: (serialized[2] as List<dynamic>).cast<int>(),
         module: serialized[3] as String,
       );
 
   final List<int> codes;
   final List<FubukiConstant> constants;
-  final List<String> positions;
+  final List<int> lines;
   final String module;
 
-  int addOpCode(final FubukiOpCodes opCode, final String position) =>
-      addCode(opCode.index, position);
+  int addOpCode(final FubukiOpCodes opCode, final int line) =>
+      addCode(opCode.index, line);
 
-  int addCode(final int code, final String position) {
+  int addCode(final int code, final int line) {
     codes.add(code);
-    positions.add(position);
+    lines.add(line);
     return length - 1;
   }
 
@@ -57,7 +57,7 @@ class FubukiChunk {
 
   FubukiConstant constantAt(final int index) => constants[index];
 
-  String positionAt(final int index) => positions[index];
+  int lineAt(final int index) => lines[index];
 
   FubukiSerializedConstant serialize() {
     final FubukiSerializedConstant serializedConstant =
@@ -65,7 +65,7 @@ class FubukiChunk {
       if (x is FubukiFunctionConstant) return x.serialize();
       return x;
     }).toList();
-    return <dynamic>[codes, serializedConstant, positions, module];
+    return <dynamic>[codes, serializedConstant, lines, module];
   }
 
   int get length => codes.length;

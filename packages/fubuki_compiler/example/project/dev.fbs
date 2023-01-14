@@ -1,1 +1,2 @@
-print 10e-4;
+x := list [1, 2, 3];
+print x;
