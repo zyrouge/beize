@@ -14,8 +14,8 @@ abstract class FubukiValue {
 
   bool canCast<T extends FubukiValue>() {
     if (T == FubukiValue) return true;
-    if (T == FubukiPrimitiveObjectValue && this is FubukiPrimitiveObjectValue) {
-      return true;
+    if (T == FubukiPrimitiveObjectValue) {
+      return this is FubukiPrimitiveObjectValue;
     }
     final FubukiValueKind to = getKindFromType(T);
     if (kind == to) return true;
@@ -37,6 +37,7 @@ abstract class FubukiValue {
     FubukiObjectValue: FubukiValueKind.object,
     FubukiStringValue: FubukiValueKind.string,
     FubukiModuleValue: FubukiValueKind.module,
+    FubukiFutureValue: FubukiValueKind.future,
   };
 
   static FubukiValueKind getKindFromType(final Type type) =>
