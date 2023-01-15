@@ -25,6 +25,7 @@ final Map<FubukiValueKind, String> _kindCodeMap = <FubukiValueKind, String>{
   FubukiValueKind.list: 'List',
   FubukiValueKind.future: 'Future',
   FubukiValueKind.module: 'Module',
+  FubukiValueKind.primitiveObject: 'PrimitiveObject',
 };
 
 extension FubukiValueKindUtils on FubukiValueKind {
