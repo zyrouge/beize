@@ -265,7 +265,7 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
         (final Match match) {
           final String key = match[1]!;
           if (key.isEmpty) {
-            return env.getIndex(++i).kToString();
+            return env.getIndex(i++).kToString();
           }
           return env.getIndex(int.parse(key)).kToString();
         },
