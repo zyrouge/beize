@@ -150,6 +150,7 @@ abstract class FubukiConvertNatives {
       for (final Object? x in json) {
         list.push(fromJson(x));
       }
+      return list;
     }
     if (json is Map<dynamic, dynamic>) {
       final FubukiObjectValue obj = FubukiObjectValue();
