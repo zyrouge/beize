@@ -8,7 +8,7 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
   }) {
     // NOTE: this makes sure that uncaught futures vanish away
     value.catchError(
-      (final _) => FubukiNullValue.value,
+      (final _) async => FubukiNullValue.value,
       test: (final _) => !isHandled,
     );
   }
@@ -54,14 +54,15 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
             (final FubukiNativeFunctionCall call) {
               final FubukiFunctionValue catchFn = call.argumentAt(0);
               isHandled = true;
-              value.catchError((final Object err, final StackTrace stackTrace) {
+              value.catchError(
+                  (final Object err, final StackTrace stackTrace) async {
                 final FubukiValue value =
                     FubukiNativeFunctionValue.createValueFromException(
                   call,
                   err.toString(),
                   stackTrace,
                 );
-                catchFn.callInVM(call.vm, <FubukiValue>[value]);
+                await catchFn.callInVM(call.vm, <FubukiValue>[value]);
                 return FubukiNullValue.value;
               });
               return FubukiNullValue.value;
