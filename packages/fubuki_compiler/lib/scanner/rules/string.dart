@@ -102,7 +102,7 @@ abstract class FubukiStringScanner {
 
           return FubukiToken(
             FubukiTokens.illegal,
-            buffer.toString(),
+            literal,
             token.span,
             error: 'Invalid unicode escape sequence',
             errorSpan: FubukiSpan(
@@ -133,7 +133,7 @@ abstract class FubukiStringScanner {
 
           return FubukiToken(
             FubukiTokens.illegal,
-            buffer.toString(),
+            literal,
             token.span,
             error: 'Invalid unicode escape sequence',
             errorSpan: FubukiSpan(

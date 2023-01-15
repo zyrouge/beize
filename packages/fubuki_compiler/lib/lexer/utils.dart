@@ -5,7 +5,7 @@ class FubukiLexerUtils {
       '+-0123456789.exabcdef'.contains(char.toLowerCase());
   static bool isQuote(final String char) => char == "'" || char == '"';
   static bool isAlpha(final String char) =>
-      RegExp('[A-Za-z_\$]').hasMatch(char);
+      r'$_abcdefghijklmnopqrstuvwxyz'.contains(char.toLowerCase());
   static bool isAlphaNumeric(final String char) =>
       isAlpha(char) || isNumeric(char);
 }
