@@ -38,6 +38,7 @@ abstract class FubukiValue {
     FubukiStringValue: FubukiValueKind.string,
     FubukiModuleValue: FubukiValueKind.module,
     FubukiFutureValue: FubukiValueKind.future,
+    FubukiPrimitiveObjectValue: FubukiValueKind.primitiveObject,
   };
 
   static FubukiValueKind getKindFromType(final Type type) =>

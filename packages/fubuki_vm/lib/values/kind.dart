@@ -10,6 +10,7 @@ enum FubukiValueKind {
   list,
   future,
   module,
+  primitiveObject,
 }
 
 final Map<FubukiValueKind, String> _kindCodeMap = <FubukiValueKind, String>{
