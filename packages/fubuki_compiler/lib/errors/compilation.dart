@@ -89,6 +89,15 @@ class FubukiCompilationException implements Exception {
         'Multiple else classes are not allowed ("${token.type.code}" found at ${token.span})',
       );
 
+  factory FubukiCompilationException.cannotAwaitOutsideAsyncFunction(
+    final String module,
+    final FubukiToken token,
+  ) =>
+      FubukiCompilationException(
+        module,
+        'Cannot "await" outside of "async" function ("${token.type.code}" found at ${token.span})',
+      );
+
   final String module;
   final String text;
 

@@ -1,3 +1,10 @@
-print String.format("Hello {hellow}", {
-    hellow:"hi"
-});
+gen := -> async {
+    await Future.wait(1000);
+    return "Hello World";
+};
+
+main := -> async {
+    print await gen();
+};
+
+await main();

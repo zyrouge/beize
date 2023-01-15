@@ -11,7 +11,7 @@ abstract class FubukiFunctionNatives {
         (final FubukiNativeFunctionCall call) async {
           final FubukiFunctionValue fn = call.argumentAt(0);
           final FubukiListValue arguments = call.argumentAt(1);
-          return fn.callInVM(call.vm, arguments.elements);
+          return call.frame.callValue(fn, arguments.elements);
         },
       ),
     );

@@ -223,8 +223,8 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
     final String result = await replacePatternMapped(
       pattern.value,
       (final Match match) async {
-        final FubukiValue result = await mapper.callInVM(
-          call.vm,
+        final FubukiValue result = await call.frame.callValue(
+          mapper,
           <FubukiValue>[FubukiStringValue(match.group(0)!)],
         ).unwrapUnsafe();
         return result.cast<FubukiStringValue>().value;

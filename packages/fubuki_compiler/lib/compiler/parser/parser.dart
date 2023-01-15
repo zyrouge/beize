@@ -462,6 +462,8 @@ abstract class FubukiParser {
       functionCompiler.currentFunction.arguments.add(arg);
       cont = functionCompiler.match(FubukiTokens.comma);
     }
+    final bool isAsync = functionCompiler.match(FubukiTokens.asyncKw);
+    functionCompiler.currentFunction.isAsync = isAsync;
     if (functionCompiler.match(FubukiTokens.colon)) {
       parseExpression(functionCompiler);
       functionCompiler.emitOpCode(FubukiOpCodes.opReturn);
@@ -577,6 +579,17 @@ abstract class FubukiParser {
       dotCall: !compiler.match(FubukiTokens.bracketLeft),
     );
     compiler.patchJump(exitJump);
+  }
+
+  static void parseAwait(final FubukiCompiler compiler) {
+    if (!compiler.currentFunction.isAsync) {
+      throw FubukiCompilationException.cannotAwaitOutsideAsyncFunction(
+        compiler.module,
+        compiler.previousToken,
+      );
+    }
+    parseExpression(compiler);
+    compiler.emitOpCode(FubukiOpCodes.opAwait);
   }
 }
 

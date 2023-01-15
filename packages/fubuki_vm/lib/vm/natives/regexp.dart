@@ -1,6 +1,6 @@
 import '../../values/exports.dart';
+import '../call_frame.dart';
 import '../namespace.dart';
-import '../vm.dart';
 
 abstract class FubukiRegExpNatives {
   static void bind(final FubukiNamespace namespace) {
@@ -193,8 +193,8 @@ abstract class FubukiRegExpNatives {
     final String result = await input.replacePatternMapped(
       regex,
       (final Match match) async {
-        final FubukiValue result = await mapper.callInVM(
-          call.vm,
+        final FubukiValue result = await call.frame.callValue(
+          mapper,
           <FubukiValue>[newRegExpMatch(match as RegExpMatch)],
         ).unwrapUnsafe();
         return result.cast<FubukiStringValue>().value;

@@ -13,7 +13,7 @@ abstract class FubukiExceptionNatives {
           if (stackTrace is FubukiNullValue) {
             return newException(
               message,
-              FubukiStringValue(call.vm.getCurrentStackTrace()),
+              FubukiStringValue(call.frame.getStackTrace()),
             );
           }
           return newException(message, stackTrace.cast());

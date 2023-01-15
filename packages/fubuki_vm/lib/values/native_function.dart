@@ -18,11 +18,11 @@ typedef FubukiNativeFunctionAsyncFn = Future<FubukiValue> Function(
 
 class FubukiNativeFunctionCall {
   FubukiNativeFunctionCall({
-    required this.vm,
+    required this.frame,
     required this.arguments,
   });
 
-  final FubukiVM vm;
+  final FubukiCallFrame frame;
   final List<FubukiValue> arguments;
 
   T argumentAt<T extends FubukiValue>(final int index) {
@@ -132,7 +132,7 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
     if (err is FubukiValue) return err;
     return FubukiExceptionNatives.newExceptionNative(
       err.toString(),
-      '${call.vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
+      '${call.frame.getStackTrace()}\nDart Stack Trace:\n$stackTrace',
     );
   }
 }

@@ -1,7 +1,6 @@
 import '../../errors/exports.dart';
 import '../../values/exports.dart';
 import '../namespace.dart';
-import '../vm.dart';
 import 'object.dart';
 
 abstract class FubukiListNatives {
@@ -34,8 +33,8 @@ abstract class FubukiListNatives {
           final FubukiListValue result = FubukiListValue();
           for (int i = 0; i < length; i++) {
             result.push(
-              await predicate.callInVM(
-                call.vm,
+              await call.frame.callValue(
+                predicate,
                 <FubukiValue>[FubukiNumberValue(i.toDouble())],
               ).unwrapUnsafe(),
             );

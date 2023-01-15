@@ -119,8 +119,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             (final FubukiNativeFunctionCall call) async {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               for (final FubukiValue x in elements) {
-                final FubukiValue result = await predicate
-                    .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) return x;
               }
               return FubukiNullValue.value;
@@ -133,8 +133,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               for (int i = 0; i < elements.length; i++) {
                 final FubukiValue x = elements[i];
-                final FubukiValue result = await predicate
-                    .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   return FubukiNumberValue(i.toDouble());
                 }
@@ -149,8 +149,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               for (int i = elements.length - 1; i >= 0; i--) {
                 final FubukiValue x = elements[i];
-                final FubukiValue result = await predicate
-                    .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   return FubukiNumberValue(i.toDouble());
                 }
@@ -165,8 +165,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               final FubukiListValue nValue = FubukiListValue();
               for (final FubukiValue x in elements) {
-                final FubukiValue result = await predicate
-                    .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 nValue.push(result);
               }
               return nValue;
@@ -179,8 +179,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               final FubukiListValue nValue = FubukiListValue();
               for (final FubukiValue x in elements) {
-                final FubukiValue result = await predicate
-                    .callInVM(call.vm, <FubukiValue>[x]).unwrapUnsafe();
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   nValue.push(result);
                 }
@@ -199,8 +199,8 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
                 for (int j = 0; j < sorted.length - i - 1; j++) {
                   final FubukiValue a = sorted[j];
                   final FubukiValue b = sorted[j + 1];
-                  final FubukiValue result = await predicate
-                      .callInVM(call.vm, <FubukiValue>[a, b]).unwrapUnsafe();
+                  final FubukiValue result = await call.frame
+                      .callValue(predicate, <FubukiValue>[a, b]).unwrapUnsafe();
                   final bool shouldSwap =
                       result.cast<FubukiNumberValue>().value > 0;
                   if (shouldSwap) {
@@ -248,7 +248,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             (final FubukiNativeFunctionCall call) async {
               final FubukiFunctionValue predicate = call.argumentAt(0);
               for (final FubukiValue x in elements) {
-                await predicate.callInVM(call.vm, <FubukiValue>[x]);
+                await call.frame.callValue(predicate, <FubukiValue>[x]);
               }
               return FubukiNullValue.value;
             },

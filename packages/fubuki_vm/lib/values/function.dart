@@ -1,6 +1,5 @@
 import '../bytecode.dart';
-import '../vm/namespace.dart';
-import '../vm/vm.dart';
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class FubukiFunctionValue extends FubukiPrimitiveObjectValue {
@@ -20,7 +19,7 @@ class FubukiFunctionValue extends FubukiPrimitiveObjectValue {
           return FubukiNativeFunctionValue(
             (final FubukiNativeFunctionCall call) {
               final FubukiListValue arguments = call.argumentAt(0);
-              return callInVM(call.vm, arguments.elements);
+              return call.frame.callValue(this, arguments.elements);
             },
           );
       }

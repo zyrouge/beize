@@ -1,7 +1,6 @@
 import 'dart:async';
 import '../../values/exports.dart';
 import '../namespace.dart';
-import '../vm.dart';
 
 abstract class FubukiFutureNatives {
   static void bind(final FubukiNamespace namespace) {
@@ -15,8 +14,8 @@ abstract class FubukiFutureNatives {
       FubukiNativeFunctionValue.asyncReturn(
         (final FubukiNativeFunctionCall call) async {
           final FubukiFunctionValue value = call.argumentAt(0);
-          return value
-              .callInVM(call.vm, <FubukiFunctionValue>[]).unwrapUnsafe();
+          return call.frame
+              .callValue(value, <FubukiFunctionValue>[]).unwrapUnsafe();
         },
       ),
     );
@@ -46,7 +45,7 @@ abstract class FubukiFutureNatives {
         (final FubukiNativeFunctionCall call) async {
           final FubukiListValue futures = call.argumentAt(0);
           final List<FubukiValue> result =
-              await Future.wait(castListFutures(call.vm, futures));
+              await Future.wait(castListFutures(call, futures));
           return FubukiListValue(result);
         },
       ),
@@ -57,7 +56,7 @@ abstract class FubukiFutureNatives {
         (final FubukiNativeFunctionCall call) async {
           final FubukiListValue futures = call.argumentAt(0);
           final FubukiValue result =
-              await Future.any(castListFutures(call.vm, futures));
+              await Future.any(castListFutures(call, futures));
           return result;
         },
       ),
@@ -94,13 +93,13 @@ abstract class FubukiFutureNatives {
   }
 
   static Iterable<Future<FubukiValue>> castListFutures(
-    final FubukiVM vm,
+    final FubukiNativeFunctionCall call,
     final FubukiListValue list,
   ) =>
       list.elements.map(
         (final FubukiValue x) async {
           final FubukiFunctionValue fn = x.cast();
-          return fn.callInVM(vm, <FubukiValue>[]).unwrapUnsafe();
+          return call.frame.callValue(fn, <FubukiValue>[]).unwrapUnsafe();
         },
       );
 }

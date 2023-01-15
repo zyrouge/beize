@@ -39,7 +39,7 @@ class FubukiInterpreter {
       return FubukiInterpreterResult.fail(
         FubukiExceptionNatives.newExceptionNative(
           'FubukiRuntimeException: $err',
-          '${vm.getCurrentStackTrace()}\nDart Stack Trace:\n$stackTrace',
+          '${frame.getStackTrace()}\nDart Stack Trace:\n$stackTrace',
         ),
       );
     }
@@ -138,7 +138,7 @@ class FubukiInterpreter {
           }
           final FubukiValue value = vm.stack.pop();
           final FubukiInterpreterResult result =
-              await vm.callValue(value, arguments);
+              await frame.callValue(value, arguments);
           if (result.isFailure) {
             return handleError(result.value);
           }
@@ -426,6 +426,14 @@ class FubukiInterpreter {
           namespace.declare(name, result.value);
           break;
 
+        case FubukiOpCodes.opAwait:
+          final FubukiValue value = vm.stack.top();
+          if (value is FubukiFutureValue) {
+            vm.stack.pop();
+            vm.stack.push(await value.value);
+          }
+          break;
+
         default:
           throw FubukiRuntimeExpection.unknownOpCode(opCode);
       }
@@ -438,7 +446,7 @@ class FubukiInterpreter {
   Future<FubukiInterpreterResult> handleInvalidUnary(final String message) {
     final FubukiValue error = FubukiExceptionNatives.newExceptionNative(
       'FubukiInvalidUnaryOperation: $message',
-      vm.getCurrentStackTrace(),
+      frame.getStackTrace(),
     );
     return handleError(error);
   }
@@ -446,7 +454,7 @@ class FubukiInterpreter {
   Future<FubukiInterpreterResult> handleInvalidBinary(final String message) {
     final FubukiValue error = FubukiExceptionNatives.newExceptionNative(
       'FubukiInvalidBinaryOperation: $message',
-      vm.getCurrentStackTrace(),
+      frame.getStackTrace(),
     );
     return handleError(error);
   }
