@@ -1,4 +1,4 @@
-import '../bytecode/exports.dart';
+import '../bytecode.dart';
 import '../values/exports.dart';
 
 class FubukiRuntimeExpection implements Exception {

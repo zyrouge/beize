@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../bytecode/exports.dart';
+import '../bytecode.dart';
 import '../errors/exports.dart';
 import '../errors/runtime_exception.dart';
 import '../values/exports.dart';

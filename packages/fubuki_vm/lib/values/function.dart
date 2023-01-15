@@ -1,4 +1,4 @@
-import '../bytecode/exports.dart';
+import '../bytecode.dart';
 import '../vm/namespace.dart';
 import '../vm/vm.dart';
 import 'exports.dart';

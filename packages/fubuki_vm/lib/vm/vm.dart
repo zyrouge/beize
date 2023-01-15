@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../bytecode/exports.dart';
+import '../bytecode.dart';
 import '../errors/exports.dart';
 import '../values/exports.dart';
 import 'call_frame.dart';

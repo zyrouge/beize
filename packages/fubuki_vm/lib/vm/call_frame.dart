@@ -1,4 +1,4 @@
-import '../bytecode/exports.dart';
+import '../bytecode.dart';
 import 'namespace.dart';
 import 'try_frame.dart';
 import 'vm.dart';

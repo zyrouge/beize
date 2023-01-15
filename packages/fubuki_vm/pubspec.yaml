@@ -2,8 +2,20 @@ name: fubuki_vm
 description: Virtual Machine of Fubuki.
 version: 0.0.0
 
+publish_to: none
+
 environment:
     sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+    fubuki_shared:
+        git:
+            url: https://github.com/yukino-org/fubuki
+            path: packages/fubuki_shared
+
+dependency_overrides:
+    fubuki_shared:
+        path: ../fubuki_shared
 
 dev_dependencies:
     zlint:

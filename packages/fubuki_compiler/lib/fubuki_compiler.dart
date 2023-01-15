@@ -1,5 +1,6 @@
 library fubuki_compiler;
 
+export 'bytecode.dart';
 export 'compiler/exports.dart';
 export 'disassembler/exports.dart';
 export 'errors/exports.dart';

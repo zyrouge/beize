@@ -1,4 +1,4 @@
-import 'package:fubuki_vm/fubuki_vm.dart';
+import 'package:fubuki_shared/fubuki_shared.dart';
 import '../../errors/exports.dart';
 import '../../token/exports.dart';
 import '../compiler.dart';

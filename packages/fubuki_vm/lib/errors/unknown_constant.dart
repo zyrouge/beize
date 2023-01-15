@@ -1,4 +1,4 @@
-import '../exports.dart';
+import '../bytecode.dart';
 
 class FubukiUnknownConstantExpection implements Exception {
   FubukiUnknownConstantExpection(this.message);
