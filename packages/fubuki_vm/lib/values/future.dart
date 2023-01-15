@@ -2,19 +2,9 @@ import '../vm/exports.dart';
 import 'exports.dart';
 
 class FubukiFutureValue extends FubukiPrimitiveObjectValue {
-  FubukiFutureValue(
-    this.value, {
-    this.isHandled = false,
-  }) {
-    // NOTE: this makes sure that uncaught futures vanish away
-    value.catchError(
-      (final _) async => FubukiNullValue.value,
-      test: (final _) => !isHandled,
-    );
-  }
+  FubukiFutureValue(this.value);
 
   final Future<FubukiValue> value;
-  bool isHandled;
 
   @override
   FubukiValue get(final FubukiValue key) {
@@ -53,7 +43,6 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
           return FubukiNativeFunctionValue.sync(
             (final FubukiNativeFunctionCall call) {
               final FubukiFunctionValue catchFn = call.argumentAt(0);
-              isHandled = true;
               value.catchError(
                   (final Object err, final StackTrace stackTrace) async {
                 final FubukiValue value =
