@@ -6,7 +6,7 @@ abstract class FubukiRegExpNatives {
   static void bind(final FubukiNamespace namespace) {
     final FubukiObjectValue value = FubukiObjectValue();
     value.set(
-      FubukiStringValue('from'),
+      FubukiStringValue('new'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) {
           final FubukiStringValue value = call.argumentAt(0);
