@@ -79,9 +79,7 @@ class FubukiVM {
       return callFunctionValue(value, arguments);
     }
     if (value is FubukiNativeFunctionValue) {
-      return Future<FubukiInterpreterResult>.sync(
-        () => callNativeFunction(value, arguments),
-      );
+      return callNativeFunction(value, arguments);
     }
     return FubukiInterpreterResult.fail(
       FubukiExceptionNatives.newExceptionNative(
