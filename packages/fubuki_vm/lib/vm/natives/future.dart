@@ -11,6 +11,16 @@ abstract class FubukiFutureNatives {
       FubukiNativeFunctionValue.sync((final _) => newCompleter()),
     );
     value.set(
+      FubukiStringValue('fromFunction'),
+      FubukiNativeFunctionValue.asyncReturn(
+        (final FubukiNativeFunctionCall call) async {
+          final FubukiFunctionValue value = call.argumentAt(0);
+          return value
+              .callInVM(call.vm, <FubukiFunctionValue>[]).unwrapUnsafe();
+        },
+      ),
+    );
+    value.set(
       FubukiStringValue('fromValue'),
       FubukiNativeFunctionValue.sync(
         (final FubukiNativeFunctionCall call) =>
