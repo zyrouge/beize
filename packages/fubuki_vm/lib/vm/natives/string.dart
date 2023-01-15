@@ -37,6 +37,27 @@ abstract class FubukiStringNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('format'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final FubukiStringValue template = call.argumentAt(0);
+          final FubukiPrimitiveObjectValue env = call.argumentAt(1);
+          final bool usePosition = env is FubukiListValue;
+          final String result = template.value.replaceAllMapped(
+              RegExp(r'(?<!\\){([^}]+)}'), (final Match match) {
+            final String key = match[1]!;
+            if (usePosition) {
+              return env
+                  .get(FubukiNumberValue(num.parse(key).toDouble()))
+                  .kToString();
+            }
+            return env.get(FubukiStringValue(key)).kToString();
+          });
+          return FubukiStringValue(result);
+        },
+      ),
+    );
     namespace.declare('String', value);
   }
 }
