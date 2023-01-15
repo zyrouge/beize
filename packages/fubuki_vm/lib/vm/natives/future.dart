@@ -1,7 +1,7 @@
 import 'dart:async';
 import '../../values/exports.dart';
 import '../namespace.dart';
-import '../result.dart';
+import '../vm.dart';
 
 abstract class FubukiFutureNatives {
   static void bind(final FubukiNamespace namespace) {
@@ -43,44 +43,24 @@ abstract class FubukiFutureNatives {
       ),
     );
     value.set(
-      FubukiStringValue('awaitAll'),
-      FubukiNativeFunctionValue(
+      FubukiStringValue('unify'),
+      FubukiNativeFunctionValue.asyncReturn(
         (final FubukiNativeFunctionCall call) async {
           final FubukiListValue futures = call.argumentAt(0);
-          try {
-            final List<FubukiValue> result =
-                await Future.wait(castListFutures(futures));
-            return FubukiInterpreterResult.success(FubukiListValue(result));
-          } catch (err, stackTrace) {
-            return FubukiInterpreterResult.fail(
-              FubukiNativeFunctionValue.createValueFromException(
-                call,
-                err.toString(),
-                stackTrace,
-              ),
-            );
-          }
+          final List<FubukiValue> result =
+              await Future.wait(castListFutures(call.vm, futures));
+          return FubukiListValue(result);
         },
       ),
     );
     value.set(
       FubukiStringValue('any'),
-      FubukiNativeFunctionValue(
+      FubukiNativeFunctionValue.asyncReturn(
         (final FubukiNativeFunctionCall call) async {
           final FubukiListValue futures = call.argumentAt(0);
-          try {
-            final FubukiValue result =
-                await Future.any(castListFutures(futures));
-            return FubukiInterpreterResult.success(result);
-          } catch (err, stackTrace) {
-            return FubukiInterpreterResult.fail(
-              FubukiNativeFunctionValue.createValueFromException(
-                call,
-                err.toString(),
-                stackTrace,
-              ),
-            );
-          }
+          final FubukiValue result =
+              await Future.any(castListFutures(call.vm, futures));
+          return result;
         },
       ),
     );
@@ -116,12 +96,13 @@ abstract class FubukiFutureNatives {
   }
 
   static Iterable<Future<FubukiValue>> castListFutures(
+    final FubukiVM vm,
     final FubukiListValue list,
   ) =>
       list.elements.map(
         (final FubukiValue x) async {
-          if (x is FubukiFutureValue) return x.value;
-          return x;
+          final FubukiFunctionValue fn = x.cast();
+          return fn.callInVM(vm, <FubukiValue>[]).unwrapUnsafe();
         },
       );
 }
