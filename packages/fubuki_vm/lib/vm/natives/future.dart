@@ -18,18 +18,6 @@ abstract class FubukiFutureNatives {
       ),
     );
     value.set(
-      FubukiStringValue('maybeAwait'),
-      FubukiNativeFunctionValue.async(
-        (final FubukiNativeFunctionCall call) async {
-          final FubukiValue value = call.argumentAt(0);
-          if (value is FubukiFutureValue) {
-            return value.value;
-          }
-          return value;
-        },
-      ),
-    );
-    value.set(
       FubukiStringValue('wait'),
       FubukiNativeFunctionValue.async(
         (final FubukiNativeFunctionCall call) async {
