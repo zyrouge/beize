@@ -200,6 +200,14 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
             (final _) => FubukiStringValue(value.toUpperCase()),
           );
 
+        case 'format':
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) {
+              final FubukiPrimitiveObjectValue value = call.argumentAt(0);
+              return FubukiStringValue(format(value));
+            },
+          );
+
         default:
       }
     }
@@ -246,6 +254,30 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
       result = nResult;
       i++;
     }
+    return result;
+  }
+
+  String format(final FubukiPrimitiveObjectValue env) {
+    if (env is FubukiListValue) {
+      int i = 0;
+      return value.replaceAllMapped(
+        RegExp(r'(?<!\\){([^}]*)}'),
+        (final Match match) {
+          final String key = match[1]!;
+          if (key.isEmpty) {
+            return env.getIndex(++i).kToString();
+          }
+          return env.getIndex(int.parse(key)).kToString();
+        },
+      );
+    }
+    final String result = value.replaceAllMapped(
+      RegExp(r'(?<!\\){([^}]+)}'),
+      (final Match match) {
+        final String key = match[1]!;
+        return env.get(FubukiStringValue(key)).kToString();
+      },
+    );
     return result;
   }
 
