@@ -168,7 +168,7 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
                 final FubukiValue result = await call.frame
                     .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
-                  nValue.push(result);
+                  nValue.push(x);
                 }
               }
               return nValue;
