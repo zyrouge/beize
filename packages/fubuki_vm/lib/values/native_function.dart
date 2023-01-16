@@ -138,7 +138,9 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
 
 extension FubukiValueInterpreterResultUtils on FubukiInterpreterResult {
   FubukiValue unwrapUnsafe() {
-    if (isFailure) throw value.kToString();
+    if (isFailure) {
+      throw FubukiRuntimeExpection.unwrapFailed(value.kToString());
+    }
     return value;
   }
 }

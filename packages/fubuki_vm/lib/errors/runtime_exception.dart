@@ -40,6 +40,9 @@ class FubukiRuntimeExpection implements Exception {
         'Cannot cast "${received.code}" to "${expected.code}"',
       );
 
+  factory FubukiRuntimeExpection.unwrapFailed(final String message) =>
+      FubukiRuntimeExpection('Unwrap failed due to "$message"');
+
   final String message;
 
   @override
