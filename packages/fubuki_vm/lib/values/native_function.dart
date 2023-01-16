@@ -29,7 +29,7 @@ class FubukiNativeFunctionCall {
         index < arguments.length ? arguments[index] : FubukiNullValue.value;
     if (!value.canCast<T>()) {
       throw FubukiRuntimeExpection(
-        'Cannot cast argument at $index to "${FubukiValue.getKindFromType(T).code}"',
+        'Expected argument at $index to be "${FubukiValue.getKindFromType(T).code}", received "${value.kind.code}"',
       );
     }
     return value as T;
@@ -138,7 +138,7 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
 
 extension FubukiValueInterpreterResultUtils on FubukiInterpreterResult {
   FubukiValue unwrapUnsafe() {
-    if (isFailure) throw FubukiUnhandledExpection(value.kToString());
+    if (isFailure) throw value.kToString();
     return value;
   }
 }
