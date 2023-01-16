@@ -69,7 +69,17 @@ class FubukiVM {
     return FubukiInterpreterResult.success(value);
   }
 
+  void superviseFuture(final Future<FubukiValue> future) {
+    Future<void>.microtask(() async {
+      try {
+        await future.whenComplete(() => null);
+      } on FubukiValue catch (err) {
+        onUnhandledException(err);
+      }
+    });
+  }
+
   void onUnhandledException(final FubukiValue err) {
-    throw FubukiUnhandledExpection('${err.kToString()}\n\nDart Stack Trace:');
+    throw FubukiUnhandledExpection(err.kToString());
   }
 }

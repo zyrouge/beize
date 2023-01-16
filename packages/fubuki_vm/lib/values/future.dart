@@ -1,5 +1,11 @@
 import 'exports.dart';
 
+enum FubukiFutureState {
+  resolving,
+  resolved,
+  failed,
+}
+
 class FubukiFutureValue extends FubukiPrimitiveObjectValue {
   FubukiFutureValue(this.value);
 

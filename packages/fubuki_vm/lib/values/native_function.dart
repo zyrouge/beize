@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import '../errors/runtime_exception.dart';
+import '../errors/exports.dart';
 import '../vm/exports.dart';
 import 'exports.dart';
 
@@ -139,7 +138,7 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
 
 extension FubukiValueInterpreterResultUtils on FubukiInterpreterResult {
   FubukiValue unwrapUnsafe() {
-    if (isFailure) throw value.kToString();
+    if (isFailure) throw FubukiUnhandledExpection(value.kToString());
     return value;
   }
 }

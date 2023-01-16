@@ -76,6 +76,7 @@ class FubukiCallFrame {
     );
     if (frame.function.isAsync) {
       final Completer<FubukiValue> completer = Completer<FubukiValue>();
+      frame.vm.superviseFuture(completer.future);
       FubukiInterpreter(frame).run().then(
         (final FubukiInterpreterResult result) {
           if (result.isSuccess) {
@@ -96,13 +97,6 @@ class FubukiCallFrame {
         },
       );
       final FubukiFutureValue result = FubukiFutureValue(completer.future);
-      Future<void>.microtask(() async {
-        try {
-          await completer.future.whenComplete(() => null);
-        } on FubukiValue catch (err) {
-          frame.vm.onUnhandledException(err);
-        }
-      });
       return FubukiInterpreterResult.success(result);
     }
     final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
