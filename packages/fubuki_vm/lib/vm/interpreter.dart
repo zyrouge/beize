@@ -430,7 +430,21 @@ class FubukiInterpreter {
           final FubukiValue value = vm.stack.top();
           if (value is FubukiFutureValue) {
             vm.stack.pop();
-            vm.stack.push(await value.value);
+            final FubukiValue result;
+            try {
+              result = await value.value;
+            } catch (err) {
+              if (err is FubukiValue) {
+                return handleError(err);
+              }
+              return handleError(
+                FubukiExceptionNatives.newExceptionNative(
+                  err.toString(),
+                  frame.getStackTrace(),
+                ),
+              );
+            }
+            vm.stack.push(result);
           }
           break;
 

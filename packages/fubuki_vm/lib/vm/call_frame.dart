@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import '../bytecode.dart';
+import '../errors/exports.dart';
 import '../values/exports.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
@@ -79,15 +79,31 @@ class FubukiCallFrame {
       FubukiInterpreter(frame).run().then(
         (final FubukiInterpreterResult result) {
           if (result.isSuccess) {
-            completer.complete(result.value);
-          } else {
-            completer.completeError(result.value);
+            return completer.complete(result.value);
           }
+          completer.completeError(result.value);
+        },
+        onError: (final Object err, final StackTrace stackTrace) {
+          if (err is FubukiValue) {
+            return completer.completeError(err);
+          }
+          completer.completeError(
+            FubukiExceptionNatives.newExceptionNative(
+              err.toString(),
+              getStackTrace(),
+            ),
+          );
         },
       );
-      return FubukiInterpreterResult.success(
-        FubukiFutureValue(completer.future),
-      );
+      final FubukiFutureValue result = FubukiFutureValue(completer.future);
+      Future<void>.microtask(() async {
+        try {
+          await completer.future.whenComplete(() => null);
+        } on FubukiValue catch (err) {
+          frame.vm.onUnhandledException(err);
+        }
+      });
+      return FubukiInterpreterResult.success(result);
     }
     final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
     return result;

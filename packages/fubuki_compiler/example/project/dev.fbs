@@ -1,10 +1,9 @@
 gen := -> async {
-    await Future.wait(1000);
-    return "Hello World";
+    return "hello";
 };
 
 main := -> async {
     print await gen();
 };
 
-await main();
+main();

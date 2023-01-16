@@ -43,7 +43,7 @@ class FubukiVM {
       isEntrypoint: true,
     );
     if (result.isFailure) {
-      throw FubukiUnhandledExpection(result.value.kToString());
+      onUnhandledException(result.value);
     }
   }
 
@@ -67,5 +67,9 @@ class FubukiVM {
     final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
     if (result.isFailure) return result;
     return FubukiInterpreterResult.success(value);
+  }
+
+  void onUnhandledException(final FubukiValue err) {
+    throw FubukiUnhandledExpection('${err.kToString()}\n\nDart Stack Trace:');
   }
 }
