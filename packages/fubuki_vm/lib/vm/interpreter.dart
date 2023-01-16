@@ -362,8 +362,11 @@ class FubukiInterpreter {
         case FubukiOpCodes.opList:
           final int count = chunk.codeAt(frame.ip);
           frame.ip++;
-          final List<FubukiValue> values =
-              List<FubukiValue>.filled(count, FubukiNullValue.value);
+          final List<FubukiValue> values = List<FubukiValue>.filled(
+            count,
+            FubukiNullValue.value,
+            growable: true,
+          );
           for (int i = count - 1; i >= 0; i--) {
             values[i] = vm.stack.pop();
           }
