@@ -97,9 +97,6 @@ abstract class FubukiFutureNatives {
     final FubukiListValue list,
   ) =>
       list.elements.map(
-        (final FubukiValue x) async {
-          final FubukiFunctionValue fn = x.cast();
-          return call.frame.callValue(fn, <FubukiValue>[]).unwrapUnsafe();
-        },
+        (final FubukiValue x) async => x.cast<FubukiFutureValue>().value,
       );
 }
