@@ -97,6 +97,11 @@ abstract class FubukiFutureNatives {
     final FubukiListValue list,
   ) =>
       list.elements.map(
-        (final FubukiValue x) async => x.cast<FubukiFutureValue>().resolve(),
+        (final FubukiValue x) async {
+          if (x is FubukiFutureValue) {
+            return x.resolve();
+          }
+          return x;
+        },
       );
 }
