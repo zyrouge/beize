@@ -32,6 +32,6 @@ abstract class FubukiFiberNatives {
         },
       ),
     );
-    namespace.declare('Future', value);
+    namespace.declare('Fiber', value);
   }
 }
