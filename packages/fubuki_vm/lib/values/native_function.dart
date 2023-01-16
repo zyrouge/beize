@@ -67,26 +67,6 @@ class FubukiNativeFunctionValue extends FubukiPrimitiveObjectValue {
         },
       );
 
-  factory FubukiNativeFunctionValue.asyncReturn(
-    final FubukiNativeFunctionAsyncFn asyncFn,
-  ) =>
-      FubukiNativeFunctionValue(
-        (final FubukiNativeFunctionCall call) async {
-          try {
-            final Completer<FubukiValue> completer = Completer<FubukiValue>();
-            asyncFn(call).then(
-              completer.complete,
-              onError: completer.completeError,
-            );
-            return FubukiInterpreterResult.success(
-              FubukiFutureValue(completer.future),
-            );
-          } catch (err, stackTrace) {
-            return createResultFromException(call, err, stackTrace);
-          }
-        },
-      );
-
   final FubukiNativeFunctionFn nativeFn;
 
   Future<FubukiInterpreterResult> call(

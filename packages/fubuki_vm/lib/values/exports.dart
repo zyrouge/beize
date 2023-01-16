@@ -1,6 +1,5 @@
 export 'boolean.dart';
 export 'function.dart';
-export 'future.dart';
 export 'kind.dart';
 export 'list.dart';
 export 'module.dart';

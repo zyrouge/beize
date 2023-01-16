@@ -74,30 +74,6 @@ class FubukiCallFrame {
       function: function.constant,
       namespace: namespace,
     );
-    if (frame.function.isAsync) {
-      final Completer<FubukiValue> completer = Completer<FubukiValue>();
-      FubukiInterpreter(frame).run().then(
-        (final FubukiInterpreterResult result) {
-          if (result.isSuccess) {
-            return completer.complete(result.value);
-          }
-          completer.completeError(result.value);
-        },
-        onError: (final Object err, final StackTrace stackTrace) {
-          if (err is FubukiValue) {
-            return completer.completeError(err);
-          }
-          completer.completeError(
-            FubukiExceptionNatives.newExceptionNative(
-              err.toString(),
-              getStackTrace(),
-            ),
-          );
-        },
-      );
-      final FubukiFutureValue result = FubukiFutureValue(completer.future);
-      return FubukiInterpreterResult.success(result);
-    }
     final FubukiInterpreterResult result = await FubukiInterpreter(frame).run();
     return result;
   }

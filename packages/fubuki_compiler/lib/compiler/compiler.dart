@@ -49,7 +49,6 @@ class FubukiCompiler {
     final bool isAsync = false,
   }) {
     currentFunction = FubukiFunctionConstant(
-      isAsync: isAsync,
       arguments: <String>[],
       chunk: FubukiChunk.empty(module),
     );
@@ -240,7 +239,6 @@ class FubukiCompiler {
     // NOTE: dummy chunk
     derived.modules[entrypoint] = FubukiFunctionConstant(
       arguments: <String>[],
-      isAsync: false,
       chunk: FubukiChunk.empty(entrypoint),
     );
     derived.modules[entrypoint] = await derived.compile();

@@ -37,7 +37,6 @@ abstract class FubukiValue {
     FubukiObjectValue: FubukiValueKind.object,
     FubukiStringValue: FubukiValueKind.string,
     FubukiModuleValue: FubukiValueKind.module,
-    FubukiFutureValue: FubukiValueKind.future,
     FubukiPrimitiveObjectValue: FubukiValueKind.primitiveObject,
   };
 

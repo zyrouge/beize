@@ -60,8 +60,6 @@ enum FubukiTokens {
   asKw, // as
   whenKw, // when
   matchKw, // match
-  asyncKw, // async
-  awaitKw, // await
 }
 
 const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
@@ -123,8 +121,6 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.asKw: 'as',
   FubukiTokens.whenKw: 'when',
   FubukiTokens.matchKw: 'match',
-  FubukiTokens.asyncKw: 'async',
-  FubukiTokens.awaitKw: 'await',
 };
 
 extension OutreTokensUtils on FubukiTokens {

@@ -429,28 +429,6 @@ class FubukiInterpreter {
           namespace.declare(name, result.value);
           break;
 
-        case FubukiOpCodes.opAwait:
-          final FubukiValue value = vm.stack.top();
-          if (value is FubukiFutureValue) {
-            vm.stack.pop();
-            final FubukiValue result;
-            try {
-              result = await value.resolve();
-            } catch (err) {
-              if (err is FubukiValue) {
-                return handleError(err);
-              }
-              return handleError(
-                FubukiExceptionNatives.newExceptionNative(
-                  err.toString(),
-                  frame.getStackTrace(),
-                ),
-              );
-            }
-            vm.stack.push(result);
-          }
-          break;
-
         default:
           throw FubukiRuntimeExpection.unknownOpCode(opCode);
       }

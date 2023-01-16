@@ -7,8 +7,8 @@ abstract class FubukiNatives {
     FubukiConvertNatives.bind(namespace);
     FubukiDateTimeNatives.bind(namespace);
     FubukiExceptionNatives.bind(namespace);
+    FubukiFiberNatives.bind(namespace);
     FubukiFunctionNatives.bind(namespace);
-    FubukiFutureNatives.bind(namespace);
     FubukiListNatives.bind(namespace);
     FubukiNumberNatives.bind(namespace);
     FubukiObjectNatives.bind(namespace);

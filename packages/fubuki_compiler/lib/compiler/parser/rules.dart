@@ -134,7 +134,6 @@ class FubukiParseRule {
     FubukiTokens.trueKw: FubukiParseRule(prefix: FubukiParser.parseBoolean),
     FubukiTokens.falseKw: FubukiParseRule(prefix: FubukiParser.parseBoolean),
     FubukiTokens.nullKw: FubukiParseRule(prefix: FubukiParser.parseNull),
-    FubukiTokens.awaitKw: FubukiParseRule(prefix: FubukiParser.parseAwait),
   };
 
   static FubukiParseRule of(final FubukiTokens type) => rules[type] ?? none;
