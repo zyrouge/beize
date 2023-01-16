@@ -19,11 +19,11 @@ typedef FubukiVMOnUncaughtError = void Function(FubukiValue);
 class FubukiVMOptions {
   FubukiVMOptions({
     this.disablePrint = false,
-    this.onUncaughtError,
+    this.onUnhandledException,
   });
 
   final bool disablePrint;
-  final FubukiVMOnUncaughtError? onUncaughtError;
+  final FubukiVMOnUncaughtError? onUnhandledException;
 }
 
 class FubukiVM {
@@ -80,6 +80,10 @@ class FubukiVM {
   }
 
   void onUnhandledException(final FubukiValue err) {
+    if (options.onUnhandledException != null) {
+      options.onUnhandledException!.call(err);
+      return;
+    }
     throw FubukiUnhandledExpection(err.kToString());
   }
 }
