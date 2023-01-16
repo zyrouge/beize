@@ -48,12 +48,13 @@ class FubukiCallFrame {
   Future<FubukiInterpreterResult> callNativeFunction(
     final FubukiNativeFunctionValue function,
     final List<FubukiValue> arguments,
-  ) {
+  ) async {
     final FubukiNativeFunctionCall call = FubukiNativeFunctionCall(
       frame: this,
       arguments: arguments,
     );
-    return function.call(call);
+    final FubukiInterpreterResult result = await function.call(call);
+    return result;
   }
 
   Future<FubukiInterpreterResult> callFunctionValue(

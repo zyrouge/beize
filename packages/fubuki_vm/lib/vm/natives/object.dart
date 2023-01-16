@@ -1,6 +1,5 @@
 import '../../values/exports.dart';
 import '../namespace.dart';
-import '../vm.dart';
 
 abstract class FubukiObjectNatives {
   static void bind(final FubukiNamespace namespace) {
