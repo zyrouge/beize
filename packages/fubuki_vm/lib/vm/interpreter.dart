@@ -432,7 +432,7 @@ class FubukiInterpreter {
             vm.stack.pop();
             final FubukiValue result;
             try {
-              result = await value.value;
+              result = await value.resolve();
             } catch (err) {
               if (err is FubukiValue) {
                 return handleError(err);

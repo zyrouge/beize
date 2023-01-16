@@ -43,6 +43,12 @@ class FubukiFutureValue extends FubukiPrimitiveObjectValue {
     return super.get(key);
   }
 
+  Future<FubukiValue> resolve() async {
+    final FubukiValue result = await value;
+    if (result is FubukiFutureValue) return result.resolve();
+    return result;
+  }
+
   @override
   final FubukiValueKind kind = FubukiValueKind.future;
 
