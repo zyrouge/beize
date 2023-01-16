@@ -76,7 +76,6 @@ class FubukiCallFrame {
     );
     if (frame.function.isAsync) {
       final Completer<FubukiValue> completer = Completer<FubukiValue>();
-      frame.vm.superviseFuture(completer.future);
       FubukiInterpreter(frame).run().then(
         (final FubukiInterpreterResult result) {
           if (result.isSuccess) {
