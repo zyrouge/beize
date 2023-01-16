@@ -181,9 +181,9 @@ abstract class FubukiConvertNatives {
       case FubukiValueKind.object:
         final FubukiObjectValue obj = value.cast();
         final Map<Object?, Object?> json = <Object, Object>{};
-        for (final int i in obj.keys.keys) {
-          final Object? key = toJson(obj.keys[i]!);
-          final Object? value = toJson(obj.values[i]!);
+        for (final MapEntry<FubukiValue, FubukiValue> x in obj.entries()) {
+          final Object? key = toJson(x.key);
+          final Object? value = toJson(x.value);
           json[key] = value;
         }
         return json;
