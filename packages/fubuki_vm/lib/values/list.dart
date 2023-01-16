@@ -159,6 +159,22 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'filter':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiFunctionValue predicate = call.argumentAt(0);
+              final FubukiListValue nValue = FubukiListValue();
+              for (final FubukiValue x in elements) {
+                final FubukiValue result = await call.frame
+                    .callValue(predicate, <FubukiValue>[x]).unwrapUnsafe();
+                if (result.isTruthy) {
+                  nValue.push(result);
+                }
+              }
+              return nValue;
+            },
+          );
+
         case 'map':
           return FubukiNativeFunctionValue.async(
             (final FubukiNativeFunctionCall call) async {
