@@ -110,11 +110,11 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
               final FubukiNumberValue start = call.argumentAt(0);
               final FubukiNumberValue end = call.argumentAt(1);
               final int iEnd = end.intValue;
-              elements.sublist(
+              final List<FubukiValue> sublist = elements.sublist(
                 start.intValue,
                 iEnd < length ? iEnd : length,
               );
-              return FubukiNullValue.value;
+              return FubukiListValue(sublist);
             },
           );
 
