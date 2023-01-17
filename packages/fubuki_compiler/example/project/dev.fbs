@@ -1,9 +1,12 @@
-gen := -> async {
+gen := -> {
     return "hello";
 };
 
-main := -> async {
-    print await gen();
+gen = null;
+
+main := -> {
+    gen?.a = 2;
+    print gen?.a;
 };
 
 main();

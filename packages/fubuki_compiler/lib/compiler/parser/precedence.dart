@@ -14,6 +14,7 @@ enum FubukiPrecedence {
   unary, // ! ~ + -
   call, // () . [] ?.
   grouping, // (...)
+  kekw,
 }
 
 extension FubukiPrecedenceUtils on FubukiPrecedence {

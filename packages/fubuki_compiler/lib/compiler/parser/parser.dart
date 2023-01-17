@@ -572,10 +572,7 @@ abstract class FubukiParser {
 
   static void parseNullAccess(final FubukiCompiler compiler) {
     final int exitJump = compiler.emitJump(FubukiOpCodes.opJumpIfNull);
-    parsePropertyCall(
-      compiler,
-      dotCall: !compiler.match(FubukiTokens.bracketLeft),
-    );
+    parsePrecedence(compiler, FubukiPrecedence.call);
     compiler.patchJump(exitJump);
   }
 }

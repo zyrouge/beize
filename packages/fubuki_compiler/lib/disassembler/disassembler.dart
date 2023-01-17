@@ -45,6 +45,7 @@ class FubukiDisassembler {
 
       case FubukiOpCodes.opJump:
       case FubukiOpCodes.opJumpIfFalse:
+      case FubukiOpCodes.opJumpIfNull:
       case FubukiOpCodes.opAbsoluteJump:
       case FubukiOpCodes.opCall:
       case FubukiOpCodes.opList:

@@ -43,7 +43,7 @@ class FubukiCompiler {
   late FubukiFunctionConstant currentFunction;
 
   late int scopeDepth;
-  late List<FubukiCompilerLoopState> loops;
+  late final List<FubukiCompilerLoopState> loops;
 
   void prepare({
     final bool isAsync = false,

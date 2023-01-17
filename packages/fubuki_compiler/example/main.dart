@@ -15,5 +15,4 @@ Future<void> main() async {
   FubukiDisassembler.disassembleProgram(real);
   final FubukiVM vm = FubukiVM(real, FubukiVMOptions());
   await vm.run();
-  print(vm.stack);
 }
