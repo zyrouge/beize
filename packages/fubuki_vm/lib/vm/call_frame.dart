@@ -1,11 +1,11 @@
 import 'dart:async';
 import '../bytecode.dart';
-import '../errors/exports.dart';
 import '../values/exports.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
 import 'natives/exports.dart';
 import 'result.dart';
+import 'stack.dart';
 import 'try_frame.dart';
 import 'vm.dart';
 
@@ -21,6 +21,7 @@ class FubukiCallFrame {
   int sip = 0;
   int scopeDepth = 0;
   final List<FubukiTryFrame> tryFrames = <FubukiTryFrame>[];
+  final FubukiStack stack = FubukiStack();
 
   final FubukiVM vm;
   final FubukiCallFrame? parent;

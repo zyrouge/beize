@@ -34,7 +34,6 @@ class FubukiVM {
 
   final FubukiNamespace globalNamespace = FubukiNamespace.withNatives();
   final Map<String, FubukiModuleValue> modules = <String, FubukiModuleValue>{};
-  final FubukiStack stack = FubukiStack();
   late final FubukiCallFrame topFrame;
 
   Future<void> run() async {

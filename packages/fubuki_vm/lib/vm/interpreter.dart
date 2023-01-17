@@ -18,11 +18,9 @@ enum FubukiInterpreterState {
 
 class FubukiInterpreter {
   FubukiInterpreter(this.frame)
-      : vm = frame.vm,
-        chunk = frame.function.chunk,
+      : chunk = frame.function.chunk,
         namespace = frame.namespace;
 
-  final FubukiVM vm;
   final FubukiCallFrame frame;
   final FubukiChunk chunk;
   FubukiNamespace namespace;
@@ -78,34 +76,34 @@ class FubukiInterpreter {
           } else {
             throw FubukiRuntimeExpection.unknownConstant(constant);
           }
-          vm.stack.push(value);
+          frame.stack.push(value);
           frame.ip++;
           break;
 
         case FubukiOpCodes.opTrue:
-          vm.stack.push(FubukiBooleanValue.trueValue);
+          frame.stack.push(FubukiBooleanValue.trueValue);
           break;
 
         case FubukiOpCodes.opFalse:
-          vm.stack.push(FubukiBooleanValue.falseValue);
+          frame.stack.push(FubukiBooleanValue.falseValue);
           break;
 
         case FubukiOpCodes.opNull:
-          vm.stack.push(FubukiNullValue.value);
+          frame.stack.push(FubukiNullValue.value);
           break;
 
         case FubukiOpCodes.opPop:
-          vm.stack.pop();
+          frame.stack.pop();
           break;
 
         case FubukiOpCodes.opTop:
-          vm.stack.push(vm.stack.top());
+          frame.stack.push(frame.stack.top());
           break;
 
         case FubukiOpCodes.opJumpIfNull:
           final int offset = chunk.codeAt(frame.ip);
           frame.ip++;
-          if (vm.stack.top() is FubukiNullValue) {
+          if (frame.stack.top() is FubukiNullValue) {
             frame.ip += offset;
           }
           break;
@@ -113,7 +111,7 @@ class FubukiInterpreter {
         case FubukiOpCodes.opJumpIfFalse:
           final int offset = chunk.codeAt(frame.ip);
           frame.ip++;
-          if (vm.stack.top().isFalsey) {
+          if (frame.stack.top().isFalsey) {
             frame.ip += offset;
           }
           break;
@@ -134,66 +132,66 @@ class FubukiInterpreter {
           final List<FubukiValue> arguments =
               List<FubukiValue>.filled(count, FubukiNullValue.value);
           for (int i = count - 1; i >= 0; i--) {
-            arguments[i] = vm.stack.pop();
+            arguments[i] = frame.stack.pop();
           }
-          final FubukiValue value = vm.stack.pop();
+          final FubukiValue value = frame.stack.pop();
           final FubukiInterpreterResult result =
               await frame.callValue(value, arguments);
           if (result.isFailure) {
             return handleError(result.value);
           }
-          vm.stack.push(result.value);
+          frame.stack.push(result.value);
           break;
 
         case FubukiOpCodes.opReturn:
           frame.ip = chunk.length;
-          resultValue = vm.stack.pop();
+          resultValue = frame.stack.pop();
           break;
 
         case FubukiOpCodes.opPrint:
-          if (!vm.options.disablePrint) {
+          if (!frame.vm.options.disablePrint) {
             // ignore: avoid_print
-            print('print: ${vm.stack.pop().kToString()}');
+            print('print: ${frame.stack.pop().kToString()}');
           }
           break;
 
         case FubukiOpCodes.opNegate:
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue) {
             return handleInvalidUnary(
               'Cannot perform negate on "${a.kind.code}"',
             );
           }
-          vm.stack.push(a.negate);
+          frame.stack.push(a.negate);
           break;
 
         case FubukiOpCodes.opBitwiseNot:
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue) {
             return handleInvalidUnary(
               'Cannot perform bitwise not on "${a.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue((~a.unsafeIntValue).toDouble()));
+          frame.stack.push(FubukiNumberValue((~a.unsafeIntValue).toDouble()));
           break;
 
         case FubukiOpCodes.opEqual:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
-          vm.stack.push(FubukiBooleanValue(a.kHashCode == b.kHashCode));
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
+          frame.stack.push(FubukiBooleanValue(a.kHashCode == b.kHashCode));
           break;
 
         case FubukiOpCodes.opNot:
-          vm.stack.push(FubukiBooleanValue(!vm.stack.pop().isTruthy));
+          frame.stack.push(FubukiBooleanValue(!frame.stack.pop().isTruthy));
           break;
 
         case FubukiOpCodes.opAdd:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is FubukiStringValue || b is FubukiStringValue) {
-            vm.stack.push(FubukiStringValue(a.kToString() + b.kToString()));
+            frame.stack.push(FubukiStringValue(a.kToString() + b.kToString()));
           } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
-            vm.stack.push(FubukiNumberValue(a.value + b.value));
+            frame.stack.push(FubukiNumberValue(a.value + b.value));
           } else {
             return handleInvalidBinary(
               'Cannot perform addition between "${a.kind.code}" and "${b.kind.code}"',
@@ -202,100 +200,100 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opSubtract:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform subtraction between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue(a.value - b.value));
+          frame.stack.push(FubukiNumberValue(a.value - b.value));
           break;
 
         case FubukiOpCodes.opMultiply:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform multiplication between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue(a.value * b.value));
+          frame.stack.push(FubukiNumberValue(a.value * b.value));
           break;
 
         case FubukiOpCodes.opDivide:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform division between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue(a.value / b.value));
+          frame.stack.push(FubukiNumberValue(a.value / b.value));
           break;
 
         case FubukiOpCodes.opFloor:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform floor division between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue((a.value ~/ b.value).toDouble()));
+          frame.stack.push(FubukiNumberValue((a.value ~/ b.value).toDouble()));
           break;
 
         case FubukiOpCodes.opModulo:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform remainder between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue(a.value % b.value));
+          frame.stack.push(FubukiNumberValue(a.value % b.value));
           break;
 
         case FubukiOpCodes.opExponent:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform exponentiation between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiNumberValue(pow(a.value, b.value).toDouble()));
+          frame.stack.push(FubukiNumberValue(pow(a.value, b.value).toDouble()));
           break;
 
         case FubukiOpCodes.opLess:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiBooleanValue(a.value < b.value));
+          frame.stack.push(FubukiBooleanValue(a.value < b.value));
           break;
 
         case FubukiOpCodes.opGreater:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is! FubukiNumberValue || b is! FubukiNumberValue) {
             return handleInvalidBinary(
               'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
             );
           }
-          vm.stack.push(FubukiBooleanValue(a.value > b.value));
+          frame.stack.push(FubukiBooleanValue(a.value > b.value));
           break;
 
         case FubukiOpCodes.opBitwiseAnd:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
-            vm.stack.push(FubukiBooleanValue(a.value & b.value));
+            frame.stack.push(FubukiBooleanValue(a.value & b.value));
           } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
-            vm.stack.push(
+            frame.stack.push(
               FubukiNumberValue(
                 (a.unsafeIntValue & b.unsafeIntValue).toDouble(),
               ),
@@ -308,12 +306,12 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opBitwiseOr:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
-            vm.stack.push(FubukiBooleanValue(a.value | b.value));
+            frame.stack.push(FubukiBooleanValue(a.value | b.value));
           } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
-            vm.stack.push(
+            frame.stack.push(
               FubukiNumberValue((a.intValue | b.intValue).toDouble()),
             );
           } else {
@@ -324,12 +322,12 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opBitwiseXor:
-          final FubukiValue b = vm.stack.pop();
-          final FubukiValue a = vm.stack.pop();
+          final FubukiValue b = frame.stack.pop();
+          final FubukiValue a = frame.stack.pop();
           if (a is FubukiBooleanValue && b is FubukiBooleanValue) {
-            vm.stack.push(FubukiBooleanValue(a.value ^ b.value));
+            frame.stack.push(FubukiBooleanValue(a.value ^ b.value));
           } else if (a is FubukiNumberValue && b is FubukiNumberValue) {
-            vm.stack.push(
+            frame.stack.push(
               FubukiNumberValue((a.intValue ^ b.intValue).toDouble()),
             );
           } else {
@@ -340,14 +338,14 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opDeclare:
-          final FubukiValue value = vm.stack.top();
+          final FubukiValue value = frame.stack.top();
           final String name = frame.readConstantAt(frame.ip) as String;
           frame.ip++;
           namespace.declare(name, value);
           break;
 
         case FubukiOpCodes.opAssign:
-          final FubukiValue value = vm.stack.top();
+          final FubukiValue value = frame.stack.top();
           final String name = frame.readConstantAt(frame.ip) as String;
           frame.ip++;
           namespace.assign(name, value);
@@ -356,7 +354,7 @@ class FubukiInterpreter {
         case FubukiOpCodes.opLookup:
           final String name = frame.readConstantAt(frame.ip) as String;
           frame.ip++;
-          vm.stack.push(namespace.lookup(name));
+          frame.stack.push(namespace.lookup(name));
           break;
 
         case FubukiOpCodes.opList:
@@ -368,9 +366,9 @@ class FubukiInterpreter {
             growable: true,
           );
           for (int i = count - 1; i >= 0; i--) {
-            values[i] = vm.stack.pop();
+            values[i] = frame.stack.pop();
           }
-          vm.stack.push(FubukiListValue(values));
+          frame.stack.push(FubukiListValue(values));
           break;
 
         case FubukiOpCodes.opObject:
@@ -378,29 +376,29 @@ class FubukiInterpreter {
           frame.ip++;
           final FubukiObjectValue obj = FubukiObjectValue();
           for (int i = 0; i < count; i++) {
-            final FubukiValue value = vm.stack.pop();
-            final FubukiValue key = vm.stack.pop();
+            final FubukiValue value = frame.stack.pop();
+            final FubukiValue key = frame.stack.pop();
             if (value is FubukiFunctionValue) {
               value.namespace.assign('this', obj);
             }
             obj.set(key, value);
           }
-          vm.stack.push(obj);
+          frame.stack.push(obj);
           break;
 
         case FubukiOpCodes.opGetProperty:
-          final FubukiValue name = vm.stack.pop();
-          final FubukiPrimitiveObjectValue obj = vm.stack.pop();
+          final FubukiValue name = frame.stack.pop();
+          final FubukiPrimitiveObjectValue obj = frame.stack.pop();
           final FubukiValue value = obj.get(name);
-          vm.stack.push(value);
+          frame.stack.push(value);
           break;
 
         case FubukiOpCodes.opSetProperty:
-          final FubukiValue value = vm.stack.pop();
-          final FubukiValue name = vm.stack.pop();
-          final FubukiPrimitiveObjectValue obj = vm.stack.pop();
+          final FubukiValue value = frame.stack.pop();
+          final FubukiValue name = frame.stack.pop();
+          final FubukiPrimitiveObjectValue obj = frame.stack.pop();
           obj.set(name, value);
-          vm.stack.push(value);
+          frame.stack.push(value);
           break;
 
         case FubukiOpCodes.opBeginTry:
@@ -416,13 +414,14 @@ class FubukiInterpreter {
           break;
 
         case FubukiOpCodes.opThrow:
-          return handleError(vm.stack.pop());
+          return handleError(frame.stack.pop());
 
         case FubukiOpCodes.opModule:
           final String module = frame.readConstantAt(frame.ip) as String;
           final String name = frame.readConstantAt(frame.ip + 1) as String;
           frame.ip += 2;
-          final FubukiInterpreterResult result = await vm.loadModule(module);
+          final FubukiInterpreterResult result =
+              await frame.vm.loadModule(module);
           if (result.isFailure) {
             return handleError(result.value);
           }
@@ -466,7 +465,7 @@ class FubukiInterpreter {
       }
     }
     frame.ip = tryFrame.offset;
-    vm.stack.push(error);
+    frame.stack.push(error);
     return interpret();
   }
 }
