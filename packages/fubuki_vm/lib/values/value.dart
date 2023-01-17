@@ -27,7 +27,7 @@ abstract class FubukiValue {
   int get kHashCode;
 
   @override
-  String toString() => 'FubukiValue(${kind.code}, ${kToString()})';
+  String toString() => 'Fubuki${kind.code}Value: ${kToString()}';
 
   static final Map<Type, FubukiValueKind> _typeKindMap =
       <Type, FubukiValueKind>{
