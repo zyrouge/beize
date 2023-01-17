@@ -39,7 +39,7 @@ class FubukiCallFrame {
     }
     return FubukiInterpreterResult.fail(
       FubukiExceptionNatives.newExceptionNative(
-        'Value "${value.kToString()}" is not callable',
+        'Value "${value.kind.code}" is not callable',
         getStackTrace(),
       ),
     );
