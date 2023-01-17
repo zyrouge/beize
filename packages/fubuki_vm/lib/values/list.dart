@@ -108,8 +108,12 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
           return FubukiNativeFunctionValue.sync(
             (final FubukiNativeFunctionCall call) {
               final FubukiNumberValue start = call.argumentAt(0);
-              final FubukiNumberValue end = call.argumentAt(0);
-              elements.sublist(start.intValue, end.intValue);
+              final FubukiNumberValue end = call.argumentAt(1);
+              final int iEnd = end.intValue;
+              elements.sublist(
+                start.intValue,
+                iEnd < length ? iEnd : length,
+              );
               return FubukiNullValue.value;
             },
           );
