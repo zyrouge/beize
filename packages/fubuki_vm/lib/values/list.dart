@@ -274,6 +274,23 @@ class FubukiListValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'join':
+          return FubukiNativeFunctionValue.async(
+            (final FubukiNativeFunctionCall call) async {
+              final FubukiStringValue delimiter = call.argumentAt(0);
+              final String delimiterValue = delimiter.value;
+              final StringBuffer buffer = StringBuffer();
+              final int max = length;
+              for (int i = 0; i < max; i++) {
+                buffer.write(elements[i].kToString());
+                if (max < length - 1) {
+                  buffer.write(delimiterValue);
+                }
+              }
+              return FubukiStringValue(buffer.toString());
+            },
+          );
+
         default:
       }
     }
