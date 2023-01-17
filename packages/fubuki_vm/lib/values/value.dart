@@ -26,6 +26,9 @@ abstract class FubukiValue {
   bool get isFalsey => !isTruthy;
   int get kHashCode;
 
+  @override
+  String toString() => 'FubukiValue(${kind.code}, ${kToString()})';
+
   static final Map<Type, FubukiValueKind> _typeKindMap =
       <Type, FubukiValueKind>{
     FubukiBooleanValue: FubukiValueKind.boolean,
