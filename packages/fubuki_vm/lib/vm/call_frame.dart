@@ -21,7 +21,6 @@ class FubukiCallFrame {
   int sip = 0;
   int scopeDepth = 0;
   final List<FubukiTryFrame> tryFrames = <FubukiTryFrame>[];
-  final FubukiStack stack = FubukiStack();
 
   final FubukiVM vm;
   final FubukiCallFrame? parent;
