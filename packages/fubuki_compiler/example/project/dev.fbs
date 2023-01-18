@@ -2,11 +2,10 @@ gen := -> {
     return "hello";
 };
 
-gen = null;
+#gen = null;
 
 main := -> {
-    gen?.a = 2;
-    print gen?.a;
+    print gen?.([]);
 };
 
 main();

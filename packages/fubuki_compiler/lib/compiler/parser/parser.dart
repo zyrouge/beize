@@ -288,7 +288,13 @@ abstract class FubukiParser {
       );
     }
     rule.prefix!(compiler);
+    parseInfixExpression(compiler, precedence);
+  }
 
+  static void parseInfixExpression(
+    final FubukiCompiler compiler,
+    final FubukiPrecedence precedence,
+  ) {
     FubukiParseRule nextRule = FubukiParseRule.of(compiler.currentToken.type);
     while (precedence.value <= nextRule.precedence.value) {
       compiler.advance();
@@ -572,7 +578,15 @@ abstract class FubukiParser {
 
   static void parseNullAccess(final FubukiCompiler compiler) {
     final int exitJump = compiler.emitJump(FubukiOpCodes.opJumpIfNull);
-    parsePrecedence(compiler, FubukiPrecedence.call);
+    if (compiler.match(FubukiTokens.parenLeft)) {
+      parseCall(compiler);
+    } else {
+      parsePropertyCall(
+        compiler,
+        dotCall: !compiler.match(FubukiTokens.bracketLeft),
+      );
+    }
+    parseInfixExpression(compiler, FubukiPrecedence.call);
     compiler.patchJump(exitJump);
   }
 }
