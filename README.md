@@ -25,4 +25,4 @@ print text;
 
 # License
 
-[GPL-3.0](./LICENSE)
+[![GPL-3.0](https://github.com/yukino-org/media/blob/main/images/license-logo/gplv3.png?raw=true)](./LICENSE)
