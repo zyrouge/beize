@@ -6,7 +6,6 @@ import 'call_frame.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
 import 'result.dart';
-import 'stack.dart';
 
 enum FubukiVMState {
   ready,

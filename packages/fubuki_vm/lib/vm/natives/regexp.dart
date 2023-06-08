@@ -1,5 +1,4 @@
 import '../../values/exports.dart';
-import '../call_frame.dart';
 import '../namespace.dart';
 
 abstract class FubukiRegExpNatives {

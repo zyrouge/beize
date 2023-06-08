@@ -5,7 +5,6 @@ import 'interpreter.dart';
 import 'namespace.dart';
 import 'natives/exports.dart';
 import 'result.dart';
-import 'stack.dart';
 import 'try_frame.dart';
 import 'vm.dart';
 
