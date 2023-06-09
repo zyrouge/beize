@@ -78,6 +78,15 @@ class FubukiNumberValue extends FubukiPrimitiveObjectValue {
             ),
           );
 
+        case 'toRadixString':
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) => FubukiStringValue(
+              intValue.toRadixString(
+                call.argumentAt<FubukiNumberValue>(0).intValue,
+              ),
+            ),
+          );
+
         default:
       }
     }

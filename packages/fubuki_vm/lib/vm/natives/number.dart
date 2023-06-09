@@ -43,6 +43,32 @@ abstract class FubukiNumberNatives {
         },
       ),
     );
+    value.set(
+      FubukiStringValue('fromRadix'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final String value = call.argumentAt(0).kToString();
+          final FubukiNumberValue radix = call.argumentAt(1);
+          final double? parsed =
+              int.tryParse(value, radix: radix.intValue)?.toDouble();
+          if (parsed is double) return FubukiNumberValue(parsed);
+          throw FubukiNativeException('Cannot parse "$value" to number');
+        },
+      ),
+    );
+    value.set(
+      FubukiStringValue('fromRadixOrNull'),
+      FubukiNativeFunctionValue.sync(
+        (final FubukiNativeFunctionCall call) {
+          final String value = call.argumentAt(0).kToString();
+          final FubukiNumberValue radix = call.argumentAt(1);
+          final double? parsed =
+              int.tryParse(value, radix: radix.intValue)?.toDouble();
+          if (parsed is double) return FubukiNumberValue(parsed);
+          return FubukiNullValue.value;
+        },
+      ),
+    );
     namespace.declare('Number', value);
   }
 }

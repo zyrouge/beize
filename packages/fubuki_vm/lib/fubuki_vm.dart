@@ -1,3 +1,4 @@
+// ignore: unnecessary_library_directive
 library fubuki_compiler;
 
 export 'bytecode.dart';

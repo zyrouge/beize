@@ -180,6 +180,14 @@ class FubukiStringValue extends FubukiPrimitiveObjectValue {
             },
           );
 
+        case 'charAt':
+          return FubukiNativeFunctionValue.sync(
+            (final FubukiNativeFunctionCall call) {
+              final FubukiNumberValue index = call.argumentAt(0);
+              return FubukiStringValue(value[index.intValue]);
+            },
+          );
+
         case 'toCodeUnits':
           return FubukiNativeFunctionValue.sync(
             (final _) => FubukiListValue(
