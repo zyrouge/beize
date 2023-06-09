@@ -73,6 +73,27 @@ class FubukiScannerRules {
       constructOffset2ScanFn(FubukiTokens.lesserThanEqual),
       constructOffset2ScanFn(FubukiTokens.greaterThanEqual),
       constructOffset2ScanFn(FubukiTokens.rightArrow),
+      constructOffset2ScanFn(FubukiTokens.increment),
+      constructOffset2ScanFn(FubukiTokens.decrement),
+      constructOffset2ScanFn(FubukiTokens.plusEqual),
+      constructOffset2ScanFn(FubukiTokens.minusEqual),
+      constructOffset2ScanFn(FubukiTokens.asteriskEqual),
+      constructOffset2ScanFn(FubukiTokens.slashEqual),
+      constructOffset2ScanFn(FubukiTokens.moduloEqual),
+      constructOffset2ScanFn(FubukiTokens.ampersandEqual),
+      constructOffset2ScanFn(FubukiTokens.pipeEqual),
+      constructOffset2ScanFn(FubukiTokens.caretEqual),
+    ],
+  );
+
+  static final Map<String, FubukiScannerRuleReadFn> offset3ScanFns =
+      Map<String, FubukiScannerRuleReadFn>.fromEntries(
+    <MapEntry<String, FubukiScannerRuleReadFn>>[
+      constructOffset3ScanFn(FubukiTokens.exponentEqual),
+      constructOffset3ScanFn(FubukiTokens.floorEqual),
+      constructOffset3ScanFn(FubukiTokens.logicalAndEqual),
+      constructOffset3ScanFn(FubukiTokens.logicalOrEqual),
+      constructOffset3ScanFn(FubukiTokens.nullOrEqual),
     ],
   );
 
@@ -91,7 +112,8 @@ class FubukiScannerRules {
       return scanEndOfFile(scanner, current);
     }
 
-    final FubukiScannerRuleReadFn scanFn = getOffset2ScanFn(scanner, current) ??
+    final FubukiScannerRuleReadFn scanFn = getOffset3ScanFn(scanner, current) ??
+        getOffset2ScanFn(scanner, current) ??
         getOffset1ScanFn(scanner, current) ??
         getCustomScanFn(scanner, current) ??
         scanInvalidToken;
@@ -125,6 +147,12 @@ class FubukiScannerRules {
   ) =>
       offset2ScanFns[scanner.input.getCharactersAt(current.point.position, 2)];
 
+  static FubukiScannerRuleReadFn? getOffset3ScanFn(
+    final FubukiScanner scanner,
+    final FubukiInputIteration current,
+  ) =>
+      offset3ScanFns[scanner.input.getCharactersAt(current.point.position, 3)];
+
   static MapEntry<String, FubukiScannerRuleReadFn> constructOffset1ScanFn(
     final FubukiTokens type,
   ) =>
@@ -134,6 +162,11 @@ class FubukiScannerRules {
     final FubukiTokens type,
   ) =>
       constructOffsetScanFn(type, 2);
+
+  static MapEntry<String, FubukiScannerRuleReadFn> constructOffset3ScanFn(
+    final FubukiTokens type,
+  ) =>
+      constructOffsetScanFn(type, 3);
 
   static MapEntry<String, FubukiScannerRuleReadFn> constructOffsetScanFn(
     final FubukiTokens type,

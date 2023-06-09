@@ -1,11 +1,9 @@
-gen := -> {
-    return "hello";
+keker := -> {
+    print "called!";
+    return 69420;
 };
 
-#gen = null;
-
-main := -> {
-    print gen?.([]);
-};
-
-main();
+kek := null;
+kek ??= keker();
+kek++;
+print kek;

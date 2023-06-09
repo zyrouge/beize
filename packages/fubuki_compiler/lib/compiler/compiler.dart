@@ -171,17 +171,19 @@ class FubukiCompiler {
   }
 
   void beginLoop(final int start) {
+    final int endJump = emitJump(FubukiOpCodes.opJumpIfFalse);
     final FubukiCompilerLoopState loop = FubukiCompilerLoopState(
       scopeDepth: scopeDepth,
       start: start,
+      endJump: endJump,
     );
     loops.add(loop);
-    final int exitJump = emitJump(FubukiOpCodes.opJumpIfFalse);
-    loop.exitJumps.add(exitJump);
   }
 
   void endLoop() {
     final FubukiCompilerLoopState loop = loops.removeLast();
+    patchJump(loop.endJump);
+    emitOpCode(FubukiOpCodes.opPop);
     loop.exitJumps.forEach(patchJump);
   }
 

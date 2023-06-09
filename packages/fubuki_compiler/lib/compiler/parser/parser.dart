@@ -7,11 +7,6 @@ import 'rules.dart';
 
 abstract class FubukiParser {
   static Future<void> parseStatement(final FubukiCompiler compiler) async {
-    if (compiler.currentToken.type == FubukiTokens.identifier &&
-        compiler.currentToken.literal == 'print') {
-      compiler.advance();
-      return parsePrintStatement(compiler);
-    }
     if (compiler.match(FubukiTokens.braceLeft)) {
       return parseBlockStatement(compiler);
     }
@@ -44,6 +39,12 @@ abstract class FubukiParser {
     }
     if (compiler.match(FubukiTokens.matchKw)) {
       return parseMatchStatement(compiler);
+    }
+    if (compiler.match(FubukiTokens.printKw)) {
+      return parsePrintStatement(compiler);
+    }
+    if (compiler.match(FubukiTokens.forKw)) {
+      return parseForStatement(compiler);
     }
     return parseExpressionStatement(compiler);
   }
@@ -81,7 +82,38 @@ abstract class FubukiParser {
     final int jump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
     compiler.patchAbsoluteJumpTo(jump, start);
     compiler.endLoop();
+  }
+
+  static void parseForStatement(final FubukiCompiler compiler) {
+    compiler.consume(FubukiTokens.parenLeft);
+    if (!compiler.check(FubukiTokens.semi)) {
+      parseExpression(compiler);
+      compiler.emitOpCode(FubukiOpCodes.opPop);
+    }
+    compiler.consume(FubukiTokens.semi);
+    final int conditionOffset = compiler.currentAbsoluteOffset;
+    if (!compiler.check(FubukiTokens.semi)) {
+      parseExpression(compiler);
+    } else {
+      compiler.emitOpCode(FubukiOpCodes.opTrue);
+    }
+    compiler.consume(FubukiTokens.semi);
+    final int updateJump = compiler.emitJump(FubukiOpCodes.opJump);
+    final int updateOffset = compiler.currentAbsoluteOffset;
+    if (!compiler.check(FubukiTokens.semi)) {
+      parseExpression(compiler);
+      compiler.emitOpCode(FubukiOpCodes.opPop);
+    }
+    final int conditionJump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+    compiler.patchAbsoluteJumpTo(conditionJump, conditionOffset);
+    compiler.patchJump(updateJump);
+    compiler.consume(FubukiTokens.parenRight);
+    compiler.beginLoop(updateOffset);
     compiler.emitOpCode(FubukiOpCodes.opPop);
+    parseStatement(compiler);
+    final int jump = compiler.emitJump(FubukiOpCodes.opAbsoluteJump);
+    compiler.patchAbsoluteJumpTo(jump, updateOffset);
+    compiler.endLoop();
   }
 
   static void parseBreakStatement(final FubukiCompiler compiler) {
@@ -431,31 +463,120 @@ abstract class FubukiParser {
 
   static void parseIdentifier(final FubukiCompiler compiler) {
     final int index = parseIdentifierConstant(compiler);
+    bool emitIndex = true;
+
+    void emitLookup() {
+      compiler.emitOpCode(FubukiOpCodes.opLookup);
+      compiler.emitCode(index);
+    }
+
+    void emitAssign() {
+      compiler.emitOpCode(FubukiOpCodes.opAssign);
+    }
+
+    void emitAssignAndIndex() {
+      compiler.emitOpCode(FubukiOpCodes.opAssign);
+      compiler.emitCode(index);
+    }
+
+    void emitExprAssign(final FubukiOpCodes opCode) {
+      emitLookup();
+      parsePrecedence(compiler, FubukiPrecedence.assignment);
+      compiler.emitOpCode(opCode);
+      emitAssign();
+    }
+
     if (compiler.match(FubukiTokens.declare)) {
       parseExpression(compiler);
       compiler.emitOpCode(FubukiOpCodes.opDeclare);
     } else if (compiler.match(FubukiTokens.assign)) {
       parseExpression(compiler);
-      compiler.emitOpCode(FubukiOpCodes.opAssign);
+      emitAssign();
+    } else if (compiler.match(FubukiTokens.increment)) {
+      emitLookup();
+      compiler.emitConstant(1.0);
+      compiler.emitOpCode(FubukiOpCodes.opAdd);
+      emitAssign();
+    } else if (compiler.match(FubukiTokens.decrement)) {
+      emitLookup();
+      compiler.emitConstant(1.0);
+      compiler.emitOpCode(FubukiOpCodes.opSubtract);
+      emitAssign();
+    } else if (compiler.match(FubukiTokens.plusEqual)) {
+      emitExprAssign(FubukiOpCodes.opAdd);
+    } else if (compiler.match(FubukiTokens.minusEqual)) {
+      emitExprAssign(FubukiOpCodes.opSubtract);
+    } else if (compiler.match(FubukiTokens.asteriskEqual)) {
+      emitExprAssign(FubukiOpCodes.opMultiply);
+    } else if (compiler.match(FubukiTokens.exponentEqual)) {
+      emitExprAssign(FubukiOpCodes.opExponent);
+    } else if (compiler.match(FubukiTokens.slashEqual)) {
+      emitExprAssign(FubukiOpCodes.opDivide);
+    } else if (compiler.match(FubukiTokens.floorEqual)) {
+      emitExprAssign(FubukiOpCodes.opFloor);
+    } else if (compiler.match(FubukiTokens.moduloEqual)) {
+      emitExprAssign(FubukiOpCodes.opModulo);
+    } else if (compiler.match(FubukiTokens.ampersandEqual)) {
+      emitExprAssign(FubukiOpCodes.opBitwiseAnd);
+    } else if (compiler.match(FubukiTokens.pipeEqual)) {
+      emitExprAssign(FubukiOpCodes.opBitwiseOr);
+    } else if (compiler.match(FubukiTokens.caretEqual)) {
+      emitExprAssign(FubukiOpCodes.opBitwiseXor);
+    } else if (compiler.match(FubukiTokens.logicalAndEqual)) {
+      emitIndex = false;
+      emitLookup();
+      parseLogicalAnd(
+        compiler,
+        precedence: FubukiPrecedence.assignment,
+        beforePatch: emitAssignAndIndex,
+      );
+    } else if (compiler.match(FubukiTokens.logicalOrEqual)) {
+      emitIndex = false;
+      emitLookup();
+      parseLogicalOr(
+        compiler,
+        precedence: FubukiPrecedence.assignment,
+        beforePatch: emitAssignAndIndex,
+      );
+    } else if (compiler.match(FubukiTokens.nullOrEqual)) {
+      emitIndex = false;
+      emitLookup();
+      parseNullOr(
+        compiler,
+        precedence: FubukiPrecedence.assignment,
+        beforePatch: emitAssignAndIndex,
+      );
     } else {
       compiler.emitOpCode(FubukiOpCodes.opLookup);
     }
-    compiler.emitCode(index);
+    if (emitIndex) {
+      compiler.emitCode(index);
+    }
   }
 
-  static void parseLogicalAnd(final FubukiCompiler compiler) {
+  static void parseLogicalAnd(
+    final FubukiCompiler compiler, {
+    final FubukiPrecedence precedence = FubukiPrecedence.and,
+    final void Function()? beforePatch,
+  }) {
     final int endJump = compiler.emitJump(FubukiOpCodes.opJumpIfFalse);
     compiler.emitOpCode(FubukiOpCodes.opPop);
-    parsePrecedence(compiler, FubukiPrecedence.and);
+    parsePrecedence(compiler, precedence);
+    beforePatch?.call();
     compiler.patchJump(endJump);
   }
 
-  static void parseLogicalOr(final FubukiCompiler compiler) {
+  static void parseLogicalOr(
+    final FubukiCompiler compiler, {
+    final FubukiPrecedence precedence = FubukiPrecedence.or,
+    final void Function()? beforePatch,
+  }) {
     final int elseJump = compiler.emitJump(FubukiOpCodes.opJumpIfFalse);
     final int endJump = compiler.emitJump(FubukiOpCodes.opJump);
     compiler.patchJump(elseJump);
     compiler.emitOpCode(FubukiOpCodes.opPop);
-    parsePrecedence(compiler, FubukiPrecedence.or);
+    parsePrecedence(compiler, precedence);
+    beforePatch?.call();
     compiler.patchJump(endJump);
   }
 
@@ -567,12 +688,17 @@ abstract class FubukiParser {
     compiler.patchJump(elseJump);
   }
 
-  static void parseNullOr(final FubukiCompiler compiler) {
+  static void parseNullOr(
+    final FubukiCompiler compiler, {
+    final FubukiPrecedence precedence = FubukiPrecedence.or,
+    final void Function()? beforePatch,
+  }) {
     final int elseJump = compiler.emitJump(FubukiOpCodes.opJumpIfNull);
     final int endJump = compiler.emitJump(FubukiOpCodes.opJump);
     compiler.patchJump(elseJump);
     compiler.emitOpCode(FubukiOpCodes.opPop);
-    parsePrecedence(compiler, FubukiPrecedence.or);
+    parsePrecedence(compiler, precedence);
+    beforePatch?.call();
     compiler.patchJump(endJump);
   }
 

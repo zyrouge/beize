@@ -43,6 +43,21 @@ enum FubukiTokens {
   lesserThanEqual, // <=
   greaterThanEqual, // >=
   rightArrow, // ->
+  increment, // ++
+  decrement, // --
+  plusEqual, // +=
+  minusEqual, // -=
+  asteriskEqual, // *=
+  exponentEqual, // **=
+  slashEqual, // /=
+  floorEqual, // //=
+  moduloEqual, // %=
+  ampersandEqual, // &=
+  logicalAndEqual, // &&=
+  pipeEqual, // |=
+  logicalOrEqual, // ||=
+  caretEqual, // ^=
+  nullOrEqual, // ??=
 
   trueKw, // true
   falseKw, // false
@@ -60,6 +75,8 @@ enum FubukiTokens {
   asKw, // as
   whenKw, // when
   matchKw, // match
+  printKw, // print
+  forKw, // for
 }
 
 const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
@@ -105,6 +122,21 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.lesserThanEqual: '<=',
   FubukiTokens.greaterThanEqual: '>=',
   FubukiTokens.rightArrow: '->',
+  FubukiTokens.increment: '++',
+  FubukiTokens.decrement: '--',
+  FubukiTokens.plusEqual: '+=',
+  FubukiTokens.minusEqual: '-=',
+  FubukiTokens.asteriskEqual: '*=',
+  FubukiTokens.exponentEqual: '**=',
+  FubukiTokens.slashEqual: '/=',
+  FubukiTokens.floorEqual: '//=',
+  FubukiTokens.moduloEqual: '%=',
+  FubukiTokens.ampersandEqual: '&=',
+  FubukiTokens.logicalAndEqual: '&&=',
+  FubukiTokens.pipeEqual: '|=',
+  FubukiTokens.logicalOrEqual: '||=',
+  FubukiTokens.caretEqual: '^=',
+  FubukiTokens.nullOrEqual: '??=',
   FubukiTokens.trueKw: 'true',
   FubukiTokens.falseKw: 'false',
   FubukiTokens.ifKw: 'if',
@@ -121,6 +153,8 @@ const Map<FubukiTokens, String> _tokensCodeMap = <FubukiTokens, String>{
   FubukiTokens.asKw: 'as',
   FubukiTokens.whenKw: 'when',
   FubukiTokens.matchKw: 'match',
+  FubukiTokens.printKw: 'print',
+  FubukiTokens.forKw: 'for',
 };
 
 extension OutreTokensUtils on FubukiTokens {
