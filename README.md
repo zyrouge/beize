@@ -1,20 +1,20 @@
 <p align="center">
-    <img src="https://github.com/yukino-org/media/blob/main/images/subbanners/gh-fubuki-banner.png?raw=true" width="100%">
+    <img src="./media/banner.png" width="100%">
 </p>
 
-# Fubuki
+# Baize
 
-🖋️ A hand-crafted scripting language exclusively made for Tenka modules.
+🖋️ A scripting language made for unknown reasons.
 
 # Language Specification
 
-The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Fubuki script files takes an extension of `.fbs`. The [`fubuki_compiler`](./packages/fubuki_compiler) and [`fubuki_vm`](./packages/fubuki_vm) provides the compiler and the runtime for the language.
+The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Baize script files have an `.baize` extension. The [`baize_compiler`](./packages/baize_compiler) and [`baize_vm`](./packages/baize_vm) provides the compiler and the runtime for the language.
 
-But is it fast? The performance is reasonable for a mere scripting language. It can do `100000` iterations and function calls in less than 1.5 seconds. I would say, it's pretty freaking good.
+But is it fast? The performance is reasonable for a mere scripting language. It can do `100000` iterations and function calls in less than 1.5 seconds. I would say, it's pretty freaking good for a mere scripting language.
 
 # Documentation
 
-Refer [wiki/fubuki](https://yukino-org.github.io/wiki/fubuki/).
+Refer [wiki/baize](https:///).
 
 # Example
 
@@ -25,4 +25,4 @@ print text;
 
 # License
 
-[![GPL-3.0](https://github.com/yukino-org/media/blob/main/images/license-logo/gplv3.png?raw=true)](./LICENSE)
+[GPL-3.0](./LICENSE)

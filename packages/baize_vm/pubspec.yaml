@@ -1,0 +1,23 @@
+name: baize_vm
+description: Virtual Machine of Fubuki.
+version: 0.0.0
+
+publish_to: none
+
+environment:
+    sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+    baize_shared:
+        git:
+            url: https://github.com/zyrouge/baize-script
+            path: packages/baize_shared
+
+dependency_overrides:
+    baize_shared:
+        path: ../baize_shared
+
+dev_dependencies:
+    zlint:
+        git:
+            url: https://github.com/zyrouge/dart_zlint
