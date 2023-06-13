@@ -1,0 +1,41 @@
+site_name: Baize
+site_url: https://zyrouge.github.io/baize/
+docs_dir: ./docs
+repo_url: https://github.com/zyrouge/baize
+repo_name: zyrouge/baize
+edit_uri: edit/main/docs/
+
+theme:
+    name: material
+    logo: assets/logo.png
+    favicon: assets/favicon.png
+    palette:
+        scheme: slate
+        primary: teal
+        accent: teal
+    font:
+        text: DM Sans
+        code: Roboto Mono
+    features:
+        - navigation.top
+        - navigation.sections
+        - content.action.edit
+
+markdown_extensions:
+    - admonition
+    - toc:
+          permalink: true
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.superfences
+    - pymdownx.snippets
+    - tables
+
+extra_css:
+    - assets/styles.css
+
+copyright: Licensed under GPL-3.0
+extra:
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/zyrouge/baize
