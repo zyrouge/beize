@@ -3,4 +3,5 @@
 build/
 test-data
 dist
+docs-dist
 node_modules
