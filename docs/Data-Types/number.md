@@ -29,12 +29,26 @@ Returns the `-1` (less than zero), `0` (zero) or `1` (greater than zero).
 -> : Number
 ```
 
+```title="Example"
+num := -5;
+
+# prints -1
+print num.sign();
+```
+
 ### `isFinite`
 
 Is the number finite?
 
 ```title="Signature"
 -> : Boolean
+```
+
+```title="Example"
+num := 5;
+
+# prints true
+print num.isFinite();
 ```
 
 ### `isInfinite`
@@ -45,12 +59,26 @@ Is the number infinite?
 -> : Boolean
 ```
 
+```title="Example"
+num := 5;
+
+# prints false
+print num.isInfinite();
+```
+
 ### `isNaN`
 
 Is the number `NaN`?
 
 ```title="Signature"
 -> : Boolean
+```
+
+```title="Example"
+num := 5;
+
+# prints false
+print num.isNaN();
 ```
 
 ### `isNegative`
@@ -61,12 +89,26 @@ Is the number negative?
 -> : Boolean
 ```
 
+```title="Example"
+num := 5;
+
+# prints false
+print num.isNegative();
+```
+
 ### `abs`
 
 Returns the number without sign.
 
 ```title="Signature"
 -> : Number
+```
+
+```title="Example"
+num := -5;
+
+# prints 5
+print num.abs();
 ```
 
 ### `ceil`
@@ -77,12 +119,26 @@ Returns the number rounded towards positive infinity.
 -> : Number
 ```
 
+```title="Example"
+num := 5.1;
+
+# prints 6
+print num.ceil();
+```
+
 ### `round`
 
 Returns the number rounded towards negative infinity.
 
 ```title="Signature"
 -> : Number
+```
+
+```title="Example"
+num := 5.5;
+
+# prints 6
+print num.round();
 ```
 
 ### `truncate`
@@ -93,6 +149,13 @@ Returns the number discarding fractional digits.
 -> : Number
 ```
 
+```title="Example"
+num := 5.45;
+
+# prints 5
+print num.truncate();
+```
+
 ### `precisionString`
 
 Returns the number string with specified precision.
@@ -101,10 +164,24 @@ Returns the number string with specified precision.
 -> Number digits : String
 ```
 
+```title="Example"
+num := 5.2512;
+
+# prints "5.25"
+print num.precisionString(2);
+```
+
 ### `toRadixString`
 
 Returns the radix equivalent of the number.
 
 ```title="Signature"
 -> Number radix : String
+```
+
+```title="Example"
+num := 5;
+
+# prints 101
+print num.toRadixString(2);
 ```

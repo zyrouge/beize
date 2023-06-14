@@ -8,13 +8,13 @@ Takes in a value and returns the boolean equivalent.
 -> Any : Boolean
 ```
 
-```
-Boolean.from(0);
-# false
+```title="Example"
+# prints false
+print Boolean.from(0);
 
-Boolean.from(1);
-# false
+# prints true
+print Boolean.from(1);
 
-Boolean.from(null);
-# false
+# prints false
+print Boolean.from(null);
 ```

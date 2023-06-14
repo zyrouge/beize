@@ -4,6 +4,15 @@
 
 Takes in an function, list of arguments and returns the result of the function after calling.
 
+```title="Signature"
+-> List<Any> params : Any
 ```
-Function.call(someFunction, [a, b, c]);
+
+```title="Example"
+printString := -> value {
+    print value;
+};
+
+# prints "Hello World!"
+Function.call(printHello, ["Hello World!"]);
 ```

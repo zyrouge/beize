@@ -1,6 +1,6 @@
 # While Statement
 
-While statements allows repeating a set of code until the condition goes falsey. `break` and `continue` statement can be used inside a loop.
+While statement allows repeating a set of code until the condition goes falsey. `break` and `continue` statement can be used inside a `while` loop.
 
 ```title="Syntax"
 while (condition) {

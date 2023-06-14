@@ -25,5 +25,14 @@ Represents a callable object. Functions are prefixed with right arrow operator (
 Calls the function and returns the result.
 
 ```title="Signature"
--> List<Any> params, Number index : Any
+-> List<Any> params : Any
+```
+
+```title="Example"
+printString := -> value {
+    print value;
+};
+
+# prints "Hello World!"
+result := printHello.call(["Hello World!"]);
 ```

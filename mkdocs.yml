@@ -19,6 +19,9 @@ theme:
     features:
         - navigation.top
         - navigation.sections
+        - navigation.tabs
+        - navigation.tabs.sticky
+        - navigation.top
         - content.action.edit
 
 markdown_extensions:

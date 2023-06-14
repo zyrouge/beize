@@ -1,12 +1,4 @@
-# Examples
-
-## Hello World!
-
-```
-print "Hello World!";
-```
-
-## Area of shapes
+# Area of shapes
 
 ```
 square := {
@@ -19,15 +11,4 @@ rectangle := {
 
 print "Area of square: " + square.area(5);
 print "Area of rectangle: " + rectangle.area(2, 3);
-```
-
-## Print until 100 and as a list
-
-```
-numbers := [];
-for (i := 0; i <= 100; i++) {
-    print i;
-    numbers.add(i);
-}
-print numbers;
 ```
