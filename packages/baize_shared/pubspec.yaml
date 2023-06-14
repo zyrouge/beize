@@ -8,4 +8,4 @@ environment:
 dev_dependencies:
     zlint:
         git:
-            url: https://github.com/zyrouge/dart_zlint
+            url: https://github.com/zyrouge/dart_zlint.git
