@@ -10,7 +10,7 @@ environment:
 dependencies:
     baize_shared:
         git:
-            url: https://github.com/zyrouge/baize-script
+            url: https://github.com/zyrouge/baize.git
             path: packages/baize_shared
 
 dependency_overrides:
@@ -20,4 +20,4 @@ dependency_overrides:
 dev_dependencies:
     zlint:
         git:
-            url: https://github.com/zyrouge/dart_zlint
+            url: https://github.com/zyrouge/dart_zlint.git
