@@ -20,16 +20,19 @@ else
 ```
 
 ```title="Example"
+# prints "Hello World"
 if (true) print "Hello World";
 
 if (false) print "Hello World";
 else print "Goodbye World";
 
-text := ""
+text := "";
 if (true) {
     text = "Hello World";
 } else {
     text = "Goodbye World";
 }
+
+# prints "Hello World"
 print text;
 ```

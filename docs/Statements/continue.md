@@ -9,9 +9,13 @@ continue;
 ```title="Example"
 i := 0;
 while (i < 6) {
-    i = i + 1;
+    i++;
     if (i % 2 == 0) continue;
     print i;
 }
-# 1 3 5
+
+# prints,
+#   1
+#   3
+#   5
 ```

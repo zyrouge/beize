@@ -9,6 +9,9 @@ import "filename" as variable;
 ```title="Example"
 import "utils.fbs" as utils;
 
+# prints "Hello World!"
 print utils.helloWorld;
+
+# prints "Hello World!"
 utils.displayHelloWorld();
 ```

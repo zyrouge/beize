@@ -12,7 +12,12 @@ for ([initialization]; [condition]; [increment/decrement]) {
 for (i := 0; i < 5; i++) {
     print i;
 }
-# 0 1 2 3 4
+# prints,
+#   0
+#   1
+#   2
+#   3
+#   4
 
 for (;;) {
     print "Hello!";

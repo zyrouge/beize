@@ -7,6 +7,9 @@ print expr;
 ```
 
 ```title="Example"
+# prints 1
 print 1;
+
+# prints "Hello World"
 print "Hello World";
 ```

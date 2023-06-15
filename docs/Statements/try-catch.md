@@ -4,9 +4,9 @@ Try-catch statement is used to handle exceptions and unintended behaviours. Try-
 
 ```title="Syntax"
 try {
-    tryStatements
+    tryStatement
 } catch (exception) {
-    catchStatements
+    catchStatement
 }
 ```
 
@@ -16,5 +16,6 @@ try {
 } catch (err) {
     print err;
 }
-# Hello World!
+
+# prints "Hello World!"
 ```

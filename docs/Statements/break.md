@@ -10,8 +10,12 @@ break;
 i := 0;
 while (true) {
     print i;
-    i = i + 1;
+    i++;
     if (i > 2) break;
 }
-# 0 1 2
+
+# prints,
+#   0
+#   1
+#   2
 ```

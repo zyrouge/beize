@@ -4,16 +4,18 @@ Creates a lexical scope and contains a sequence of statements.
 
 ```title="Syntax"
 {
-    statement1;
-    statement2;
+    statement1
+    statement2
     ...
-    statementN;
+    statementN
 }
 ```
 
 ```title="Example"
 {
     a := 2;
+
+    # prints 2
     print a;
 }
 ```

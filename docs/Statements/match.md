@@ -13,7 +13,7 @@ match (expr) {
 ```
 
 ```title="Example"
-a := 0
+a := 0;
 match (a) {
     -1: {
         print "Found: -1";
@@ -22,5 +22,6 @@ match (a) {
     1: print "Found: 1";
     else: print a;
 }
-# Found: 0
+
+# prints "Found: 0"
 ```

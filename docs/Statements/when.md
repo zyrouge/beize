@@ -13,13 +13,14 @@ when {
 ```
 
 ```title="Example"
-a := 2
-b := 3
+a := 2;
+b := 3;
 when {
     a > b: {
         print "Yes";
     }
     else: print "No";
 }
-# No
+
+# prints "No"
 ```
