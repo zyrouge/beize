@@ -7,6 +7,8 @@
         "doc": "docs"
     },
     "scripts": {
+        "docs:dev": "mkdocs serve",
+        "docs:build": "mkdocs build -d docs-dist",
         "docs:deploy": "gh workflow run deploy.yml"
     },
     "author": "Zyrouge",
