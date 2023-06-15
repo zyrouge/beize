@@ -1,0 +1,4 @@
+while (true) {
+    break;
+    out("c-0");
+}

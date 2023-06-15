@@ -1,0 +1,5 @@
+if (false) {
+    out("c-1");
+} else {
+    out("c-2");
+}

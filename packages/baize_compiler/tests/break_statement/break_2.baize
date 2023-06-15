@@ -1,0 +1,6 @@
+done := false;
+while (true) {
+    if (done) break;
+    out("c-0");
+    done = true;
+}

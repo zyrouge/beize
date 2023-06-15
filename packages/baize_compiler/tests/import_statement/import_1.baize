@@ -1,0 +1,3 @@
+import "./import_dummy.baize" as dummy;
+
+dummy.callOut("c-0");

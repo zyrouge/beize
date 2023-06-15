@@ -100,7 +100,7 @@ abstract class BaizeParser {
     compiler.consume(BaizeTokens.semi);
     final int updateJump = compiler.emitJump(BaizeOpCodes.opJump);
     final int updateOffset = compiler.currentAbsoluteOffset;
-    if (!compiler.check(BaizeTokens.semi)) {
+    if (!compiler.check(BaizeTokens.parenRight)) {
       parseExpression(compiler);
       compiler.emitOpCode(BaizeOpCodes.opPop);
     }
@@ -140,8 +140,7 @@ abstract class BaizeParser {
 
   static void parseBlockStatement(final BaizeCompiler compiler) {
     compiler.emitOpCode(BaizeOpCodes.opBeginScope);
-    while (
-        !compiler.isEndOfFile() && !compiler.check(BaizeTokens.braceRight)) {
+    while (!compiler.isEndOfFile() && !compiler.check(BaizeTokens.braceRight)) {
       parseStatement(compiler);
     }
     compiler.emitOpCode(BaizeOpCodes.opEndScope);
@@ -157,6 +156,8 @@ abstract class BaizeParser {
     }
     if (!compiler.check(BaizeTokens.semi)) {
       parseExpression(compiler);
+    } else {
+      compiler.emitOpCode(BaizeOpCodes.opNull);
     }
     compiler.consume(BaizeTokens.semi);
     compiler.emitOpCode(BaizeOpCodes.opReturn);
@@ -309,8 +310,7 @@ abstract class BaizeParser {
     final BaizePrecedence precedence,
   ) {
     compiler.advance();
-    final BaizeParseRule rule =
-        BaizeParseRule.of(compiler.previousToken.type);
+    final BaizeParseRule rule = BaizeParseRule.of(compiler.previousToken.type);
     if (rule.prefix == null) {
       throw BaizeCompilationException.expectedXButReceivedToken(
         compiler.module,

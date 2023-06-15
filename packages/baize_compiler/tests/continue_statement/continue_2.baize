@@ -1,0 +1,7 @@
+i := 0;
+while (i < 3) {
+    current := i;
+    i++;
+    if (current == 1) continue;
+    out("c-" + current);
+}

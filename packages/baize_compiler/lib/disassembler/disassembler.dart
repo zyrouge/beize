@@ -28,12 +28,13 @@ class BaizeDisassembler {
       case BaizeOpCodes.opDeclare:
       case BaizeOpCodes.opAssign:
       case BaizeOpCodes.opLookup:
-        final BaizeConstant constant = chunk.constantAt(chunk.codeAt(ip + 1));
+        final int constantPosition = chunk.codeAt(ip + 1);
+        final BaizeConstant constant = chunk.constantAt(constantPosition);
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(constant = ${stringifyConstant(constant)})',
+          '{so}(constant [$constantPosition] = ${stringifyConstant(constant)})',
         );
         if (constant is BaizeFunctionConstant) {
           output.write('-> (${constant.arguments.join(', ')})');
@@ -46,19 +47,51 @@ class BaizeDisassembler {
       case BaizeOpCodes.opJump:
       case BaizeOpCodes.opJumpIfFalse:
       case BaizeOpCodes.opJumpIfNull:
+        final int offset = chunk.codeAt(ip + 1);
+        final int absoluteOffset = ip + offset;
+        writeInstruction(
+          opCode,
+          ip,
+          chunk.lineAt(ip),
+          '{so}(offset = $offset, absoluteOffset = $absoluteOffset)',
+        );
+        return 1;
+
       case BaizeOpCodes.opAbsoluteJump:
-      case BaizeOpCodes.opCall:
-      case BaizeOpCodes.opList:
-      case BaizeOpCodes.opObject:
       case BaizeOpCodes.opBeginTry:
         final int offset = chunk.codeAt(ip + 1);
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(offset = $offset)',
+          '{so}(absoluteOffset = $offset)',
         );
         return 1;
+
+      case BaizeOpCodes.opCall:
+      case BaizeOpCodes.opList:
+      case BaizeOpCodes.opObject:
+        final int popCount = chunk.codeAt(ip + 1);
+        writeInstruction(
+          opCode,
+          ip,
+          chunk.lineAt(ip),
+          '{so}(popCount = $popCount)',
+        );
+        return 1;
+
+      case BaizeOpCodes.opModule:
+        final int pathPosition = chunk.codeAt(ip + 1);
+        final int identifierPosition = chunk.codeAt(ip + 2);
+        final BaizeConstant path = chunk.constantAt(pathPosition);
+        final BaizeConstant identifier = chunk.constantAt(identifierPosition);
+        writeInstruction(
+          opCode,
+          ip,
+          chunk.lineAt(ip),
+          '{so}(path [$pathPosition] = $path, identifier [$identifierPosition] = $identifier)',
+        );
+        return 2;
 
       default:
         writeInstruction(opCode, ip, chunk.lineAt(ip));

@@ -1,0 +1,5 @@
+when {
+    else: {
+        out("c-else");
+    }
+}

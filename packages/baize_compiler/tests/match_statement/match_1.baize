@@ -1,0 +1,6 @@
+match (0) {
+    0: {
+        out("c-0");
+    }
+    else: out("c-else");
+}

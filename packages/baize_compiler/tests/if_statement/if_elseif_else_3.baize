@@ -1,0 +1,7 @@
+if (false) {
+    out("c-1");
+} else if (false) {
+    out("c-2");
+} else {
+    out("c-3");
+}
