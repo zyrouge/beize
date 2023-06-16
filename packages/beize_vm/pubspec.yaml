@@ -1,0 +1,23 @@
+name: beize_vm
+description: Virtual Machine of Fubuki.
+version: 0.0.0
+
+publish_to: none
+
+environment:
+    sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+    beize_shared:
+        git:
+            url: https://github.com/zyrouge/beize.git
+            path: packages/beize_shared
+
+dependency_overrides:
+    beize_shared:
+        path: ../beize_shared
+
+dev_dependencies:
+    zlint:
+        git:
+            url: https://github.com/zyrouge/dart_zlint.git

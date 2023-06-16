@@ -1,0 +1,31 @@
+name: beize_compiler
+description: Compiler of Fubuki.
+version: 0.0.0
+
+publish_to: none
+
+environment:
+    sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+    beize_shared:
+        git:
+            url: https://github.com/zyrouge/beize.git
+            path: packages/beize_shared
+    path: ^1.8.3
+
+dependency_overrides:
+    beize_shared:
+        path: ../beize_shared
+    beize_vm:
+        path: ../beize_vm
+
+dev_dependencies:
+    beize_vm:
+        git:
+            url: https://github.com/zyrouge/beize.git
+            path: packages/beize_vm
+    test: ^1.24.3
+    zlint:
+        git:
+            url: https://github.com/zyrouge/dart_zlint.git

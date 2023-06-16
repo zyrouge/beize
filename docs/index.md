@@ -1,6 +1,6 @@
 # Overview
 
-The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Baize script files have an `.baize` extension. The program can be compiled using Baize Compiler and can be run on Baize VM.
+The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Beize script files have an `.beize` extension. The program can be compiled using Beize Compiler and can be run on Beize VM.
 
 !!! info
 
@@ -43,7 +43,7 @@ match
 
 Identifiers are made up of alphabets (`A-Z`, `a-z`), dollar sign (`$`) and underscore (`_`). Numbers (`0-9`) can also be used but are not allowed at the start of an identifier. Keywords cannot be used as identifiers.
 
-Baize does not have a standard naming convention but camel-case is preferred.
+Beize does not have a standard naming convention but camel-case is preferred.
 
 ```
 helloWorld

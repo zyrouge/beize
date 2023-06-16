@@ -1,9 +1,0 @@
-keker := -> {
-    print "called!";
-    return 69420;
-};
-
-kek := null;
-kek ??= keker();
-kek++;
-print kek;

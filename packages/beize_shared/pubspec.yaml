@@ -1,0 +1,11 @@
+name: beize_shared
+description: Shared components of Fubuki.
+version: 0.0.0
+
+environment:
+    sdk: ">=2.18.0 <3.0.0"
+
+dev_dependencies:
+    zlint:
+        git:
+            url: https://github.com/zyrouge/dart_zlint.git

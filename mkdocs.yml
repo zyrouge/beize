@@ -1,8 +1,8 @@
-site_name: Baize
-site_url: https://zyrouge.github.io/baize/
+site_name: Beize
+site_url: https://zyrouge.github.io/beize/
 docs_dir: ./docs
-repo_url: https://github.com/zyrouge/baize
-repo_name: zyrouge/baize
+repo_url: https://github.com/zyrouge/beize
+repo_name: zyrouge/beize
 edit_uri: edit/main/docs/
 
 theme:
@@ -41,4 +41,4 @@ copyright: Licensed under GPL-3.0
 extra:
     social:
         - icon: fontawesome/brands/github
-          link: https://github.com/zyrouge/baize
+          link: https://github.com/zyrouge/beize
