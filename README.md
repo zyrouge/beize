@@ -6,6 +6,7 @@
 
 🖋️ A scripting language made for unknown reasons.
 
+[![Deploy](https://github.com/zyrouge/beize/actions/workflows/deploy.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/deploy.yml)
 [![Test](https://github.com/zyrouge/beize/actions/workflows/test.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/test.yml)
 
 # Language Specification
