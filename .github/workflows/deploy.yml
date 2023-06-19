@@ -3,13 +3,6 @@ name: Deploy
 on:
     workflow_dispatch:
 
-env:
-    DEPLOY_BRANCH: gh-pages
-    DEPLOY_DIR: dist
-    GIT_CONFIG_NAME: "[Automated] Yui"
-    GIT_CONFIG_EMAIL: yukino-org@users.noreply.github.com
-    GIT_COMMIT_MSG: "[automated] deploy site (${{ github.sha }})"
-
 jobs:
     build:
         runs-on: ubuntu-latest

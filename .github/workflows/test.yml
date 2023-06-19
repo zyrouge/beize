@@ -1,0 +1,28 @@
+name: Test
+
+on:
+    push:
+        paths:
+            - "**.dart"
+            - "**.beize"
+        workflow_dispatch:
+
+env:
+    TESTS_CWD: ./packages/beize_compiler
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: dart-lang/setup-dart@v1
+
+            - name: 🚧 Install dependencies
+              working-directory: ${{ env.TESTS_CWD }}
+              run: dart pub get
+
+            - name: 🧪 Run tests
+              working-directory: ${{ env.TESTS_CWD }}
+              run: dart test -r github ./tests
