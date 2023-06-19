@@ -1,11 +1,11 @@
 name: Test
 
 on:
+    workflow_dispatch:
     push:
         paths:
             - "**.dart"
             - "**.beize"
-        workflow_dispatch:
 
 env:
     TESTS_CWD: ./packages/beize_compiler
