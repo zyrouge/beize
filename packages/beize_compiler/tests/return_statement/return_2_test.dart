@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'Return (2)';
+  const String title = '[Statement] Return (2)';
   final BeizeProgramConstant program =
       await compileTestScript('return_statement', 'return_2.beize');
 

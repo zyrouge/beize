@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'Import (1)';
+  const String title = '[Statement] Import (1)';
   final BeizeProgramConstant program =
       await compileTestScript('import_statement', 'import_1.beize');
 

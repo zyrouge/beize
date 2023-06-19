@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'When (1)';
+  const String title = '[Statement] When (1)';
   final BeizeProgramConstant program =
       await compileTestScript('when_statement', 'when_1.beize');
 

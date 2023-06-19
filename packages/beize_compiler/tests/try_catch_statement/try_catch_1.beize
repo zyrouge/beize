@@ -1,0 +1,6 @@
+try {
+    throw Exception.new("Test");
+    out("c-0");
+} catch (_) {
+    out("c-1");
+}

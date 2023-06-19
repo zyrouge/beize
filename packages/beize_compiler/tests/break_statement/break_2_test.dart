@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'Break (2)';
+  const String title = '[Statement] Break (2)';
   final BeizeProgramConstant program =
       await compileTestScript('break_statement', 'break_2.beize');
 

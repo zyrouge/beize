@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'Match (4)';
+  const String title = '[Statement] Match (4)';
   final BeizeProgramConstant program =
       await compileTestScript('match_statement', 'match_4.beize');
 

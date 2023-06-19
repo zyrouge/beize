@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = 'While (3)';
+  const String title = '[Statement] While (3)';
   final BeizeProgramConstant program =
       await compileTestScript('while_statement', 'while_3.beize');
 
