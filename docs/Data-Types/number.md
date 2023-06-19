@@ -33,7 +33,7 @@ Returns the `-1` (less than zero), `0` (zero) or `1` (greater than zero).
 num := -5;
 
 # prints -1
-print num.sign();
+print(num.sign());
 ```
 
 ### `isFinite`
@@ -48,7 +48,7 @@ Is the number finite?
 num := 5;
 
 # prints true
-print num.isFinite();
+print(num.isFinite());
 ```
 
 ### `isInfinite`
@@ -63,7 +63,7 @@ Is the number infinite?
 num := 5;
 
 # prints false
-print num.isInfinite();
+print(num.isInfinite());
 ```
 
 ### `isNaN`
@@ -78,7 +78,7 @@ Is the number `NaN`?
 num := 5;
 
 # prints false
-print num.isNaN();
+print(num.isNaN());
 ```
 
 ### `isNegative`
@@ -93,7 +93,7 @@ Is the number negative?
 num := 5;
 
 # prints false
-print num.isNegative();
+print(num.isNegative());
 ```
 
 ### `abs`
@@ -108,7 +108,7 @@ Returns the number without sign.
 num := -5;
 
 # prints 5
-print num.abs();
+print(num.abs());
 ```
 
 ### `ceil`
@@ -123,7 +123,7 @@ Returns the number rounded towards positive infinity.
 num := 5.1;
 
 # prints 6
-print num.ceil();
+print(num.ceil());
 ```
 
 ### `round`
@@ -138,7 +138,7 @@ Returns the number rounded towards negative infinity.
 num := 5.5;
 
 # prints 6
-print num.round();
+print(num.round());
 ```
 
 ### `truncate`
@@ -153,7 +153,7 @@ Returns the number discarding fractional digits.
 num := 5.45;
 
 # prints 5
-print num.truncate();
+print(num.truncate());
 ```
 
 ### `precisionString`
@@ -168,7 +168,7 @@ Returns the number string with specified precision.
 num := 5.2512;
 
 # prints "5.25"
-print num.precisionString(2);
+print(num.precisionString(2));
 ```
 
 ### `toRadixString`
@@ -183,5 +183,5 @@ Returns the radix equivalent of the number.
 num := 5;
 
 # prints 101
-print num.toRadixString(2);
+print(num.toRadixString(2));
 ```

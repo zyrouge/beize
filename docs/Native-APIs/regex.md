@@ -13,10 +13,10 @@ regex1 := RegExp.new(r"\w+");
 regex2 := RegExp.new("\\d+");
 
 # prints "\\w+"
-print regex1.pattern;
+print(regex1.pattern);
 
 # prints "\\d+"
-print regex2.pattern;
+print(regex2.pattern);
 ```
 
 ## `RegExpInst` (Private)
@@ -35,7 +35,7 @@ Boolean
 regex := RegExp.new(r"\w+", "i");
 
 # prints true
-print regex.isCaseInsensitive;
+print(regex.isCaseInsensitive);
 ```
 
 ### `isDotAll`
@@ -50,7 +50,7 @@ Boolean
 regex := RegExp.new(r"\w+", "s");
 
 # prints true
-print regex.isDotAll;
+print(regex.isDotAll);
 ```
 
 ### `isMultiline`
@@ -65,7 +65,7 @@ Boolean
 regex := RegExp.new(r"\w+", "m");
 
 # prints true
-print regex.isMultiline;
+print(regex.isMultiline);
 ```
 
 ### `isUnicode`
@@ -80,7 +80,7 @@ Boolean
 regex := RegExp.new(r"\w+", "u");
 
 # prints true
-print regex.isUnicode;
+print(regex.isUnicode);
 ```
 
 ### `pattern`
@@ -95,7 +95,7 @@ String
 regex := RegExp.new(r"\w+");
 
 # prints "\\w+"
-print regex.pattern;
+print(regex.pattern);
 ```
 
 ### `hasMatch`
@@ -110,7 +110,7 @@ Does `input` has matches against the pattern.
 regex := RegExp.new(r"\w+");
 
 # prints true
-print regex.hasMatch("Hello");
+print(regex.hasMatch("Hello"));
 ```
 
 ### `stringMatch`
@@ -125,7 +125,7 @@ Returns the string match of `input` against the pattern.
 regex := RegExp.new(r"\w+");
 
 # prints "Hello"
-print regex.stringMatch("Hello");
+print(regex.stringMatch("Hello"));
 ```
 
 ### `firstMatch`
@@ -140,7 +140,7 @@ Returns the match of `input` against the pattern.
 regex := RegExp.new(r"(\d+)");
 
 # prints "1"
-print regex.firstMatch("1 2 3").group(1);
+print(regex.firstMatch("1 2 3").group(1));
 ```
 
 ### `allMatches`
@@ -159,7 +159,7 @@ matches := regex.allMatches("1 2 3");
 #   "1"
 #   "2"
 #   "3"
-matches.forEach(-> x : print x.group(1));
+matches.forEach(-> x : print(x.group(1)));
 ```
 
 ### `replaceFirst`
@@ -174,7 +174,7 @@ Returns a string after replacing first match of `input` against the pattern usin
 regex := RegExp.new(r"\.md$");
 
 # prints "index.html"
-print regex.replaceFirst("index.md", ".html");
+print(regex.replaceFirst("index.md", ".html"));
 ```
 
 ### `replaceAll`
@@ -189,7 +189,7 @@ Returns a string after replacing all the matches of `input` against the pattern 
 regex := RegExp.new(r"\.md");
 
 # prints "index.html, hello.html"
-print regex.replaceAll("index.md, hello.md", ".html");
+print(regex.replaceAll("index.md, hello.md", ".html"));
 ```
 
 ### `replaceFirstMapped`
@@ -204,7 +204,7 @@ Returns a string after replacing first match of `input` against the pattern usin
 regex := RegExp.new(r"[A-Z]+");
 
 # prints "hello worLD"
-print regex.replaceFirstMapped("HELLo worLD", -> match : match.group(0).toLowerCase());
+print(regex.replaceFirstMapped("HELLo worLD", -> match : match.group(0).toLowerCase()));
 ```
 
 ### `replaceAllMapped`
@@ -219,7 +219,7 @@ Returns a string after replacing all the matches of `input` against the pattern 
 regex := RegExp.new(r"[A-Z]+");
 
 # prints "hello world"
-print regex.replaceAllMapped("HELLo worLD", -> match : match.group(0).toLowerCase());
+print(regex.replaceAllMapped("HELLo worLD", -> match : match.group(0).toLowerCase()));
 ```
 
 ## `RegExpMatch` (Private)
@@ -239,7 +239,7 @@ regex := RegExp.new(r"(\d+)");
 match := regex.firstMatch("1 2 3");
 
 # prints "1 2 3"
-print match.input;
+print(match.input);
 ```
 
 ### `groupCount`
@@ -255,7 +255,7 @@ regex := RegExp.new(r"(\d+)");
 match := regex.firstMatch("1 2 3");
 
 # prints 1
-print match.groupCount;
+print(match.groupCount);
 ```
 
 ### `groupNames`
@@ -271,7 +271,7 @@ regex := RegExp.new(r"(?<digit>\d+)");
 match := regex.firstMatch("1 2 3");
 
 # prints ["digit"]
-print match.groupNames;
+print(match.groupNames);
 ```
 
 ### `namedGroup`
@@ -287,7 +287,7 @@ regex := RegExp.new(r"(?<digit>\d+)");
 match := regex.firstMatch("1 2 3");
 
 # prints "1"
-print match.namedGroup("digit");
+print(match.namedGroup("digit"));
 ```
 
 ### `group`
@@ -303,5 +303,5 @@ regex := RegExp.new(r"(\d+)");
 match := regex.firstMatch("1 2 3");
 
 # prints "1"
-print match.group(1);
+print(match.group(1));
 ```

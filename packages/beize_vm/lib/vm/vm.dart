@@ -37,7 +37,7 @@ class BeizeVM {
 
   Future<void> run() async {
     final BeizeInterpreterResult result = await loadModuleAsync(
-      program.entrypoint,
+      0,
       isEntrypoint: true,
     );
     if (result.isFailure) {
@@ -46,15 +46,16 @@ class BeizeVM {
   }
 
   BeizePreparedModule prepareModule(
-    final String module, {
+    final int moduleId, {
     required final bool isEntrypoint,
   }) {
+    final String moduleName = program.moduleNameAt(moduleId);
     final BeizeNamespace namespace = globalNamespace.enclosed;
     final BeizeModuleValue value = BeizeModuleValue(namespace);
-    modules[module] = value;
+    modules[moduleName] = value;
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: this,
-      function: program.modules[module]!,
+      function: program.modules[moduleId],
       namespace: namespace,
       parent: !isEntrypoint ? topFrame : null,
     );
@@ -63,14 +64,15 @@ class BeizeVM {
   }
 
   BeizeInterpreterResult loadModule(
-    final String module, {
+    final int moduleId, {
     final bool isEntrypoint = false,
   }) {
-    if (modules.containsKey(module)) {
-      return BeizeInterpreterResult.success(modules[module]!);
+    final String moduleName = program.moduleNameAt(moduleId);
+    if (modules.containsKey(moduleName)) {
+      return BeizeInterpreterResult.success(modules[moduleName]!);
     }
     final BeizePreparedModule prepared = prepareModule(
-      module,
+      moduleId,
       isEntrypoint: isEntrypoint,
     );
     final BeizeInterpreterResult result =
@@ -80,14 +82,15 @@ class BeizeVM {
   }
 
   Future<BeizeInterpreterResult> loadModuleAsync(
-    final String module, {
+    final int moduleId, {
     final bool isEntrypoint = false,
   }) async {
-    if (modules.containsKey(module)) {
-      return BeizeInterpreterResult.success(modules[module]!);
+    final String moduleName = program.moduleNameAt(moduleId);
+    if (modules.containsKey(moduleName)) {
+      return BeizeInterpreterResult.success(modules[moduleName]!);
     }
     final BeizePreparedModule prepared = prepareModule(
-      module,
+      moduleId,
       isEntrypoint: isEntrypoint,
     );
     final BeizeInterpreterResult result =

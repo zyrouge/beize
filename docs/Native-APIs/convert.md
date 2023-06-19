@@ -39,7 +39,7 @@ bytesList := Convert.newBytesList([72, 101, 108, 108, 111]);
 decoded := Convert.decodeAscii(bytesList);
 
 # prints "Hello"
-print decoded;
+print(decoded);
 ```
 
 ## `Convert.encodeBase64`
@@ -55,7 +55,7 @@ bytesList := Convert.newBytesList([72, 101, 108, 108, 111]);
 base64 := Convert.encodeBase64(bytesList);
 
 # prints "SGVsbG8="
-print base64;
+print(base64);
 ```
 
 ## `Convert.decodeBase64`
@@ -97,7 +97,7 @@ bytesList := Convert.newBytesList([72, 101, 108, 108, 111]);
 decoded := Convert.decodeLatin1(bytesList);
 
 # prints "Hello"
-print decoded;
+print(decoded);
 ```
 
 ## `Convert.encodeUtf8`
@@ -126,7 +126,7 @@ bytesList := Convert.newBytesList([72, 101, 108, 108, 111]);
 decoded := Convert.decodeUtf8(bytes);
 
 # prints "Hello"
-print decoded;
+print(decoded);
 ```
 
 ## `Convert.encodeJson`
@@ -144,7 +144,7 @@ json := {
 encoded := Convert.encodeJson(json);
 
 # prints `{"hello":"world"}`
-print encoded;
+print(encoded);
 ```
 
 ## `Convert.decodeJson`
@@ -160,7 +160,7 @@ json := '{"hello":"world"}';
 decoded := Convert.decodeJson(json);
 
 # prints { hello: "world" }
-print decoded;
+print(decoded);
 ```
 
 ## `BytesList` (Private)
@@ -179,5 +179,5 @@ Returns the bytes as a list.
 bytesList := Convert.newBytesList([0, 1, 2]);
 
 # prints [0, 1, 2]
-print bytesList.bytes();
+print(bytesList.bytes());
 ```

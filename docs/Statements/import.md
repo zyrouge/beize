@@ -10,7 +10,7 @@ import "filename" as variable;
 import "utils.fbs" as utils;
 
 # prints "Hello World!"
-print utils.helloWorld;
+print(utils.helloWorld);
 
 # prints "Hello World!"
 utils.displayHelloWorld();

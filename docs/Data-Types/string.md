@@ -36,7 +36,7 @@ Is string empty?
 str := "Hello World!";
 
 # prints false
-print str.isEmpty();
+print(str.isEmpty());
 ```
 
 ### `isNotEmpty`
@@ -51,7 +51,7 @@ Is string not empty?
 str := "Hello World!";
 
 # prints true
-print str.isNotEmpty();
+print(str.isNotEmpty());
 ```
 
 ### `length`
@@ -66,7 +66,7 @@ Length of the string.
 str := "Hello World!";
 
 # prints 12
-print str.length();
+print(str.length());
 ```
 
 ### `compareTo`
@@ -82,7 +82,7 @@ str1 := "Hello";
 str2 := "World";
 
 # prints -1
-print str1.compareTo(str2);
+print(str1.compareTo(str2));
 ```
 
 ### `contains`
@@ -97,7 +97,7 @@ Check if `other` is present in the string.
 str := "Hello World!";
 
 # prints true
-print str.contains("!");
+print(str.contains("!"));
 ```
 
 ### `startsWith`
@@ -112,7 +112,7 @@ Check if the string is prefixed with `other`.
 str := "Hello World!";
 
 # prints true
-print str.startsWith("Hell");
+print(str.startsWith("Hell"));
 ```
 
 ### `endsWith`
@@ -127,7 +127,7 @@ Check if the string is suffixed with `other`.
 str := "Hello World!";
 
 # prints true
-print str.endsWith("!");
+print(str.endsWith("!"));
 ```
 
 ### `indexOf`
@@ -142,7 +142,7 @@ Position of `substring` in the string. Returns `-1` if not present.
 str := "Hello World!";
 
 # prints 6
-print str.indexOf("W");
+print(str.indexOf("W"));
 ```
 
 ### `substring`
@@ -157,7 +157,7 @@ Returns a substring between `start` and `end`.
 str := "Hello World!";
 
 # prints "World"
-print str.substring(6, 11);
+print(str.substring(6, 11));
 ```
 
 ### `replaceFirst`
@@ -172,7 +172,7 @@ Replaces first `substring` with `with`.
 str := "Hello World!";
 
 # prints "Heelo World!"
-print str.replaceFirst("l", "e");
+print(str.replaceFirst("l", "e"));
 ```
 
 ### `replaceAll`
@@ -187,7 +187,7 @@ Replaces all `substring` with `with`.
 str := "Hello World!";
 
 # prints "Heeeo World!"
-print str.replaceAll("l", "e");
+print(str.replaceAll("l", "e"));
 ```
 
 ### `replaceFirstMapped`
@@ -202,7 +202,7 @@ Replaces first `substring` with value returned by `with`.
 str := "Hello World!";
 
 # prints "Heilo World!"
-print str.replaceFirstMapped("l", -> _ : "i");
+print(str.replaceFirstMapped("l", -> _ : "i"));
 ```
 
 ### `replaceAllMapped`
@@ -217,7 +217,7 @@ Replaces all `substring` with value returned by `with`.
 str := "Hello World!";
 
 # prints "Heiio World!"
-print str.replaceAllMapped("l", -> _ : "i");
+print(str.replaceAllMapped("l", -> _ : "i"));
 ```
 
 ### `trim`
@@ -232,7 +232,7 @@ Removes all whitespaces at the ends.
 str := "\tHello World!   ";
 
 # prints "Hello World!"
-print str.trim();
+print(str.trim());
 ```
 
 ### `trimLeft`
@@ -247,7 +247,7 @@ Removes all whitespaces at the start.
 str := "  Hello World!  ";
 
 # prints "Hello World  "
-print str.trimLeft();
+print(str.trimLeft());
 ```
 
 ### `trimRight`
@@ -262,7 +262,7 @@ Removes all whitespaces at the end.
 str := "  Hello World!  ";
 
 # prints "  Hello World"
-print str.trimRight();
+print(str.trimRight());
 ```
 
 ### `padLeft`
@@ -277,7 +277,7 @@ Pads using `with` at the start.
 str := "1";
 
 # prints 01
-print str.padLeft(2, "0");
+print(str.padLeft(2, "0"));
 ```
 
 ### `padRight`
@@ -292,7 +292,7 @@ Pads using `with` at the end.
 str := "1";
 
 # prints 10
-print str.padRight(2, "0");
+print(str.padRight(2, "0"));
 ```
 
 ### `split`
@@ -307,7 +307,7 @@ Splits the string at `splitter`s.
 str := "Hello!";
 
 # prints ["He", "o!"]
-print str.split("ll");
+print(str.split("ll"));
 ```
 
 ### `charAt`
@@ -322,7 +322,7 @@ Returns character at `index`.
 str := "Hello World!";
 
 # prints "e"
-print str.charAt(1);
+print(str.charAt(1));
 ```
 
 ### `codeUnitAt`
@@ -337,7 +337,7 @@ Returns code-unit at `index`.
 str := "Hello World!";
 
 # prints 101
-print str.codeUnitAt(1);
+print(str.codeUnitAt(1));
 ```
 
 ### `toCodeUnits`
@@ -352,7 +352,7 @@ Returns code-units of the string.
 str := "Hello!";
 
 # prints [72, 101, 108, 108, 111, 33]
-print str.toCodeUnits();
+print(str.toCodeUnits());
 ```
 
 ### `toLowerCase`
@@ -367,7 +367,7 @@ Returns the string in lowercase.
 str := "Hello World!";
 
 # prints "hello world!"
-print str.toLowerCase();
+print(str.toLowerCase());
 ```
 
 ### `toUpperCase`
@@ -382,7 +382,7 @@ Returns the string in uppercase.
 str := "Hello World!";
 
 # prints "HELLO WORLD!"
-print str.toUpperCase();
+print(str.toUpperCase());
 ```
 
 ### `format`
@@ -395,5 +395,5 @@ Returns the formatted string. Example: `"{} {1}".format(["Hello", "World"])`, `"
 
 ```title="Example"
 # prints "Hello World!"
-print "{} {}!".format(["Hello", "World"]);
+print("{} {}!".format(["Hello", "World"]));
 ```

@@ -10,8 +10,8 @@ Takes in a value and returns the type. The type will be any one of `Boolean`, `F
 
 ```title="Example"
 # prints "Number"
-print typeof(10);
+print(typeof(10));
 
 # prints "String"
-print typeof("Hello");
+print(typeof("Hello"));
 ```

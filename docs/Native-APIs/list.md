@@ -13,10 +13,10 @@ list1 := List.from([0, 1, 2]);
 list2 := List.from({ hello: "world" });
 
 # prints [0, 1, 2]
-print list1;
+print(list1);
 
 # prints [["hello", "world"]]
-print list2;
+print(list2);
 ```
 
 ## `List.generate`
@@ -31,7 +31,7 @@ Takes in a length, a predicate that returns a value and returns the generated li
 list := List.from(3, -> i : i + 1);
 
 # prints [1, 2, 3]
-print list;
+print(list);
 ```
 
 ## `List.filled`
@@ -46,5 +46,5 @@ Takes in a length, a value and returns the list.
 list := List.from(3, 10);
 
 # prints [10, 10, 10]
-print list;
+print(list);
 ```

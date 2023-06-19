@@ -13,7 +13,7 @@ ms := 1330329420000;
 time := DateTime.fromMillisecondsSinceEpoch(ms);
 
 # prints "2012-02-27T13:27:00.000"
-print time.iso;
+print(time.iso);
 ```
 
 ## `DateTime.parse`
@@ -43,7 +43,7 @@ Examples of accepted strings:
 time := DateTime.parse("2012-02-27 13:27:00");
 
 # prints "2012-02-27T13:27:00.000"
-print time.iso;
+print(time.iso);
 ```
 
 ## `DateTime.now`
@@ -58,7 +58,7 @@ Returns a `DateTimeInst` of current time.
 time := DateTime.now();
 
 # prints "2012-02-27T13:27:00.000"
-print time.iso;
+print(time.iso);
 ```
 
 ## `DateTimeInst` (Private)
@@ -77,7 +77,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 27
-print now.day;
+print(now.day);
 ```
 
 ### `weekday`
@@ -92,7 +92,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 1
-print now.weekday;
+print(now.weekday);
 ```
 
 ### `month`
@@ -107,7 +107,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 2
-print now.month;
+print(now.month);
 ```
 
 ### `year`
@@ -122,7 +122,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 2012
-print now.year;
+print(now.year);
 ```
 
 ### `hour`
@@ -137,7 +137,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 13
-print now.hour;
+print(now.hour);
 ```
 
 ### `minute`
@@ -152,7 +152,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 27
-print now.minute;
+print(now.minute);
 ```
 
 ### `second`
@@ -167,7 +167,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:01");
 
 # prints 1
-print now.second;
+print(now.second);
 ```
 
 ### `millisecond`
@@ -182,7 +182,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00.12345");
 
 # prints 12345
-print now.millisecond;
+print(now.millisecond);
 ```
 
 ### `millisecondsSinceEpoch`
@@ -197,7 +197,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 1330329420000
-print now.millisecondsSinceEpoch;
+print(now.millisecondsSinceEpoch);
 ```
 
 ### `timeZoneName`
@@ -212,7 +212,7 @@ String
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints "Pacific Standard Time"
-print now.timeZoneName;
+print(now.timeZoneName);
 ```
 
 ### `timeZoneOffset`
@@ -227,7 +227,7 @@ Number
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints 60000
-print now.timeZoneOffset;
+print(now.timeZoneOffset);
 ```
 
 ### `iso`
@@ -242,5 +242,5 @@ String
 now := DateTime.parse("2012-02-27 13:27:00");
 
 # prints "2012-02-27T13:27:00.000"
-print now.iso;
+print(now.iso);
 ```

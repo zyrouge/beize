@@ -10,7 +10,7 @@ Number
 
 ```title="Example"
 # prints Infinity
-print Number.infinity;
+print(Number.infinity);
 ```
 
 ## `Number.negativeInfinity`
@@ -23,7 +23,7 @@ Number
 
 ```title="Example"
 # prints -Infinity
-print Number.negativeInfinity;
+print(Number.negativeInfinity);
 ```
 
 ## `Number.NaN`
@@ -36,7 +36,7 @@ Number
 
 ```title="Example"
 # prints NaN
-print Number.NaN;
+print(Number.NaN);
 ```
 
 ## `Number.maxFinite`
@@ -49,7 +49,7 @@ Number
 
 ```title="Example"
 # prints 1.7976931348623157e+308
-print Number.maxFinite;
+print(Number.maxFinite);
 ```
 
 ## `Number.from`
@@ -62,7 +62,7 @@ Takes in a value and returns a number.
 
 ```title="Example"
 # prints 10
-print Number.from("10");
+print(Number.from("10"));
 ```
 
 ## `Number.fromOrNull`
@@ -75,10 +75,10 @@ Takes in a value and returns a number or `null`.
 
 ```title="Example"
 # prints 10
-print Number.from("10");
+print(Number.from("10"));
 
 # prints null
-print Number.from([]);
+print(Number.from([]));
 ```
 
 ## `Number.fromRadix`
@@ -91,10 +91,10 @@ Takes in a value and returns a number.
 
 ```title="Example"
 # prints 55
-print Number.fromRadix("110111", 2);
+print(Number.fromRadix("110111", 2));
 
 # prints 15
-print Number.fromRadix("17", 8);
+print(Number.fromRadix("17", 8));
 ```
 
 ## `Number.fromRadixOrNull`
@@ -107,8 +107,8 @@ Takes in a value and returns a number or `null`.
 
 ```title="Example"
 # prints 55
-print Number.fromRadixOrNull("110111");
+print(Number.fromRadixOrNull("110111"));
 
 # prints null
-print Number.fromRadixOrNull([]);
+print(Number.fromRadixOrNull([]));
 ```

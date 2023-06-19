@@ -21,10 +21,10 @@ else
 
 ```title="Example"
 # prints "Hello World"
-if (true) print "Hello World";
+if (true) print("Hello World");
 
-if (false) print "Hello World";
-else print "Goodbye World";
+if (false) print("Hello World");
+else print("Goodbye World");
 
 text := "";
 if (true) {
@@ -34,5 +34,5 @@ if (true) {
 }
 
 # prints "Hello World"
-print text;
+print(text);
 ```

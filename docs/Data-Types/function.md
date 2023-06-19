@@ -30,7 +30,7 @@ Calls the function and returns the result.
 
 ```title="Example"
 printString := -> value {
-    print value;
+    print(value);
 };
 
 # prints "Hello World!"

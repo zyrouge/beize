@@ -10,7 +10,7 @@ for ([initialization]; [condition]; [increment/decrement]) {
 
 ```title="Example"
 for (i := 0; i < 5; i++) {
-    print i;
+    print(i);
 }
 # prints,
 #   0
@@ -20,7 +20,7 @@ for (i := 0; i < 5; i++) {
 #   4
 
 for (;;) {
-    print "Hello!";
+    print("Hello!");
 }
 # prints "Hello!" infinitely
 ```

@@ -12,13 +12,13 @@ exception2 := Exception.new("Something went wrong!", "at line 1");
 #   Exception: Something went wrong!
 #   Stack Trace:
 #   ...
-print exception1;
+print(exception1);
 
 # prints:
 #   Exception: Something went wrong!
 #   Stack Trace:
 #   at line 1
-print exception2;
+print(exception2);
 ```
 
 ## `ExceptionInst` (Private)
@@ -37,7 +37,7 @@ String
 exception := Exception.new("Something went wrong!");
 
 # prints "Something went wrong!"
-print exception.message;
+print(exception.message);
 ```
 
 ### `stackTrace`
@@ -52,5 +52,5 @@ String
 exception := Exception.new("Something went wrong!", "at line 1");
 
 # prints "at line 1"
-print exception.stackTrace;
+print(exception.stackTrace);
 ```

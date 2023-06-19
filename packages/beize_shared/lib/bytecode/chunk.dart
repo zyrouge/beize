@@ -3,36 +3,36 @@ import 'op_codes.dart';
 
 class BeizeChunk {
   BeizeChunk({
+    required this.moduleId,
     required this.codes,
     required this.constants,
     required this.lines,
-    required this.module,
   });
 
-  factory BeizeChunk.empty(final String module) => BeizeChunk(
+  factory BeizeChunk.empty(final int moduleId) => BeizeChunk(
+        moduleId: moduleId,
         codes: <int>[],
         constants: <BeizeConstant>[],
         lines: <int>[],
-        module: module,
       );
 
   factory BeizeChunk.deserialize(final BeizeSerializedConstant serialized) =>
       BeizeChunk(
-        codes: (serialized[0] as List<dynamic>).cast<int>(),
-        constants: (serialized[1] as List<dynamic>).map((final dynamic x) {
+        moduleId: serialized[0] as int,
+        codes: (serialized[1] as List<dynamic>).cast<int>(),
+        constants: (serialized[2] as List<dynamic>).map((final dynamic x) {
           if (x is List<dynamic>) {
             return BeizeFunctionConstant.deserialize(x);
           }
           return x;
         }).toList(),
-        lines: (serialized[2] as List<dynamic>).cast<int>(),
-        module: serialized[3] as String,
+        lines: (serialized[3] as List<dynamic>).cast<int>(),
       );
 
+  final int moduleId;
   final List<int> codes;
   final List<BeizeConstant> constants;
   final List<int> lines;
-  final String module;
 
   int addOpCode(final BeizeOpCodes opCode, final int line) =>
       addCode(opCode.index, line);
@@ -64,7 +64,7 @@ class BeizeChunk {
       if (x is BeizeFunctionConstant) return x.serialize();
       return x;
     }).toList();
-    return <dynamic>[codes, serializedConstant, lines, module];
+    return <dynamic>[moduleId, codes, serializedConstant, lines];
   }
 
   int get length => codes.length;

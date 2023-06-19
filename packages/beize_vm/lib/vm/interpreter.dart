@@ -479,10 +479,10 @@ class BeizeInterpreter {
         );
 
       case BeizeOpCodes.opModule:
-        final String module = frame.readConstantAt(frame.ip) as String;
+        final int moduleId = chunk.codeAt(frame.ip);
         final String name = frame.readConstantAt(frame.ip + 1) as String;
         frame.ip += 2;
-        final BeizeInterpreterResult result = frame.vm.loadModule(module);
+        final BeizeInterpreterResult result = frame.vm.loadModule(moduleId);
         if (result.isFailure) {
           return handleException(result.error);
         }

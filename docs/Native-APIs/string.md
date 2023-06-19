@@ -10,13 +10,13 @@ Takes in a value and returns a string.
 
 ```title="Example"
 # prints "false"
-print String.from(false);
+print(String.from(false));
 
 # prints "1"
-print String.from(1);
+print(String.from(1));
 
 # prints "[1, 2, 3]"
-print String.from([1, 2, 3]);
+print(String.from([1, 2, 3]));
 ```
 
 ## `String.fromCodeUnit`
@@ -29,7 +29,7 @@ Takes in a byte and returns the equivalent character value as string.
 
 ```title="Example"
 # prints "H"
-print String.fromCodeUnit(72);
+print(String.fromCodeUnit(72));
 ```
 
 ## `String.fromCodeUnits`
@@ -42,5 +42,5 @@ Takes in a byte and returns the equivalent character value as string.
 
 ```title="Example"
 # prints "Hello"
-print String.fromCodeUnit([72, 101, 108, 108, 111]);
+print(String.fromCodeUnit([72, 101, 108, 108, 111]));
 ```

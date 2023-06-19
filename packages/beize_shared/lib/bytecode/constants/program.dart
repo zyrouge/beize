@@ -3,7 +3,7 @@ import 'function.dart';
 
 class BeizeProgramConstant {
   BeizeProgramConstant({
-    required this.names,
+    required this.moduleNames,
     required this.modules,
   });
 
@@ -11,29 +11,24 @@ class BeizeProgramConstant {
     final BeizeSerializedConstant serialized,
   ) =>
       BeizeProgramConstant(
-        modules: (serialized[0] as Map<dynamic, dynamic>).map(
-          (final dynamic key, final dynamic value) =>
-              MapEntry<String, BeizeFunctionConstant>(
-            key as String,
-            BeizeFunctionConstant.deserialize(
-              value as BeizeSerializedConstant,
-            ),
-          ),
-        ),
-        entrypoint: serialized[1] as String,
+        moduleNames: (serialized[0] as List<dynamic>).cast<String>(),
+        modules: (serialized[1] as List<dynamic>)
+            .map(
+              (final dynamic x) => BeizeFunctionConstant.deserialize(
+                x as BeizeSerializedConstant,
+              ),
+            )
+            .toList(),
       );
 
-  final List<String> names;
+  final List<String> moduleNames;
   final List<BeizeFunctionConstant> modules;
 
-  BeizeSerializedConstant serialize() {
-    final Map<String, BeizeSerializedConstant> serializedModules = modules.map(
-      (final String key, final BeizeFunctionConstant value) =>
-          MapEntry<String, BeizeSerializedConstant>(
-        key,
-        value.serialize(),
-      ),
-    );
-    return <dynamic>[serializedModules, entrypoint];
-  }
+  String moduleNameAt(final int index) => moduleNames[index];
+  BeizeFunctionConstant moduleAt(final int index) => modules[index];
+
+  BeizeSerializedConstant serialize() => <dynamic>[
+        moduleNames,
+        modules.map((final BeizeFunctionConstant x) => x.serialize()).toList(),
+      ];
 }

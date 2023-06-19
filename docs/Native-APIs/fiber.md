@@ -42,5 +42,5 @@ results := Fiber.runConcurrently([
 
 # this takes only around 3-4 seconds
 # prints ["Hello", "World", "!"]
-print results;
+print(results);
 ```

@@ -26,7 +26,7 @@ list := ["foo"];
 list.push("bar");
 
 # prints ["foo", "bar"]
-print list;
+print(list);
 ```
 
 ### `pushAll`
@@ -42,7 +42,7 @@ list := ["foo"];
 list.pushAll(["bar", "baz"]);
 
 # prints ["foo", "bar", "baz"]
-print list;
+print(list);
 ```
 
 ### `pop`
@@ -58,7 +58,7 @@ list := ["foo", "bar"];
 list.pop();
 
 # prints ["foo"]
-print list;
+print(list);
 ```
 
 ### `clear`
@@ -74,7 +74,7 @@ list := ["foo", "bar"];
 list.pop();
 
 # prints ["foo"]
-print list;
+print(list);
 ```
 
 ### `length`
@@ -89,7 +89,7 @@ Returns length of the list.
 list := ["foo", "bar"];
 
 # prints 2
-print list.length();
+print(list.length());
 ```
 
 ### `isEmpty`
@@ -104,7 +104,7 @@ Is the list empty?
 list := ["foo", "bar"];
 
 # prints false
-print list.isEmpty();
+print(list.isEmpty());
 ```
 
 ### `isNotEmpty`
@@ -119,7 +119,7 @@ Is the list not empty?
 list := ["foo", "bar"];
 
 # prints true
-print list.isNotEmpty();
+print(list.isNotEmpty());
 ```
 
 ### `clone`
@@ -135,7 +135,7 @@ list := ["foo", "bar"];
 cloned = list.clone();
 
 # prints ["foo", "bar"]
-print cloned;
+print(cloned);
 ```
 
 ### `reversed`
@@ -151,7 +151,7 @@ list := ["foo", "bar"];
 reversed := list.reversed();
 
 # prints ["bar", "foo"]
-print reversed;
+print(reversed);
 ```
 
 ### `contains`
@@ -166,7 +166,7 @@ Check if `element` is present in the list.
 list := ["foo", "bar"];
 
 # prints true
-print list.contains("bar");
+print(list.contains("bar"));
 ```
 
 ### `indexOf`
@@ -181,7 +181,7 @@ Returns the index of `element` in the list.
 list := ["foo", "bar", "foo"];
 
 # prints 0
-print list.indexOf("foo");
+print(list.indexOf("foo"));
 ```
 
 ### `lastIndexOf`
@@ -196,7 +196,7 @@ Returns the last index of `element` in the list.
 list := ["foo", "bar", "foo"];
 
 # prints 2
-print list.lastIndexOf("foo");
+print(list.lastIndexOf("foo"));
 ```
 
 ### `remove`
@@ -212,7 +212,7 @@ list := ["foo", "bar"];
 list.remove("bar");
 
 # prints ["foo"]
-print list;
+print(list);
 ```
 
 ### `sublist`
@@ -228,7 +228,7 @@ list := ["foo", "bar", "baz"];
 sublist := list.sublist(0, 2);
 
 # prints ["foo", "bar"]
-print sublist;
+print(sublist);
 ```
 
 ### `find`
@@ -246,7 +246,7 @@ list := [
 ];
 
 # prints { value: "foo" }
-print list.find(-> x : x.value == "foo");
+print(list.find(-> x : x.value == "foo"));
 ```
 
 ### `findIndex`
@@ -264,7 +264,7 @@ list := [
 ];
 
 # prints 1
-print list.findIndex(-> x : x.value == "bar");
+print(list.findIndex(-> x : x.value == "bar"));
 ```
 
 ### `findLastIndex`
@@ -283,7 +283,7 @@ list := [
 ];
 
 # prints 2
-print list.findLastIndex(-> x : x.value == "foo");
+print(list.findLastIndex(-> x : x.value == "foo"));
 ```
 
 ### `map`
@@ -302,7 +302,7 @@ list := [
 mapped := list.map(-> x : x.value);
 
 # prints ["foo", "bar"]
-print mapped;
+print(mapped);
 ```
 
 ### `filter`
@@ -318,7 +318,7 @@ list := ["foo", "bar", "baz"];
 filtered := list.filter(-> x : x.value == "foo");
 
 # prints ["bar", "baz"]
-print filtered;
+print(filtered);
 ```
 
 ### `sort`
@@ -334,7 +334,7 @@ list := ["c", "a", "b"];
 sorted := list.sort(-> a, b : a.compareTo(b));
 
 # prints ["a", "b", "c"]
-print sorted;
+print(sorted);
 ```
 
 ### `flat`
@@ -350,7 +350,7 @@ list := [["foo", "bar"], ["baz"]];
 flattened := list.flat(1);
 
 # prints ["foo", "bar", "baz"]
-print flattened;
+print(flattened);
 ```
 
 ### `flatDeep`
@@ -366,7 +366,7 @@ list := [["foo", ["bar"]], ["baz"]];
 flattened := list.flatDeep();
 
 # prints ["foo", "bar", "baz"]
-print flattened;
+print(flattened);
 ```
 
 ### `unique`
@@ -382,7 +382,7 @@ list := ["foo", "bar", "foo"];
 unique := list.unique();
 
 # prints ["foo", "bar"]
-print unique;
+print(unique);
 ```
 
 ### `forEach`
@@ -400,7 +400,7 @@ list2 := [];
 list1.forEach(-> x : list2.add(x));
 
 # prints ["foo", "bar"]
-print list2;
+print(list2);
 ```
 
 ### `join`
@@ -415,5 +415,5 @@ Returns the elements converted to string, joined by `delimiter`.
 list := ["foo", "bar"];
 
 # prints "foo, bar"
-print list.join(", ");
+print(list.join(", "));
 ```

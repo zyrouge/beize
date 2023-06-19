@@ -48,7 +48,7 @@ b := {
 Object.apply(a, b);
 
 # prints { hello: "world" }
-print a;
+print(a);
 ```
 
 ## `Object.entries`
@@ -67,7 +67,7 @@ obj := {
 entries := Object.entries(obj);
 
 # prints [["hello", "world"], ["foo", "bar"]]
-print entries;
+print(entries);
 ```
 
 ## `Object.keys`
@@ -86,7 +86,7 @@ obj := {
 keys := Object.keys(obj);
 
 # prints ["hello", "foo"]
-print keys;
+print(keys);
 ```
 
 ## `Object.values`
@@ -105,7 +105,7 @@ obj := {
 values := Object.values(obj);
 
 # prints ["hello", "foo"]
-print values;
+print(values);
 ```
 
 ## `Object.clone`
@@ -121,7 +121,7 @@ obj := { hello: "world" };
 cloned := Object.clone();
 
 # prints { hello: "world" }
-print cloned;
+print(cloned);
 ```
 
 ## `Object.deleteProperty`
@@ -140,5 +140,5 @@ obj := {
 Object.deleteProperty(obj, "hello");
 
 # prints { foo: "bar" }
-print obj;
+print(obj);
 ```

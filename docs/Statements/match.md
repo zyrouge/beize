@@ -16,11 +16,11 @@ match (expr) {
 a := 0;
 match (a) {
     -1: {
-        print "Found: -1";
+        print("Found: -1");
     }
-    0: print "Found: 0";
-    1: print "Found: 1";
-    else: print a;
+    0: print("Found: 0");
+    1: print("Found: 1");
+    else: print(a);
 }
 
 # prints "Found: 0"

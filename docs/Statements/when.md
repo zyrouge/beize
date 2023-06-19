@@ -17,9 +17,9 @@ a := 2;
 b := 3;
 when {
     a > b: {
-        print "Yes";
+        print("Yes");
     }
-    else: print "No";
+    else: print("No");
 }
 
 # prints "No"

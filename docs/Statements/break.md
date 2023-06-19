@@ -9,7 +9,7 @@ break;
 ```title="Example"
 i := 0;
 while (true) {
-    print i;
+    print(i);
     i++;
     if (i > 2) break;
 }

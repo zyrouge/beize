@@ -16,6 +16,6 @@ Creates a lexical scope and contains a sequence of statements.
     a := 2;
 
     # prints 2
-    print a;
+    print(a);
 }
 ```

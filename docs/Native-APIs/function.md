@@ -10,7 +10,7 @@ Takes in an function, list of arguments and returns the result of the function a
 
 ```title="Example"
 printString := -> value {
-    print value;
+    print(value);
 };
 
 # prints "Hello World!"

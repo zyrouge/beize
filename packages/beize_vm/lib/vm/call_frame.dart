@@ -109,7 +109,7 @@ class BeizeCallFrame {
       function.chunk.constantAt(function.chunk.codeAt(index));
 
   String toStackTraceLine(final int depth) =>
-      '#$depth   ${function.chunk.module} at line ${function.chunk.lineAt(sip)}';
+      '#$depth   ${vm.program.moduleNameAt(function.chunk.moduleId)} at line ${function.chunk.lineAt(sip)}';
 
   String getStackTrace([final int depth = 0]) {
     final String current = toStackTraceLine(depth);

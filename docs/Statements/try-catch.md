@@ -14,7 +14,7 @@ try {
 try {
     throw "Hello World!";
 } catch (err) {
-    print err;
+    print(err);
 }
 
 # prints "Hello World!"
