@@ -27,7 +27,7 @@ Future<void> main() async {
   });
 
   test('$title - Bytecode (Dummy File)', () async {
-    final BeizeChunk chunk = program.modules['import_dummy.beize']!.chunk;
+    final BeizeChunk chunk = program.moduleAt(1).chunk;
     final BeizeTestChunk expectedChunk = BeizeTestChunk();
     expectedChunk.addOpCode(BeizeOpCodes.opConstant);
     final BeizeTestChunk expectedChunk_0 = BeizeTestChunk();

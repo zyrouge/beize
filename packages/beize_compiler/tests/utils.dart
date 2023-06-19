@@ -33,15 +33,13 @@ Future<List<String>> executeTestScript(
   return output;
 }
 
-BeizeChunk extractChunk(
-  final BeizeProgramConstant program,
-) {
-  final BeizeChunk chunk = program.modules[program.entrypoint]!.chunk;
+BeizeChunk extractChunk(final BeizeProgramConstant program) {
+  final BeizeChunk chunk = program.moduleAt(0).chunk;
   return chunk;
 }
 
 class BeizeTestChunk {
-  final BeizeChunk chunk = BeizeChunk.empty('testChunk');
+  final BeizeChunk chunk = BeizeChunk.empty(0);
 
   void addOpCode(final BeizeOpCodes opCode) {
     chunk.addOpCode(opCode, 0);
@@ -123,14 +121,11 @@ String buildExpectedChunkCode(
         break;
 
       case BeizeOpCodes.opModule:
-        final int pathPosition = chunk.codeAt(ip + 1);
+        final int moduleId = chunk.codeAt(ip + 1);
         final int identifierPosition = chunk.codeAt(ip + 2);
-        final String path = chunk.constantAt(pathPosition) as String;
         final String identifier =
             chunk.constantAt(identifierPosition) as String;
-        output.writeln(
-          "$variableName.addConstant($pathPosition, '${escapedString(path, "'")}');",
-        );
+        output.writeln('$variableName.addCode($moduleId);');
         output.writeln(
           "$variableName.addConstant($identifierPosition, '$identifier');",
         );

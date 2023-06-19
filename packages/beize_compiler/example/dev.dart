@@ -2,11 +2,11 @@
 
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:beize_vm/beize_vm.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 Future<void> main() async {
   final BeizeProgramConstant program = await BeizeCompiler.compileProject(
-    root: path.join(path.current, 'example/project'),
+    root: p.join(p.current, 'example/project'),
     entrypoint: 'dev.beize',
   );
   print(program.serialize());

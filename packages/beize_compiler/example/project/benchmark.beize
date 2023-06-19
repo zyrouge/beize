@@ -7,7 +7,7 @@ createBenchmarker := -> a, b {
         },
         end: -> {
             this.endedAt = DateTime.now().millisecondsSinceEpoch;
-            print 'Took ' + (this.endedAt - this.startedAt) + 'ms';
+            print('Took ' + (this.endedAt - this.startedAt) + 'ms');
         },
     };
 };

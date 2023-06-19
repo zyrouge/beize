@@ -121,7 +121,7 @@ abstract class BeizeParser {
   static void parseBreakStatement(final BeizeCompiler compiler) {
     if (compiler.loops.isEmpty) {
       throw BeizeCompilationException.cannotBreakContinueOutsideLoop(
-        compiler.module,
+        compiler.moduleName,
         compiler.previousToken,
       );
     }
@@ -132,7 +132,7 @@ abstract class BeizeParser {
   static void parseContinueStatement(final BeizeCompiler compiler) {
     if (compiler.loops.isEmpty) {
       throw BeizeCompilationException.cannotBreakContinueOutsideLoop(
-        compiler.module,
+        compiler.moduleName,
         compiler.previousToken,
       );
     }
@@ -152,7 +152,7 @@ abstract class BeizeParser {
   static void parseReturnStatement(final BeizeCompiler compiler) {
     if (compiler.mode != BeizeCompilerMode.function) {
       throw BeizeCompilationException.cannotReturnInsideScript(
-        compiler.module,
+        compiler.moduleName,
         compiler.previousToken,
       );
     }
@@ -197,7 +197,7 @@ abstract class BeizeParser {
   ) async {
     if (compiler.scopeDepth != 0) {
       throw BeizeCompilationException.topLevelImports(
-        compiler.module,
+        compiler.moduleName,
         compiler.previousToken,
       );
     }
@@ -205,20 +205,22 @@ abstract class BeizeParser {
     final String importPath =
         compiler.resolveImportPath(compiler.previousToken.literal as String);
     final String modulePath = compiler.resolveImportPath(importPath);
-    final int moduleIndex = compiler.makeConstant(modulePath);
+    final int moduleId = compiler.moduleId + 1;
     compiler.consume(BeizeTokens.asKw);
     compiler.consume(BeizeTokens.identifier);
     final int asIndex = parseIdentifierConstant(compiler);
     compiler.consume(BeizeTokens.semi);
     compiler.emitOpCode(BeizeOpCodes.opModule);
-    compiler.emitCode(moduleIndex);
+    compiler.emitCode(moduleId);
     compiler.emitCode(asIndex);
-    if (!compiler.modules.containsKey(modulePath)) {
+    if (!compiler.moduleNames.contains(modulePath)) {
       final BeizeCompiler moduleCompiler = await compiler.createModuleCompiler(
+        moduleId,
         importPath,
         isAsync: false,
       );
-      compiler.modules[modulePath] = moduleCompiler.currentFunction;
+      compiler.moduleNames.add(modulePath);
+      compiler.modules.add(moduleCompiler.currentFunction);
       await moduleCompiler.compile();
     }
   }
@@ -236,7 +238,7 @@ abstract class BeizeParser {
       if (compiler.match(BeizeTokens.elseKw)) {
         if (elseCase != null) {
           throw BeizeCompilationException.duplicateElse(
-            compiler.module,
+            compiler.moduleName,
             compiler.previousToken,
           );
         }
@@ -317,7 +319,7 @@ abstract class BeizeParser {
     final BeizeParseRule rule = BeizeParseRule.of(compiler.previousToken.type);
     if (rule.prefix == null) {
       throw BeizeCompilationException.expectedXButReceivedToken(
-        compiler.module,
+        compiler.moduleName,
         'expression',
         compiler.previousToken.type,
         compiler.previousToken.span,
@@ -661,7 +663,7 @@ abstract class BeizeParser {
     if (dotCall && compiler.match(BeizeTokens.awaitKw)) {
       if (!compiler.currentFunction.isAsync) {
         throw BeizeCompilationException.cannotAwaitOutsideAsyncFunction(
-          compiler.module,
+          compiler.moduleName,
           compiler.previousToken,
         );
       }

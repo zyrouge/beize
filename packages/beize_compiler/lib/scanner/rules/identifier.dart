@@ -29,6 +29,7 @@ abstract class BeizeIdentifierScanner {
     BeizeTokens.forKw,
     BeizeTokens.asyncKw,
     BeizeTokens.awaitKw,
+    BeizeTokens.foreachKw,
   };
 
   static final Map<String, BeizeTokens> keywordsMap = keywords.asNameMap().map(

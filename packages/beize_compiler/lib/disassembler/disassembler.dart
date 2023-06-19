@@ -2,8 +2,9 @@ import 'package:beize_shared/beize_shared.dart';
 import 'output.dart';
 
 class BeizeDisassembler {
-  BeizeDisassembler(this.chunk, this.output);
+  BeizeDisassembler(this.program, this.chunk, this.output);
 
+  final BeizeProgramConstant program;
   final BeizeChunk chunk;
   final BeizeDisassemblerOutput output;
 
@@ -40,7 +41,7 @@ class BeizeDisassembler {
           output.write(
             '-> ${constant.isAsync ? 'async' : ''} ${constant.arguments.join(', ')}',
           );
-          BeizeDisassembler(constant.chunk, output.nested)
+          BeizeDisassembler(program, constant.chunk, output.nested)
               .dissassemble(printHeader: false);
           output.write('<-');
         }
@@ -83,15 +84,15 @@ class BeizeDisassembler {
         return 1;
 
       case BeizeOpCodes.opModule:
-        final int pathPosition = chunk.codeAt(ip + 1);
+        final int moduleId = chunk.codeAt(ip + 1);
         final int identifierPosition = chunk.codeAt(ip + 2);
-        final BeizeConstant path = chunk.constantAt(pathPosition);
+        final BeizeConstant moduleName = program.moduleNameAt(moduleId);
         final BeizeConstant identifier = chunk.constantAt(identifierPosition);
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(path [$pathPosition] = $path, identifier [$identifierPosition] = $identifier)',
+          '{so}(module [$moduleId] = $moduleName, identifier [$identifierPosition] = $identifier)',
         );
         return 2;
 
@@ -119,10 +120,12 @@ class BeizeDisassembler {
 
   static void disassembleProgram(final BeizeProgramConstant program) {
     final BeizeDisassemblerOutput output = BeizeDisassemblerConsoleOutput();
-    for (final String x in program.modules.keys) {
-      output.write('> $x ${program.entrypoint == x ? "(entrypoint)" : ""}');
+    for (int i = 0; i < program.modules.length; i++) {
+      final String moduleName = program.moduleNameAt(i);
+      final BeizeFunctionConstant function = program.moduleAt(i);
+      output.write('> $moduleName ${i == 0 ? "(entrypoint)" : ""}');
       final BeizeDisassembler disassembler =
-          BeizeDisassembler(program.modules[x]!.chunk, output);
+          BeizeDisassembler(program, function.chunk, output);
       disassembler.dissassemble();
       output.write('---');
     }

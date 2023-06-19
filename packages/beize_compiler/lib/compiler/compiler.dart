@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 import '../bytecode.dart';
 import '../errors/exports.dart';
 import '../lexer/exports.dart';
@@ -24,8 +24,9 @@ class BeizeCompiler {
     this.scanner, {
     required this.mode,
     required this.root,
+    required this.moduleId,
+    required this.moduleNames,
     required this.modules,
-    required this.module,
     this.options = BeizeCompilerOptions.defaultValue,
     this.parent,
   });
@@ -35,8 +36,9 @@ class BeizeCompiler {
   final BeizeScanner scanner;
   final BeizeCompilerMode mode;
   final String root;
-  final Map<String, BeizeFunctionConstant> modules;
-  final String module;
+  final int moduleId;
+  final List<String> moduleNames;
+  final List<BeizeFunctionConstant> modules;
 
   late BeizeToken previousToken;
   late BeizeToken currentToken;
@@ -51,7 +53,7 @@ class BeizeCompiler {
     currentFunction = BeizeFunctionConstant(
       isAsync: isAsync,
       arguments: <String>[],
-      chunk: BeizeChunk.empty(module),
+      chunk: BeizeChunk.empty(moduleId),
     );
     scopeDepth = 0;
     loops = <BeizeCompilerLoopState>[];
@@ -69,8 +71,9 @@ class BeizeCompiler {
       scanner,
       mode: BeizeCompilerMode.function,
       root: root,
+      moduleId: moduleId,
+      moduleNames: moduleNames,
       modules: modules,
-      module: module,
       parent: this,
       options: options,
     );
@@ -79,27 +82,29 @@ class BeizeCompiler {
   }
 
   Future<BeizeCompiler> createModuleCompiler(
-    final String module, {
+    final int moduleId,
+    final String path, {
     required final bool isAsync,
   }) async {
-    final File file = File(path.join(root, module));
+    final File file = File(p.join(root, path));
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler derived = BeizeCompiler._(
       BeizeScanner(input),
       mode: BeizeCompilerMode.script,
       root: root,
+      moduleId: moduleId,
+      moduleNames: moduleNames,
       modules: modules,
-      module: module,
       options: options,
     );
     derived.prepare(isAsync: isAsync);
     return derived;
   }
 
-  String resolveImportPath(final String importPath) {
-    final String importDir = path.dirname(path.join(root, module));
-    final String absolutePath = path.join(importDir, importPath);
-    return path.relative(path.normalize(absolutePath), from: root);
+  String resolveImportPath(final String path) {
+    final String importDir = p.dirname(p.join(root, moduleName));
+    final String absolutePath = p.join(importDir, path);
+    return p.relative(p.normalize(absolutePath), from: root);
   }
 
   Future<BeizeFunctionConstant> compile() async {
@@ -113,7 +118,10 @@ class BeizeCompiler {
     previousToken = currentToken;
     currentToken = scanner.readToken();
     if (currentToken.type == BeizeTokens.illegal) {
-      throw BeizeCompilationException.illegalToken(module, currentToken);
+      throw BeizeCompilationException.illegalToken(
+        moduleName,
+        currentToken,
+      );
     }
     return currentToken;
   }
@@ -129,7 +137,7 @@ class BeizeCompiler {
   void ensure(final BeizeTokens type) {
     if (!check(type)) {
       throw BeizeCompilationException.expectedTokenButReceivedToken(
-        module,
+        moduleName,
         type,
         currentToken.type,
         currentToken.span,
@@ -226,6 +234,8 @@ class BeizeCompiler {
 
   bool isEndOfFile() => currentToken.type == BeizeTokens.eof;
 
+  String get moduleName => moduleNames[moduleId];
+
   BeizeChunk get currentChunk => currentFunction.chunk;
 
   int get currentAbsoluteOffset => currentChunk.length;
@@ -234,26 +244,28 @@ class BeizeCompiler {
     required final String root,
     required final String entrypoint,
   }) async {
-    final File file = File(path.join(root, entrypoint));
+    final File file = File(p.join(root, entrypoint));
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler derived = BeizeCompiler._(
       BeizeScanner(input),
       mode: BeizeCompilerMode.script,
       root: root,
-      modules: <String, BeizeFunctionConstant>{},
-      module: entrypoint,
+      moduleId: 0,
+      moduleNames: <String>[entrypoint],
+      modules: <BeizeFunctionConstant>[
+        // initialize to a dummy chunk
+        BeizeFunctionConstant(
+          isAsync: true,
+          arguments: <String>[],
+          chunk: BeizeChunk.empty(0),
+        ),
+      ],
     );
     derived.prepare(isAsync: true);
-    // initialize to a dummy chunk
-    derived.modules[entrypoint] = BeizeFunctionConstant(
-      isAsync: true,
-      arguments: <String>[],
-      chunk: BeizeChunk.empty(entrypoint),
-    );
-    derived.modules[entrypoint] = await derived.compile();
+    derived.modules[0] = await derived.compile();
     return BeizeProgramConstant(
+      moduleNames: derived.moduleNames,
       modules: derived.modules,
-      entrypoint: entrypoint,
     );
   }
 }
