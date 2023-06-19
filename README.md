@@ -6,6 +6,8 @@
 
 🖋️ A scripting language made for unknown reasons.
 
+[![Test](https://github.com/zyrouge/beize/actions/workflows/test.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/test.yml)
+
 # Language Specification
 
 The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Beize script files have an `.beize` extension. The [`beize_compiler`](./packages/beize_compiler) and [`beize_vm`](./packages/beize_vm) provides the compiler and the runtime for the language.
