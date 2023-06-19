@@ -46,9 +46,10 @@ class BeizeCompiler {
   late final List<BeizeCompilerLoopState> loops;
 
   void prepare({
-    final bool isAsync = false,
+    required final bool isAsync,
   }) {
     currentFunction = BeizeFunctionConstant(
+      isAsync: isAsync,
       arguments: <String>[],
       chunk: BeizeChunk.empty(module),
     );
@@ -61,7 +62,9 @@ class BeizeCompiler {
     }
   }
 
-  BeizeCompiler createFunctionCompiler() {
+  BeizeCompiler createFunctionCompiler({
+    required final bool isAsync,
+  }) {
     final BeizeCompiler derived = BeizeCompiler._(
       scanner,
       mode: BeizeCompilerMode.function,
@@ -71,11 +74,14 @@ class BeizeCompiler {
       parent: this,
       options: options,
     );
-    derived.prepare();
+    derived.prepare(isAsync: isAsync);
     return derived;
   }
 
-  Future<BeizeCompiler> createModuleCompiler(final String module) async {
+  Future<BeizeCompiler> createModuleCompiler(
+    final String module, {
+    required final bool isAsync,
+  }) async {
     final File file = File(path.join(root, module));
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler derived = BeizeCompiler._(
@@ -86,7 +92,7 @@ class BeizeCompiler {
       module: module,
       options: options,
     );
-    derived.prepare();
+    derived.prepare(isAsync: isAsync);
     return derived;
   }
 
@@ -237,9 +243,10 @@ class BeizeCompiler {
       modules: <String, BeizeFunctionConstant>{},
       module: entrypoint,
     );
-    derived.prepare();
-    // NOTE: dummy chunk
+    derived.prepare(isAsync: true);
+    // initialize to a dummy chunk
     derived.modules[entrypoint] = BeizeFunctionConstant(
+      isAsync: true,
       arguments: <String>[],
       chunk: BeizeChunk.empty(entrypoint),
     );

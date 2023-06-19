@@ -1,4 +1,5 @@
 import '../../values/exports.dart';
+import '../exports.dart';
 import '../namespace.dart';
 
 abstract class BeizeRegExpNatives {
@@ -118,18 +119,18 @@ abstract class BeizeRegExpNatives {
     );
     value.set(
       BeizeStringValue('replaceFirstMapped'),
-      BeizeNativeFunctionValue.async(
-        (final BeizeNativeFunctionCall call) async {
-          final BeizeStringValue result = await replaceMapped(regex, call, 1);
+      BeizeNativeFunctionValue.sync(
+        (final BeizeNativeFunctionCall call) {
+          final BeizeStringValue result = replaceMapped(regex, call, 1);
           return result;
         },
       ),
     );
     value.set(
       BeizeStringValue('replaceAllMapped'),
-      BeizeNativeFunctionValue.async(
-        (final BeizeNativeFunctionCall call) async {
-          final BeizeStringValue result = await replaceMapped(regex, call);
+      BeizeNativeFunctionValue.sync(
+        (final BeizeNativeFunctionCall call) {
+          final BeizeStringValue result = replaceMapped(regex, call);
           return result;
         },
       ),
@@ -180,17 +181,17 @@ abstract class BeizeRegExpNatives {
     return value;
   }
 
-  static Future<BeizeStringValue> replaceMapped(
+  static BeizeStringValue replaceMapped(
     final RegExp regex,
     final BeizeNativeFunctionCall call, [
     final int? count,
-  ]) async {
+  ]) {
     final BeizeStringValue input = call.argumentAt(0);
     final BeizeFunctionValue mapper = call.argumentAt(1);
-    final String result = await input.replacePatternMapped(
+    final String result = input.replacePatternMapped(
       regex,
-      (final Match match) async {
-        final BeizeValue result = await call.frame.callValue(
+      (final Match match) {
+        final BeizeValue result = call.frame.callValue(
           mapper,
           <BeizeValue>[newRegExpMatch(match as RegExpMatch)],
         ).unwrapUnsafe();

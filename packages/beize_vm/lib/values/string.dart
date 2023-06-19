@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeStringValue extends BeizePrimitiveObjectValue {
@@ -112,17 +113,17 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
           );
 
         case 'replaceFirstMapped':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
-              final BeizeStringValue result = await replaceMapped(call, 1);
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
+              final BeizeStringValue result = replaceMapped(call, 1);
               return result;
             },
           );
 
         case 'replaceAllMapped':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
-              final BeizeStringValue result = await replaceMapped(call);
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
+              final BeizeStringValue result = replaceMapped(call);
               return result;
             },
           );
@@ -221,16 +222,16 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
     return super.get(key);
   }
 
-  Future<BeizeStringValue> replaceMapped(
+  BeizeStringValue replaceMapped(
     final BeizeNativeFunctionCall call, [
     final int? count,
-  ]) async {
+  ]) {
     final BeizeStringValue pattern = call.argumentAt(0);
     final BeizeFunctionValue mapper = call.argumentAt(1);
-    final String result = await replacePatternMapped(
+    final String result = replacePatternMapped(
       pattern.value,
-      (final Match match) async {
-        final BeizeValue result = await call.frame.callValue(
+      (final Match match) {
+        final BeizeValue result = call.frame.callValue(
           mapper,
           <BeizeValue>[BeizeStringValue(match.group(0)!)],
         ).unwrapUnsafe();
@@ -241,17 +242,17 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
     return BeizeStringValue(result);
   }
 
-  Future<String> replacePatternMapped(
+  String replacePatternMapped(
     final Pattern pattern,
-    final Future<String> Function(Match) mapper, {
+    final String Function(Match) mapper, {
     final int? count,
-  }) async {
+  }) {
     String result = value;
     int adjuster = 0;
     int i = 0;
     for (final Match x in pattern.allMatches(result)) {
       if (count != null && i >= count) break;
-      final String by = await mapper(x);
+      final String by = mapper(x);
       final String nResult = result.replaceRange(
         x.start + adjuster,
         x.end + adjuster,

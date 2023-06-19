@@ -1,6 +1,6 @@
-import '../bytecode.dart';
-import '../vm/exports.dart';
-import 'exports.dart';
+import '../../bytecode.dart';
+import '../../vm/exports.dart';
+import '../exports.dart';
 
 class BeizeFunctionValue extends BeizePrimitiveObjectValue {
   BeizeFunctionValue({
@@ -26,6 +26,8 @@ class BeizeFunctionValue extends BeizePrimitiveObjectValue {
     }
     return super.get(key);
   }
+
+  bool get isAsync => constant.isAsync;
 
   @override
   final BeizeValueKind kind = BeizeValueKind.function;

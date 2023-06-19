@@ -1,0 +1,5 @@
+main := -> async {
+    print("hello world");
+};
+
+main().await;

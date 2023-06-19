@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeListValue extends BeizePrimitiveObjectValue {
@@ -118,11 +119,11 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'find':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               for (final BeizeValue x in elements) {
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) return x;
               }
@@ -131,12 +132,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'findIndex':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               for (int i = 0; i < elements.length; i++) {
                 final BeizeValue x = elements[i];
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   return BeizeNumberValue(i.toDouble());
@@ -147,12 +148,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'findLastIndex':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               for (int i = elements.length - 1; i >= 0; i--) {
                 final BeizeValue x = elements[i];
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   return BeizeNumberValue(i.toDouble());
@@ -163,12 +164,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'filter':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   nValue.push(x);
@@ -179,12 +180,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'map':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 nValue.push(result);
               }
@@ -193,12 +194,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'where':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
-                final BeizeValue result = await call.frame
+                final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
                 if (result.isTruthy) {
                   nValue.push(result);
@@ -209,8 +210,8 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'sort':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               final List<BeizeValue> sorted = elements.toList();
               for (int i = 0; i < sorted.length; i++) {
@@ -218,7 +219,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
                 for (int j = 0; j < sorted.length - i - 1; j++) {
                   final BeizeValue a = sorted[j];
                   final BeizeValue b = sorted[j + 1];
-                  final BeizeValue result = await call.frame
+                  final BeizeValue result = call.frame
                       .callValue(predicate, <BeizeValue>[a, b]).unwrapUnsafe();
                   final bool shouldSwap =
                       result.cast<BeizeNumberValue>().value > 0;
@@ -263,19 +264,19 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
           );
 
         case 'forEach':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeFunctionValue predicate = call.argumentAt(0);
               for (final BeizeValue x in elements) {
-                await call.frame.callValue(predicate, <BeizeValue>[x]);
+                call.frame.callValue(predicate, <BeizeValue>[x]);
               }
               return BeizeNullValue.value;
             },
           );
 
         case 'join':
-          return BeizeNativeFunctionValue.async(
-            (final BeizeNativeFunctionCall call) async {
+          return BeizeNativeFunctionValue.sync(
+            (final BeizeNativeFunctionCall call) {
               final BeizeStringValue delimiter = call.argumentAt(0);
               final String delimiterValue = delimiter.value;
               final StringBuffer buffer = StringBuffer();

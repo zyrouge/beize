@@ -1,6 +1,6 @@
 import 'dart:async';
 import '../../values/exports.dart';
-import '../namespace.dart';
+import '../exports.dart';
 
 abstract class BeizeFiberNatives {
   static void bind(final BeizeNamespace namespace) {
@@ -24,8 +24,14 @@ abstract class BeizeFiberNatives {
           final BeizeListValue fns = call.argumentAt(0);
           final List<BeizeValue> result = await Future.wait(
             fns.elements.map(
-              (final BeizeValue x) =>
-                  call.frame.callValue(x, <BeizeValue>[]).unwrapUnsafe(),
+              (final BeizeValue x) async {
+                BeizeValue value =
+                    call.frame.callValue(x, <BeizeValue>[]).unwrapUnsafe();
+                if (value is BeizeUnawaitedValue) {
+                  value = await value.execute(call.frame).unwrapUnsafe();
+                }
+                return value;
+              },
             ),
           );
           return BeizeListValue(result);

@@ -1,4 +1,4 @@
-import "./benchmark.fbs" as benchmark;
+import "./benchmark.beize" as benchmark;
 
 benchmarker := benchmark.createBenchmarker();
 benchmarker.start();

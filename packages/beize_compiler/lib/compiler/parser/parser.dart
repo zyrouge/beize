@@ -50,7 +50,9 @@ abstract class BeizeParser {
   }
 
   static void parsePrintStatement(final BeizeCompiler compiler) {
+    compiler.consume(BeizeTokens.parenLeft);
     parseExpression(compiler);
+    compiler.consume(BeizeTokens.parenRight);
     compiler.consume(BeizeTokens.semi);
     compiler.emitOpCode(BeizeOpCodes.opPrint);
   }
@@ -212,8 +214,10 @@ abstract class BeizeParser {
     compiler.emitCode(moduleIndex);
     compiler.emitCode(asIndex);
     if (!compiler.modules.containsKey(modulePath)) {
-      final BeizeCompiler moduleCompiler =
-          await compiler.createModuleCompiler(importPath);
+      final BeizeCompiler moduleCompiler = await compiler.createModuleCompiler(
+        importPath,
+        isAsync: false,
+      );
       compiler.modules[modulePath] = moduleCompiler.currentFunction;
       await moduleCompiler.compile();
     }
@@ -581,7 +585,9 @@ abstract class BeizeParser {
   }
 
   static void parseFunction(final BeizeCompiler compiler) {
-    final BeizeCompiler functionCompiler = compiler.createFunctionCompiler();
+    final bool isAsync = compiler.match(BeizeTokens.asyncKw);
+    final BeizeCompiler functionCompiler =
+        compiler.createFunctionCompiler(isAsync: isAsync);
     bool cont = true;
     while (cont && functionCompiler.check(BeizeTokens.identifier)) {
       functionCompiler.consume(BeizeTokens.identifier);
@@ -652,6 +658,16 @@ abstract class BeizeParser {
     final BeizeCompiler compiler, {
     final bool dotCall = false,
   }) {
+    if (dotCall && compiler.match(BeizeTokens.awaitKw)) {
+      if (!compiler.currentFunction.isAsync) {
+        throw BeizeCompilationException.cannotAwaitOutsideAsyncFunction(
+          compiler.module,
+          compiler.previousToken,
+        );
+      }
+      compiler.emitOpCode(BeizeOpCodes.opAwait);
+      return;
+    }
     if (dotCall) {
       compiler.consume(BeizeTokens.identifier);
       final String key = compiler.previousToken.literal as String;

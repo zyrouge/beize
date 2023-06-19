@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 Future<void> main() async {
   final BeizeProgramConstant program = await BeizeCompiler.compileProject(
     root: path.join(path.current, 'example/project'),
-    entrypoint: 'main.beize',
+    entrypoint: 'dev.beize',
   );
   print(program.serialize());
   final BeizeProgramConstant real =

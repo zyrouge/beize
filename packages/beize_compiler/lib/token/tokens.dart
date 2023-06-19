@@ -77,6 +77,8 @@ enum BeizeTokens {
   matchKw, // match
   printKw, // print
   forKw, // for
+  asyncKw, // async
+  awaitKw, // await
 }
 
 const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
@@ -155,6 +157,8 @@ const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
   BeizeTokens.matchKw: 'match',
   BeizeTokens.printKw: 'print',
   BeizeTokens.forKw: 'for',
+  BeizeTokens.asyncKw: 'async',
+  BeizeTokens.awaitKw: 'await',
 };
 
 extension OutreTokensUtils on BeizeTokens {

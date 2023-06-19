@@ -95,7 +95,7 @@ class BeizeCompilationException implements Exception {
   ) =>
       BeizeCompilationException(
         module,
-        'Cannot "await" outside of "async" function ("${token.type.code}" found at ${token.span})',
+        'Cannot use "await" outside of "async" function ("${token.type.code}" found at ${token.span})',
       );
 
   final String module;

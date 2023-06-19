@@ -37,7 +37,9 @@ class BeizeDisassembler {
           '{so}(constant [$constantPosition] = ${stringifyConstant(constant)})',
         );
         if (constant is BeizeFunctionConstant) {
-          output.write('-> (${constant.arguments.join(', ')})');
+          output.write(
+            '-> ${constant.isAsync ? 'async' : ''} ${constant.arguments.join(', ')}',
+          );
           BeizeDisassembler(constant.chunk, output.nested)
               .dissassemble(printHeader: false);
           output.write('<-');

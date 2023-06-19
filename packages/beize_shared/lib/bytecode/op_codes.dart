@@ -33,6 +33,7 @@ enum BeizeOpCodes {
   opBeginScope,
   opEndScope,
   opCall,
+  opAwait,
   opGetProperty,
   opSetProperty,
   opList,

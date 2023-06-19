@@ -1,3 +1,4 @@
+import '../errors/exports.dart';
 import '../values/exports.dart';
 
 enum BeizeInterpreterResultState {
@@ -21,4 +22,19 @@ class BeizeInterpreterResult {
 
   bool get isSuccess => state == BeizeInterpreterResultState.success;
   bool get isFailure => state == BeizeInterpreterResultState.fail;
+}
+
+extension BeizeValueInterpreterResultUtils on BeizeInterpreterResult {
+  BeizeValue unwrapUnsafe() {
+    if (isFailure) throw BeizeInterpreterBridgedException(error);
+    return value;
+  }
+}
+
+extension BeizeValueFutureInterpreterResultUtils
+    on Future<BeizeInterpreterResult> {
+  Future<BeizeValue> unwrapUnsafe() async {
+    final BeizeInterpreterResult result = await this;
+    return result.unwrapUnsafe();
+  }
 }

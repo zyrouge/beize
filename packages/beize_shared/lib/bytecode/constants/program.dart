@@ -3,8 +3,8 @@ import 'function.dart';
 
 class BeizeProgramConstant {
   BeizeProgramConstant({
+    required this.names,
     required this.modules,
-    required this.entrypoint,
   });
 
   factory BeizeProgramConstant.deserialize(
@@ -23,8 +23,8 @@ class BeizeProgramConstant {
         entrypoint: serialized[1] as String,
       );
 
-  final Map<String, BeizeFunctionConstant> modules;
-  final String entrypoint;
+  final List<String> names;
+  final List<BeizeFunctionConstant> modules;
 
   BeizeSerializedConstant serialize() {
     final Map<String, BeizeSerializedConstant> serializedModules = modules.map(

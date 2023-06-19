@@ -3,6 +3,7 @@ import 'constant.dart';
 
 class BeizeFunctionConstant {
   BeizeFunctionConstant({
+    required this.isAsync,
     required this.arguments,
     required this.chunk,
   });
@@ -11,15 +12,17 @@ class BeizeFunctionConstant {
     final BeizeSerializedConstant serialized,
   ) =>
       BeizeFunctionConstant(
-        arguments: (serialized[0] as List<dynamic>).cast<String>(),
+        isAsync: serialized[0] as bool,
+        arguments: (serialized[1] as List<dynamic>).cast<String>(),
         chunk: BeizeChunk.deserialize(
-          serialized[1] as BeizeSerializedConstant,
+          serialized[2] as BeizeSerializedConstant,
         ),
       );
 
+  final bool isAsync;
   final List<String> arguments;
   final BeizeChunk chunk;
 
   BeizeSerializedConstant serialize() =>
-      <dynamic>[arguments, chunk.serialize()];
+      <dynamic>[isAsync, arguments, chunk.serialize()];
 }

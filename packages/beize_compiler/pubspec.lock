@@ -33,17 +33,17 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  baize_shared:
+  beize_shared:
     dependency: "direct main"
     description:
-      path: "../baize_shared"
+      path: "../beize_shared"
       relative: true
     source: path
     version: "0.0.0"
-  baize_vm:
+  beize_vm:
     dependency: "direct dev"
     description:
-      path: "../baize_vm"
+      path: "../beize_vm"
       relative: true
     source: path
     version: "0.0.0"
