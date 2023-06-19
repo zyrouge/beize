@@ -17,7 +17,7 @@ But is it fast? The performance is reasonable for a mere scripting language. It 
 
 # Documentation
 
-Refer [wiki/beize](https://zyrouge.github.io/beize).
+Visit [https://zyrouge.github.io/beize](https://zyrouge.github.io/beize).
 
 # Example
 
