@@ -79,7 +79,6 @@ enum BeizeTokens {
   forKw, // for
   asyncKw, // async
   awaitKw, // await
-  foreachKw, // foreach
 }
 
 const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
@@ -160,7 +159,6 @@ const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
   BeizeTokens.forKw: 'for',
   BeizeTokens.asyncKw: 'async',
   BeizeTokens.awaitKw: 'await',
-  BeizeTokens.foreachKw: 'foreach',
 };
 
 extension OutreTokensUtils on BeizeTokens {
