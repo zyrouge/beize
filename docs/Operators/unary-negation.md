@@ -1,4 +1,4 @@
-# Unary negation
+# Unary Negation
 
 Unary negation operator (`-`) can be used to represent a negative number or to invert the sign of a number.
 
