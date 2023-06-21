@@ -1,0 +1,6 @@
+import "./main.beize" as main;
+import "./utils.beize" as utils;
+
+printHello := -> {
+    print("Hello World!");
+};

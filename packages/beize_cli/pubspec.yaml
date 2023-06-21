@@ -1,31 +1,31 @@
-name: beize_compiler
-description: Compiler of Beize.
+name: beize_cli
+description: CLI of Beize.
 version: 0.0.0
-
 publish_to: none
 
 environment:
     sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
-    beize_shared:
+    args: ^2.4.2
+    beize_compiler:
         git:
             url: https://github.com/zyrouge/beize.git
-            path: packages/beize_shared
-    path: ^1.8.3
-
-dependency_overrides:
-    beize_shared:
-        path: ../beize_shared
-    beize_vm:
-        path: ../beize_vm
-
-dev_dependencies:
+            path: packages/beize_compiler
     beize_vm:
         git:
             url: https://github.com/zyrouge/beize.git
             path: packages/beize_vm
-    test: ^1.24.3
+    collection: ^1.17.2
+    path: ^1.8.3
+
+dependency_overrides:
+    beize_compiler:
+        path: ../beize_compiler
+    beize_vm:
+        path: ../beize_vm
+
+dev_dependencies:
     zlint:
         git:
             url: https://github.com/zyrouge/dart_zlint.git

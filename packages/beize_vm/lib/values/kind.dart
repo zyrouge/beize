@@ -19,6 +19,7 @@ final Map<BeizeValueKind, String> _kindCodeMap = <BeizeValueKind, String>{
   BeizeValueKind.function: 'Function',
   BeizeValueKind.nativeFunction: 'NativeFunction',
   BeizeValueKind.nativeAsyncFunction: 'NativeAsyncFunction',
+  BeizeValueKind.unawaited: 'Unawaited',
   BeizeValueKind.nullValue: 'Null',
   BeizeValueKind.number: 'Number',
   BeizeValueKind.string: 'String',

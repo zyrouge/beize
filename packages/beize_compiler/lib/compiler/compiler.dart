@@ -14,9 +14,11 @@ enum BeizeCompilerMode {
 }
 
 class BeizeCompilerOptions {
-  const BeizeCompilerOptions();
+  BeizeCompilerOptions({
+    this.disablePrint = false,
+  });
 
-  static const BeizeCompilerOptions defaultValue = BeizeCompilerOptions();
+  final bool disablePrint;
 }
 
 class BeizeCompiler {
@@ -27,7 +29,7 @@ class BeizeCompiler {
     required this.moduleId,
     required this.moduleNames,
     required this.modules,
-    this.options = BeizeCompilerOptions.defaultValue,
+    required this.options,
     this.parent,
   });
 
@@ -243,26 +245,24 @@ class BeizeCompiler {
   static Future<BeizeProgramConstant> compileProject({
     required final String root,
     required final String entrypoint,
+    required final BeizeCompilerOptions options,
   }) async {
-    final File file = File(p.join(root, entrypoint));
+    final String fullPath = p.join(root, entrypoint);
+    final File file = File(fullPath);
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler derived = BeizeCompiler._(
       BeizeScanner(input),
       mode: BeizeCompilerMode.script,
       root: root,
+      options: options,
       moduleId: 0,
-      moduleNames: <String>[entrypoint],
-      modules: <BeizeFunctionConstant>[
-        // initialize to a dummy chunk
-        BeizeFunctionConstant(
-          isAsync: true,
-          arguments: <String>[],
-          chunk: BeizeChunk.empty(0),
-        ),
-      ],
+      moduleNames: <String>[],
+      modules: <BeizeFunctionConstant>[],
     );
     derived.prepare(isAsync: true);
-    derived.modules[0] = await derived.compile();
+    derived.moduleNames.add(p.relative(fullPath, from: root));
+    derived.modules.add(derived.currentFunction);
+    await derived.compile();
     return BeizeProgramConstant(
       moduleNames: derived.moduleNames,
       modules: derived.modules,

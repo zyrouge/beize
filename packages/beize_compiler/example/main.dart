@@ -8,6 +8,7 @@ Future<void> main() async {
   final BeizeProgramConstant program = await BeizeCompiler.compileProject(
     root: p.join(p.current, 'example/project'),
     entrypoint: 'main.beize',
+    options: BeizeCompilerOptions(),
   );
   print(program.serialize());
   final BeizeProgramConstant real =

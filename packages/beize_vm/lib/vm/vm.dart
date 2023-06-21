@@ -18,10 +18,12 @@ typedef BeizeVMOnUncaughtException = void Function(BeizeExceptionValue);
 class BeizeVMOptions {
   BeizeVMOptions({
     this.disablePrint = false,
+    this.printPrefix = 'print: ',
     this.onUnhandledException,
   });
 
   final bool disablePrint;
+  final String printPrefix;
   final BeizeVMOnUncaughtException? onUnhandledException;
 }
 

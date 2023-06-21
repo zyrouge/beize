@@ -1,8 +1,6 @@
 import '../../errors/exports.dart';
 import '../../values/exports.dart';
 import '../exports.dart';
-import '../namespace.dart';
-import 'object.dart';
 
 abstract class BeizeListNatives {
   static void bind(final BeizeNamespace namespace) {

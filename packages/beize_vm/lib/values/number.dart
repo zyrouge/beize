@@ -101,7 +101,6 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
 
   @override
   String kToString() {
-    // Source: https://stackoverflow.com/a/59963834
     if (value % 1 == 0) return value.toStringAsFixed(0);
     return value.toString();
   }

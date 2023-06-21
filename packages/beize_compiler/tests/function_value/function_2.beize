@@ -1,0 +1,5 @@
+value := -> async {
+    out("c-0");
+    return "c-1";
+};
+out(value().await);

@@ -3,13 +3,126 @@ name: Release
 on:
     workflow_dispatch:
 
+env:
+    CLI_CWD: ./packages/beize_cli
+
 jobs:
-    build:
+    build-linux:
+        name: Build (Linux)
         runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v3
 
             - name: 🚧 Install dependencies
-              working-directory: ${{ env.TESTS_CWD }}
+              working-directory: ${{ env.CLI_CWD }}
               run: dart pub get
+
+            - name: 👷 Build binaries
+              working-directory: ${{ env.CLI_CWD }}
+              run:
+                  - mkdir ./dist
+                  - dart compile exe ./lib/main.dart -o ./dist/beize-linux
+
+            - name: 🔢 Get release name
+              id: release_name
+              uses: actions/github-script@v6
+              env:
+                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
+              with:
+                  result-encoding: string
+                  script: |
+                      const sha = process.env["COMMIT_SHA"];
+                      const now = new Date();
+                      const date = date.getDate();
+                      const month = date.getMonth() + 1;
+                      const year = date.getFullYear();
+                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+
+            - name: 🚀 Release
+              uses: ncipollo/release-action@v1
+              with:
+                  tag: v${{ steps.release_name.outputs.result }}
+                  artifacts: ./dist
+                  draft: true
+                  artifactErrorsFailBuild: true
+
+    build-windows:
+        name: Build (Windows)
+        runs-on: windows-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: 🚧 Install dependencies
+              working-directory: ${{ env.CLI_CWD }}
+              run: dart pub get
+
+            - name: 👷 Build binaries
+              working-directory: ${{ env.CLI_CWD }}
+              run:
+                  - mkdir ./dist
+                  - dart compile exe ./lib/main.dart -o ./dist/beize-windows.exe
+
+            - name: 🔢 Get release name
+              id: release_name
+              uses: actions/github-script@v6
+              env:
+                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
+              with:
+                  result-encoding: string
+                  script: |
+                      const sha = process.env["COMMIT_SHA"];
+                      const now = new Date();
+                      const date = date.getDate();
+                      const month = date.getMonth() + 1;
+                      const year = date.getFullYear();
+                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+
+            - name: 🚀 Release
+              uses: ncipollo/release-action@v1
+              with:
+                  tag: v${{ steps.release_name.outputs.result }}
+                  artifacts: ./dist
+                  draft: true
+                  artifactErrorsFailBuild: true
+
+    build-macos:
+        name: Build (MacOS)
+        runs-on: macos-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: 🚧 Install dependencies
+              working-directory: ${{ env.CLI_CWD }}
+              run: dart pub get
+
+            - name: 👷 Build binaries
+              working-directory: ${{ env.CLI_CWD }}
+              run:
+                  - mkdir ./dist
+                  - dart compile exe ./lib/main.dart -o ./dist/beize-macos
+
+            - name: 🔢 Get release name
+              id: release_name
+              uses: actions/github-script@v6
+              env:
+                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
+              with:
+                  result-encoding: string
+                  script: |
+                      const sha = process.env["COMMIT_SHA"];
+                      const now = new Date();
+                      const date = date.getDate();
+                      const month = date.getMonth() + 1;
+                      const year = date.getFullYear();
+                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+
+            - name: 🚀 Release
+              uses: ncipollo/release-action@v1
+              with:
+                  tag: v${{ steps.release_name.outputs.result }}
+                  artifacts: ./dist
+                  draft: true
+                  artifactErrorsFailBuild: true

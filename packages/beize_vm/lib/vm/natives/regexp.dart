@@ -1,6 +1,5 @@
 import '../../values/exports.dart';
 import '../exports.dart';
-import '../namespace.dart';
 
 abstract class BeizeRegExpNatives {
   static void bind(final BeizeNamespace namespace) {

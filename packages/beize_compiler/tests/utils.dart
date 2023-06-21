@@ -12,6 +12,7 @@ Future<BeizeProgramConstant> compileTestScript(
   final BeizeProgramConstant program = await BeizeCompiler.compileProject(
     root: p.join(testsDir, dir),
     entrypoint: scriptName,
+    options: BeizeCompilerOptions(),
   );
   return program;
 }

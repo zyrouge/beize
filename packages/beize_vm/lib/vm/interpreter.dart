@@ -206,7 +206,7 @@ class BeizeInterpreter {
       case BeizeOpCodes.opPrint:
         if (!frame.vm.options.disablePrint) {
           // ignore: avoid_print
-          print('print: ${stack.pop().kToString()}');
+          print(frame.vm.options.printPrefix + stack.pop().kToString());
         }
         break;
 
@@ -482,11 +482,12 @@ class BeizeInterpreter {
         final int moduleId = chunk.codeAt(frame.ip);
         final String name = frame.readConstantAt(frame.ip + 1) as String;
         frame.ip += 2;
+        namespace.declare(name, BeizeObjectValue());
         final BeizeInterpreterResult result = frame.vm.loadModule(moduleId);
         if (result.isFailure) {
           return handleException(result.error);
         }
-        namespace.declare(name, result.value);
+        namespace.assign(name, result.value);
         break;
 
       default:
