@@ -44,8 +44,8 @@ jobs:
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: v${{ steps.release_name.outputs.result }}
-                  artifacts: ./dist
+                  tag: ${{ steps.release_name.outputs.result }}
+                  artifacts: ${{ env.CLI_CWD }}/dist
                   draft: true
                   artifactErrorsFailBuild: true
 
@@ -86,8 +86,8 @@ jobs:
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: v${{ steps.release_name.outputs.result }}
-                  artifacts: ./dist
+                  tag: ${{ steps.release_name.outputs.result }}
+                  artifacts: ${{ env.CLI_CWD }}/dist
                   draft: true
                   artifactErrorsFailBuild: true
 
@@ -128,7 +128,7 @@ jobs:
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: v${{ steps.release_name.outputs.result }}
-                  artifacts: ./dist
+                  tag: ${{ steps.release_name.outputs.result }}
+                  artifacts: ${{ env.CLI_CWD }}/dist
                   draft: true
                   artifactErrorsFailBuild: true
