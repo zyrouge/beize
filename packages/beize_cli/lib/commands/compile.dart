@@ -51,6 +51,7 @@ class CompileCommand extends Command<Future<void>> {
     final File outputFile = File(output);
     if (!(await outputFile.parent.exists())) {
       print('Output file directory "${outputFile.parent.path}" is missing.');
+      return;
     }
 
     try {

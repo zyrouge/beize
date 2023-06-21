@@ -29,6 +29,7 @@ class DisassembleCommand extends Command<Future<void>> {
     final File compiledFile = File(compiledFilePath);
     if (!(await compiledFile.exists())) {
       print('Specified file "${compiledFile.path}" does not exist.');
+      return;
     }
 
     try {

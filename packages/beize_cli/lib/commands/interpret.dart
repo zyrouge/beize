@@ -40,6 +40,7 @@ class InterpretCommand extends Command<Future<void>> {
     final File compiledFile = File(compiledFilePath);
     if (!(await compiledFile.exists())) {
       print('Specified file "${compiledFile.path}" does not exist.');
+      return;
     }
 
     late final BeizeProgramConstant program;
@@ -51,6 +52,7 @@ class InterpretCommand extends Command<Future<void>> {
       print('Parsing "${compiledFile.path}" failed.');
       println();
       print(err);
+      return;
     }
 
     try {
