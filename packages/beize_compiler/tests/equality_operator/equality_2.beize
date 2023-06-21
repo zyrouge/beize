@@ -1,0 +1,4 @@
+value1 := "c-0";
+value2 := "c-1";
+result := value1 == value2;
+out("" + result);

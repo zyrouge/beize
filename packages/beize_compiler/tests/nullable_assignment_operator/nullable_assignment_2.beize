@@ -1,0 +1,4 @@
+result := 'c-0';
+out("" + result);
+result ??= 'c-1';
+out("" + result);

@@ -1,0 +1,3 @@
+result := 10;
+result -= 7;
+out("" + result);

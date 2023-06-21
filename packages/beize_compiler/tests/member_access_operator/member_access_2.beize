@@ -1,0 +1,4 @@
+result := {
+    value: "c-0",
+};
+out(typeof(result.value1));

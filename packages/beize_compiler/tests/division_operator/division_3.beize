@@ -1,0 +1,2 @@
+result := Number.infinity / 2;
+out("" + result);

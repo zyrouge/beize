@@ -1,0 +1,5 @@
+fn := -> async : "c-0";
+result := fn();
+out(typeof(result));
+result = result.await;
+out(result);

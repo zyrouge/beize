@@ -1,0 +1,2 @@
+result := 5 < 10;
+out("" + result);

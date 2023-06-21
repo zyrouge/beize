@@ -1,0 +1,2 @@
+result := true ? "c-0" : "c-1";
+out("" + result);

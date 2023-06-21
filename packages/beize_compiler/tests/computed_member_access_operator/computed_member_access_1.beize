@@ -1,0 +1,5 @@
+result := {
+    value: "c-0",
+};
+property := "value";
+out(result[property]);

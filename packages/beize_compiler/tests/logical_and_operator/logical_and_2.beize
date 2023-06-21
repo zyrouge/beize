@@ -1,0 +1,2 @@
+result := true && false;
+out("" + result);
