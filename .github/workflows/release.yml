@@ -44,6 +44,7 @@ jobs:
                   allowUpdates: true
                   artifactErrorsFailBuild: true
                   updateOnlyUnreleased: true
+                  generateReleaseNotes: true
 
     build-windows:
         name: Build (Windows)
@@ -82,6 +83,7 @@ jobs:
                   allowUpdates: true
                   artifactErrorsFailBuild: true
                   updateOnlyUnreleased: true
+                  generateReleaseNotes: true
 
     build-macos:
         name: Build (MacOS)
@@ -120,3 +122,4 @@ jobs:
                   allowUpdates: true
                   artifactErrorsFailBuild: true
                   updateOnlyUnreleased: true
+                  generateReleaseNotes: true
