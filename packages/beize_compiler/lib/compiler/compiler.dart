@@ -250,7 +250,7 @@ class BeizeCompiler {
     final String fullPath = p.join(root, entrypoint);
     final File file = File(fullPath);
     final BeizeInput input = await BeizeInput.fromFile(file);
-    final BeizeCompiler derived = BeizeCompiler._(
+    final BeizeCompiler compiler = BeizeCompiler._(
       BeizeScanner(input),
       mode: BeizeCompilerMode.script,
       root: root,
@@ -259,13 +259,13 @@ class BeizeCompiler {
       moduleNames: <String>[],
       modules: <BeizeFunctionConstant>[],
     );
-    derived.prepare(isAsync: true);
-    derived.moduleNames.add(p.relative(fullPath, from: root));
-    derived.modules.add(derived.currentFunction);
-    await derived.compile();
+    compiler.prepare(isAsync: true);
+    compiler.moduleNames.add(p.relative(fullPath, from: root));
+    compiler.modules.add(compiler.currentFunction);
+    await compiler.compile();
     return BeizeProgramConstant(
-      moduleNames: derived.moduleNames,
-      modules: derived.modules,
+      moduleNames: compiler.moduleNames,
+      modules: compiler.modules,
     );
   }
 }
