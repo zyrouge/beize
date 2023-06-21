@@ -29,25 +29,17 @@ jobs:
             - name: 🔢 Get release name
               id: release_name
               uses: actions/github-script@v6
-              env:
-                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
-              with:
-                  result-encoding: string
-                  script: |
-                      const sha = process.env["COMMIT_SHA"];
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+              run: echo "name=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: ${{ steps.release_name.outputs.result }}
+                  tag: ${{ steps.release_name.outputs.name }}
                   artifacts: ${{ env.CLI_CWD }}/dist/beize-linux
                   draft: true
+                  allowUpdates: true
                   artifactErrorsFailBuild: true
+                  updateOnlyUnreleased: true
 
     build-windows:
         name: Build (Windows)
@@ -71,25 +63,17 @@ jobs:
             - name: 🔢 Get release name
               id: release_name
               uses: actions/github-script@v6
-              env:
-                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
-              with:
-                  result-encoding: string
-                  script: |
-                      const sha = process.env["COMMIT_SHA"];
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+              run: echo "name=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: ${{ steps.release_name.outputs.result }}
+                  tag: ${{ steps.release_name.outputs.name }}
                   artifacts: ${{ env.CLI_CWD }}/dist/beize-windows.exe
                   draft: true
+                  allowUpdates: true
                   artifactErrorsFailBuild: true
+                  updateOnlyUnreleased: true
 
     build-macos:
         name: Build (MacOS)
@@ -113,22 +97,14 @@ jobs:
             - name: 🔢 Get release name
               id: release_name
               uses: actions/github-script@v6
-              env:
-                  COMMIT_SHA: ${{ env.GITHUB_SHA }}
-              with:
-                  result-encoding: string
-                  script: |
-                      const sha = process.env["COMMIT_SHA"];
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+              run: echo "name=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
               with:
-                  tag: ${{ steps.release_name.outputs.result }}
+                  tag: ${{ steps.release_name.outputs.name }}
                   artifacts: ${{ env.CLI_CWD }}/dist/beize-macos
                   draft: true
+                  allowUpdates: true
                   artifactErrorsFailBuild: true
+                  updateOnlyUnreleased: true
