@@ -38,7 +38,7 @@ jobs:
                       const date = now.getDate();
                       const month = now.getMonth() + 1;
                       const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
@@ -81,7 +81,7 @@ jobs:
                       const date = now.getDate();
                       const month = now.getMonth() + 1;
                       const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
@@ -124,7 +124,7 @@ jobs:
                       const date = now.getDate();
                       const month = now.getMonth() + 1;
                       const year = now.getFullYear();
-                      return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
+                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
