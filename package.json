@@ -11,7 +11,7 @@
         "docs:build": "mkdocs build -d docs-dist",
         "docs:deploy": "gh workflow run deploy.yml",
         "actions:test": "gh workflow run test.yml",
-        "actions:release": "gh workflow run deploy.yml"
+        "actions:release": "gh workflow run release.yml"
     },
     "author": "Zyrouge",
     "license": "GPL-3.0"
