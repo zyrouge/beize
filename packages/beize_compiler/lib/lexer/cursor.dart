@@ -10,7 +10,7 @@ class BeizeCursor {
   final int column;
 
   @override
-  String toString() => '${row + 1}:${column + 1}@${position + 1}';
+  String toString() => '${row + 1}:${column + 1}';
 
   @override
   int get hashCode => Object.hash(position, row, column);
