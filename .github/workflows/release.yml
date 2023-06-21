@@ -32,13 +32,8 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { execSync } = require("child_process");
-                      const sha = execSync("git rev-parse HEAD").toString();
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
+                      const { getReleaseName } = require("./scripts/releaseName");
+                      return getReleaseName();
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
@@ -75,13 +70,8 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { execSync } = require("child_process");
-                      const sha = execSync("git rev-parse HEAD").toString();
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
+                      const { getReleaseName } = require("./scripts/releaseName");
+                      return getReleaseName();
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
@@ -118,13 +108,8 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { execSync } = require("child_process");
-                      const sha = execSync("git rev-parse HEAD").toString();
-                      const now = new Date();
-                      const date = now.getDate();
-                      const month = now.getMonth() + 1;
-                      const year = now.getFullYear();
-                      return `v${year}.${month}.${date}-${sha.substring(0, 6)}`;
+                      const { getReleaseName } = require("./scripts/releaseName");
+                      return getReleaseName();
 
             - name: 🚀 Release
               uses: ncipollo/release-action@v1
