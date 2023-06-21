@@ -206,8 +206,14 @@ class BeizeInterpreter {
 
       case BeizeOpCodes.opPrint:
         if (!frame.vm.options.disablePrint) {
-          // ignore: avoid_print
-          print(frame.vm.options.printPrefix + stack.pop().kToString());
+          final String text =
+              frame.vm.options.printPrefix + stack.pop().kToString();
+          if (frame.vm.options.onPrint != null) {
+            frame.vm.options.onPrint?.call(text);
+          } else {
+            // ignore: avoid_print
+            print(text);
+          }
         }
         break;
 

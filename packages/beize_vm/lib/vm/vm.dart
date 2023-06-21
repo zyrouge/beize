@@ -14,17 +14,20 @@ enum BeizeVMState {
 }
 
 typedef BeizeVMOnUncaughtException = void Function(BeizeExceptionValue);
+typedef BeizeVMOnPrint = void Function(String);
 
 class BeizeVMOptions {
   BeizeVMOptions({
     this.disablePrint = false,
     this.printPrefix = 'print: ',
     this.onUnhandledException,
+    this.onPrint,
   });
 
   final bool disablePrint;
   final String printPrefix;
   final BeizeVMOnUncaughtException? onUnhandledException;
+  final BeizeVMOnPrint? onPrint;
 }
 
 class BeizeVM {
