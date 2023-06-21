@@ -20,9 +20,9 @@ jobs:
 
             - name: 👷 Build binaries
               working-directory: ${{ env.CLI_CWD }}
-              run:
-                  - mkdir ./dist
-                  - dart compile exe ./lib/main.dart -o ./dist/beize-linux
+              run: |
+                  mkdir ./dist
+                  dart compile exe ./lib/main.dart -o ./dist/beize-linux
 
             - name: 🔢 Get release name
               id: release_name
@@ -60,9 +60,9 @@ jobs:
 
             - name: 👷 Build binaries
               working-directory: ${{ env.CLI_CWD }}
-              run:
-                  - mkdir ./dist
-                  - dart compile exe ./lib/main.dart -o ./dist/beize-windows.exe
+              run: |
+                  mkdir ./dist
+                  dart compile exe ./lib/main.dart -o ./dist/beize-windows.exe
 
             - name: 🔢 Get release name
               id: release_name
@@ -100,9 +100,9 @@ jobs:
 
             - name: 👷 Build binaries
               working-directory: ${{ env.CLI_CWD }}
-              run:
-                  - mkdir ./dist
-                  - dart compile exe ./lib/main.dart -o ./dist/beize-macos
+              run: |
+                  mkdir ./dist
+                  dart compile exe ./lib/main.dart -o ./dist/beize-macos
 
             - name: 🔢 Get release name
               id: release_name
