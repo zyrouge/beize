@@ -4,7 +4,7 @@
 
 # Beize
 
-🖋️ A scripting language made for unknown reasons.
+A scripting language made for unknown reasons.
 
 [![Release](https://github.com/zyrouge/beize/actions/workflows/release.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/release.yml)
 [![Deploy](https://github.com/zyrouge/beize/actions/workflows/deploy.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/deploy.yml)
