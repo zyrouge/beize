@@ -9,7 +9,7 @@
     "scripts": {
         "docs:dev": "mkdocs serve",
         "docs:build": "mkdocs build -d docs-dist",
-        "docs:deploy": "gh workflow run deploy.yml",
+        "docs:deploy": "gh workflow run docs.yml",
         "actions:test": "gh workflow run test.yml",
         "actions:release": "gh workflow run release.yml"
     },

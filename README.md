@@ -7,8 +7,8 @@
 A scripting language made for unknown reasons.
 
 [![Release](https://github.com/zyrouge/beize/actions/workflows/release.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/release.yml)
-[![Deploy](https://github.com/zyrouge/beize/actions/workflows/deploy.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/deploy.yml)
 [![Test](https://github.com/zyrouge/beize/actions/workflows/test.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/test.yml)
+[![Documentation](https://github.com/zyrouge/beize/actions/workflows/docs.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/docs.yml)
 
 # Language Specification
 
