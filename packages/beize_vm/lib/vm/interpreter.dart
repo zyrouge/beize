@@ -8,6 +8,7 @@ import 'namespace.dart';
 import 'result.dart';
 import 'stack.dart';
 import 'try_frame.dart';
+import 'vm.dart';
 
 enum BeizeInterpreterState {
   ready,
@@ -482,12 +483,15 @@ class BeizeInterpreter {
         final int moduleId = chunk.codeAt(frame.ip);
         final String name = frame.readConstantAt(frame.ip + 1) as String;
         frame.ip += 2;
-        namespace.declare(name, BeizeObjectValue());
-        final BeizeInterpreterResult result = frame.vm.loadModule(moduleId);
+        final BeizePreparedModule module = frame.vm.prepareModule(
+          moduleId,
+          isEntrypoint: false,
+        );
+        namespace.declare(name, module.value);
+        final BeizeInterpreterResult result = frame.vm.loadModule(module);
         if (result.isFailure) {
           return handleException(result.error);
         }
-        namespace.assign(name, result.value);
         break;
 
       default:

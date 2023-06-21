@@ -38,10 +38,11 @@ class BeizeVM {
   late final BeizeCallFrame topFrame;
 
   Future<void> run() async {
-    final BeizeInterpreterResult result = await loadModuleAsync(
+    final BeizePreparedModule prepared = prepareModule(
       0,
       isEntrypoint: true,
     );
+    final BeizeInterpreterResult result = await loadModuleAsync(prepared);
     if (result.isFailure) {
       onUnhandledException(result.error);
     }
@@ -62,43 +63,22 @@ class BeizeVM {
       parent: !isEntrypoint ? topFrame : null,
     );
     if (isEntrypoint) topFrame = frame;
-    return BeizePreparedModule(frame: frame, value: value);
+    return BeizePreparedModule(moduleId: moduleId, frame: frame, value: value);
   }
 
-  BeizeInterpreterResult loadModule(
-    final int moduleId, {
-    final bool isEntrypoint = false,
-  }) {
-    final String moduleName = program.moduleNameAt(moduleId);
-    if (modules.containsKey(moduleName)) {
-      return BeizeInterpreterResult.success(modules[moduleName]!);
-    }
-    final BeizePreparedModule prepared = prepareModule(
-      moduleId,
-      isEntrypoint: isEntrypoint,
-    );
-    final BeizeInterpreterResult result =
-        BeizeInterpreter(prepared.frame).run();
+  BeizeInterpreterResult loadModule(final BeizePreparedModule module) {
+    final BeizeInterpreterResult result = BeizeInterpreter(module.frame).run();
     if (result.isFailure) return result;
-    return BeizeInterpreterResult.success(prepared.value);
+    return BeizeInterpreterResult.success(module.value);
   }
 
   Future<BeizeInterpreterResult> loadModuleAsync(
-    final int moduleId, {
-    final bool isEntrypoint = false,
-  }) async {
-    final String moduleName = program.moduleNameAt(moduleId);
-    if (modules.containsKey(moduleName)) {
-      return BeizeInterpreterResult.success(modules[moduleName]!);
-    }
-    final BeizePreparedModule prepared = prepareModule(
-      moduleId,
-      isEntrypoint: isEntrypoint,
-    );
+    final BeizePreparedModule module,
+  ) async {
     final BeizeInterpreterResult result =
-        await BeizeInterpreter(prepared.frame).runAsync();
+        await BeizeInterpreter(module.frame).runAsync();
     if (result.isFailure) return result;
-    return BeizeInterpreterResult.success(prepared.value);
+    return BeizeInterpreterResult.success(module.value);
   }
 
   void onUnhandledException(final BeizeExceptionValue err) {
@@ -112,10 +92,12 @@ class BeizeVM {
 
 class BeizePreparedModule {
   const BeizePreparedModule({
+    required this.moduleId,
     required this.frame,
     required this.value,
   });
 
+  final int moduleId;
   final BeizeCallFrame frame;
   final BeizeModuleValue value;
 }
