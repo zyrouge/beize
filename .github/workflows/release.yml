@@ -36,9 +36,9 @@ jobs:
                   script: |
                       const sha = process.env["COMMIT_SHA"];
                       const now = new Date();
-                      const date = date.getDate();
-                      const month = date.getMonth() + 1;
-                      const year = date.getFullYear();
+                      const date = now.getDate();
+                      const month = now.getMonth() + 1;
+                      const year = now.getFullYear();
                       return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
@@ -78,9 +78,9 @@ jobs:
                   script: |
                       const sha = process.env["COMMIT_SHA"];
                       const now = new Date();
-                      const date = date.getDate();
-                      const month = date.getMonth() + 1;
-                      const year = date.getFullYear();
+                      const date = now.getDate();
+                      const month = now.getMonth() + 1;
+                      const year = now.getFullYear();
                       return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
@@ -120,9 +120,9 @@ jobs:
                   script: |
                       const sha = process.env["COMMIT_SHA"];
                       const now = new Date();
-                      const date = date.getDate();
-                      const month = date.getMonth() + 1;
-                      const year = date.getFullYear();
+                      const date = now.getDate();
+                      const month = now.getMonth() + 1;
+                      const year = now.getFullYear();
                       return `v${year}.${month}.${date}.${sha.substring(0, 6)}`;
 
             - name: 🚀 Release
