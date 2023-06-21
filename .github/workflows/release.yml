@@ -45,7 +45,7 @@ jobs:
               uses: ncipollo/release-action@v1
               with:
                   tag: ${{ steps.release_name.outputs.result }}
-                  artifacts: ${{ env.CLI_CWD }}/dist
+                  artifacts: ${{ env.CLI_CWD }}/dist/beize-linux
                   draft: true
                   artifactErrorsFailBuild: true
 
@@ -87,7 +87,7 @@ jobs:
               uses: ncipollo/release-action@v1
               with:
                   tag: ${{ steps.release_name.outputs.result }}
-                  artifacts: ${{ env.CLI_CWD }}/dist
+                  artifacts: ${{ env.CLI_CWD }}/dist/beize-windows.exe
                   draft: true
                   artifactErrorsFailBuild: true
 
@@ -129,6 +129,6 @@ jobs:
               uses: ncipollo/release-action@v1
               with:
                   tag: ${{ steps.release_name.outputs.result }}
-                  artifacts: ${{ env.CLI_CWD }}/dist
+                  artifacts: ${{ env.CLI_CWD }}/dist/beize-macos
                   draft: true
                   artifactErrorsFailBuild: true
