@@ -1,0 +1,5 @@
+result := {
+    value: "c-0",
+    getValue: -> : this.value,
+};
+out(result.getValue());

@@ -8,12 +8,15 @@ import 'utils.dart';
 Future<void> main() async {
   final TestOptions options = TestOptions(
     category: 'Operator',
-    title: 'Grouping',
+    title: 'This',
     index: 1,
-    output: <String>['28'],
+    output: <String>['c-0'],
     script: '''
-result := (2 + 5) * 4;
-out("" + result);
+result := {
+    value: "c-0",
+    getValue: -> : this.value,
+};
+out(result.getValue());
 ''',
     moduleAt: 0,
   );
