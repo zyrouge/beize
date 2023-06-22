@@ -11,3 +11,4 @@ export 'number.dart';
 export 'object.dart';
 export 'regexp.dart';
 export 'string.dart';
+export 'unawaited.dart';

@@ -1,0 +1,2 @@
+result := "Hello";
+out("" + result.replaceFirstMapped('l', -> x : x.toUpperCase()));

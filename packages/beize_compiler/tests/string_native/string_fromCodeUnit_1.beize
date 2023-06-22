@@ -1,0 +1,2 @@
+result := String.fromCodeUnit(72);
+out(result);

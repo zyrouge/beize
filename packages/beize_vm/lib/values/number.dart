@@ -10,7 +10,7 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
 
   int get intValue {
     if (value % 1 == 0) return value.toInt();
-    throw BeizeRuntimeExpection('Cannot convert "$value" to integer');
+    throw BeizeRuntimeExpection.cannotConvertDoubleToInteger(value);
   }
 
   num get numValue {
@@ -69,11 +69,11 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
             (final _) => BeizeNumberValue(value.truncateToDouble()),
           );
 
-        case 'precisionString':
+        case 'toPrecisionString':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) => BeizeStringValue(
               value.toStringAsPrecision(
-                call.argumentAt<BeizeNumberValue>(0).value.toInt(),
+                call.argumentAt<BeizeNumberValue>(0).intValue,
               ),
             ),
           );

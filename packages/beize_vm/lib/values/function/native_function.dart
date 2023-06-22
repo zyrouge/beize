@@ -29,16 +29,8 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue {
   final BeizeNativeExecuteFunction function;
 
   BeizeInterpreterResult execute(final BeizeNativeFunctionCall call) {
-    try {
-      final BeizeInterpreterResult result = function(call);
-      return result;
-    } catch (err, stackTrace) {
-      return BeizeFunctionValueUtils.handleException(
-        call.frame,
-        err,
-        stackTrace,
-      );
-    }
+    final BeizeInterpreterResult result = function(call);
+    return result;
   }
 
   @override

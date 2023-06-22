@@ -1,0 +1,7 @@
+value := -> async {
+    out("c-0");
+    return "c-1";
+};
+result := value.call([]);
+out(typeof(result));
+out(result.await);

@@ -1,0 +1,2 @@
+result := (5).toRadixString(2);
+out("" + result);

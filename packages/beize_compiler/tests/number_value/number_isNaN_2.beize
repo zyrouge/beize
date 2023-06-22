@@ -1,0 +1,2 @@
+result := Number.NaN.isNaN();
+out("" + result);

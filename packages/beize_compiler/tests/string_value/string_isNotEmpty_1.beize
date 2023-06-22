@@ -1,0 +1,2 @@
+result := 'c-0';
+out("" + result.isNotEmpty());

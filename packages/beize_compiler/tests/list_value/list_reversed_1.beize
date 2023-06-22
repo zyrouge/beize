@@ -1,0 +1,3 @@
+result := ['c-0', 'c-1'];
+reversed := result.reversed();
+out(reversed.join(', '));

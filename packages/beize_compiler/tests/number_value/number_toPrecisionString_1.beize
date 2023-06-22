@@ -1,0 +1,2 @@
+result := (5.2512).toPrecisionString(3);
+out("" + result);

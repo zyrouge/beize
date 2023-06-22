@@ -1,0 +1,3 @@
+result := ['c-0'];
+result.push('c-1');
+out(result.join(', '));

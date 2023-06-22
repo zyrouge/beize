@@ -1,0 +1,3 @@
+result := ['c-0', 'c-1'];
+cloned := result.clone();
+out(cloned.join(', '));

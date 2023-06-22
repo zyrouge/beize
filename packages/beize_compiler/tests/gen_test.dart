@@ -7,16 +7,14 @@ import 'utils.dart';
 
 Future<void> main() async {
   final TestOptions options = TestOptions(
-    category: 'Operator',
-    title: 'This',
+    category: 'Native',
+    title: 'String',
+    titleExtra: 'fromCodeUnits',
     index: 1,
-    output: <String>['c-0'],
+    output: <String>['Hello'],
     script: '''
-result := {
-    value: "c-0",
-    getValue: -> : this.value,
-};
-out(result.getValue());
+result := String.fromCodeUnits([72, 101, 108, 108, 111]);
+out(result);
 ''',
     moduleAt: 0,
   );
@@ -50,6 +48,7 @@ class TestOptions {
   TestOptions({
     required this.category,
     required this.title,
+    required this.titleExtra,
     required this.index,
     required this.output,
     required this.script,
@@ -58,6 +57,7 @@ class TestOptions {
 
   final String category;
   final String title;
+  final String? titleExtra;
   final int index;
   final List<String> output;
   final String script;
@@ -67,8 +67,17 @@ class TestOptions {
       text.replaceAll(RegExp(r'\s+'), '_').toLowerCase();
 
   String get parentDirName => toPathName('${title}_$category');
-  String get beizeFileName => toPathName('${title}_$index.beize');
-  String get dartTestFileName => toPathName('${title}_${index}_test.dart');
+  String get beizeFileName => '$baseFileName.beize';
+  String get dartTestFileName => '${baseFileName}_test.dart';
+
+  String get baseFileName {
+    final List<String> parts = <String>[
+      toPathName(title),
+      if (titleExtra != null) titleExtra!,
+      index.toString(),
+    ];
+    return parts.join('_');
+  }
 
   String get parentDirPath => p.join(rootDir, parentDirName);
   String get beizeFilePath => p.join(parentDirPath, beizeFileName);

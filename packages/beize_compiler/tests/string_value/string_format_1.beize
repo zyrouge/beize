@@ -1,0 +1,2 @@
+result := "{} {}".format(["Hello", "World!"]);
+out(result);

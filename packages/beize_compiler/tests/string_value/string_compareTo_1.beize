@@ -1,0 +1,3 @@
+str1 := "Hello";
+str2 := "World";
+out("" + str1.compareTo(str2));

@@ -1,0 +1,2 @@
+result := "1";
+out("" + result.padLeft(2, '0'));

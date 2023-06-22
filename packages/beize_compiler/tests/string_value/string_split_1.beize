@@ -1,0 +1,3 @@
+result := "Hello!".split('ll');
+out(result[0]);
+out(result[1]);

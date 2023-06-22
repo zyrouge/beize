@@ -1,0 +1,2 @@
+result := Number.infinity.isInfinite();
+out("" + result);

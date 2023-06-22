@@ -1,0 +1,3 @@
+result := ['c-0', null, 'c-1'];
+filtered := result.filter(-> x : x != null);
+out("" + filtered.join(', '));

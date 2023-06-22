@@ -1,0 +1,2 @@
+result := Unawaited.value(0);
+out("" + result);

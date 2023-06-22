@@ -44,6 +44,20 @@ class BeizeRuntimeExpection extends BeizeNativeException {
   factory BeizeRuntimeExpection.unwrapFailed(final String message) =>
       BeizeRuntimeExpection('Unwrap failed due to "$message"');
 
+  factory BeizeRuntimeExpection.cannotConvertDoubleToInteger(
+    final double value,
+  ) =>
+      BeizeRuntimeExpection('Cannot convert "$value" to integer');
+
+  factory BeizeRuntimeExpection.unexpectedArgumentType(
+    final int index,
+    final BeizeValueKind expected,
+    final BeizeValueKind received,
+  ) =>
+      BeizeRuntimeExpection(
+        'Expected argument at $index to be "${expected.code}", received "${received.code}"',
+      );
+
   @override
   String toString() => 'BeizeRuntimeExpection: $message';
 }

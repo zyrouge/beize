@@ -15,5 +15,6 @@ abstract class BeizeNatives {
     BeizeRegExpNatives.bind(namespace);
     BeizeStringNatives.bind(namespace);
     BeizeGlobalsNatives.bind(namespace);
+    BeizeUnawaitedNatives.bind(namespace);
   }
 }

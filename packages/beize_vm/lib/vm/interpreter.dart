@@ -523,7 +523,7 @@ class BeizeInterpreter {
   BeizeInterpreterResult handleInvalidBinary(final String message) =>
       handleCustomException('InvalidBinaryOperation', message);
 
-  BeizeInterpreterResult handleExceptionSynchronization(
+  BeizeInterpreterResult? handleExceptionSynchronization(
     final BeizeExceptionValue err,
   ) {
     if (frame.tryFrames.isEmpty) {
@@ -538,18 +538,23 @@ class BeizeInterpreter {
     }
     frame.ip = tryFrame.offset;
     stack.push(err);
-    return interpret();
+    return null;
   }
 
   BeizeInterpreterResult handleException(final BeizeExceptionValue err) {
-    handleExceptionSynchronization(err);
-    return interpret();
+    final BeizeInterpreterResult? synchronized =
+        handleExceptionSynchronization(err);
+    return synchronized ?? interpret();
   }
 
   Future<BeizeInterpreterResult> handleExceptionAsync(
     final BeizeExceptionValue err,
   ) {
-    handleExceptionSynchronization(err);
+    final BeizeInterpreterResult? synchronized =
+        handleExceptionSynchronization(err);
+    if (synchronized != null) {
+      return Future<BeizeInterpreterResult>.value(synchronized);
+    }
     return interpretAsync();
   }
 }

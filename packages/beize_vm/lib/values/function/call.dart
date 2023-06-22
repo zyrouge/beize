@@ -15,8 +15,10 @@ class BeizeNativeFunctionCall {
     final BeizeValue value =
         index < arguments.length ? arguments[index] : BeizeNullValue.value;
     if (!value.canCast<T>()) {
-      throw BeizeRuntimeExpection(
-        'Expected argument at $index to be "${BeizeValue.getKindFromType(T).code}", received "${value.kind.code}"',
+      throw BeizeRuntimeExpection.unexpectedArgumentType(
+        index,
+        BeizeValue.getKindFromType(T),
+        value.kind,
       );
     }
     return value as T;

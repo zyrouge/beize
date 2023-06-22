@@ -1,0 +1,4 @@
+value := ['c-0', 'c-1'];
+result := [];
+value.forEach(-> x : result.push(x));
+out("" + result.join(', '));

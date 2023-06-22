@@ -1,0 +1,2 @@
+result := "Hello World!";
+out("" + result.substring(6, 11));

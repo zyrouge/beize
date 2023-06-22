@@ -1,0 +1,3 @@
+result := [0, 1];
+mapped := result.map(-> x : 'c-' + x);
+out("" + mapped.join(', '));

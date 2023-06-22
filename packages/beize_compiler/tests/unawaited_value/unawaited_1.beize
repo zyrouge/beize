@@ -1,0 +1,3 @@
+result := Unawaited.value('c-0');
+out(typeof(result));
+out(result.await);

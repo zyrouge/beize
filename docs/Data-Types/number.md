@@ -156,9 +156,9 @@ num := 5.45;
 print(num.truncate());
 ```
 
-### `precisionString`
+### `toPrecisionString`
 
-Returns the number string with specified precision.
+Returns the number string with specified precision. Precision must satisfy `1 <= precision <= 21`.
 
 ```title="Signature"
 -> Number digits : String
@@ -168,7 +168,7 @@ Returns the number string with specified precision.
 num := 5.2512;
 
 # prints "5.25"
-print(num.precisionString(2));
+print(num.toPrecisionString(3));
 ```
 
 ### `toRadixString`

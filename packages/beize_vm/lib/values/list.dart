@@ -283,7 +283,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
               final int max = length;
               for (int i = 0; i < max; i++) {
                 buffer.write(elements[i].kToString());
-                if (max < length - 1) {
+                if (i < max - 1) {
                   buffer.write(delimiterValue);
                 }
               }

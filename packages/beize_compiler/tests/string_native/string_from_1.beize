@@ -1,0 +1,2 @@
+result := String.from([1, 2, 3]);
+out(result);
