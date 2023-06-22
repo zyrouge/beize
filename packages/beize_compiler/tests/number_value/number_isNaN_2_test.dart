@@ -5,7 +5,7 @@ import '../utils.dart';
 Future<void> main() async {
   const String title = '[Value] Number (2)';
   final BeizeProgramConstant program =
-      await compileTestScript('number_value', 'number_isnan_2.beize');
+      await compileTestScript('number_value', 'number_isNaN_2.beize');
 
   test('$title - Bytecode', () async {
     final BeizeChunk chunk = extractChunk(program);
