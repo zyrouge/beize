@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://zyrouge.github.io/beize/Operators/bitwise-or-assignment/">
+        <link rel="canonical" href="https://zyrouge.github.io/beize/Operators/this/">
       
       
-        <link rel="prev" href="../bitwise-not/">
+        <link rel="prev" href="../ternary/">
       
       
-        <link rel="next" href="../bitwise-or/">
+        <link rel="next" href="../unary-negation/">
       
       <link rel="icon" href="../../assets/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
-        <title>Bitwise OR Assignment - Beize</title>
+        <title>This - Beize</title>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bitwise-or-assignment" class="md-skip">
+        <a href="#this" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Bitwise OR Assignment
+              This
             
           </span>
         </div>
@@ -902,21 +902,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../bitwise-or-assignment/" class="md-nav__link">
         Bitwise OR Assignment
       </a>
-      
     </li>
   
 
@@ -1416,11 +1406,21 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../this/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         This
       </a>
+      
     </li>
   
 
@@ -1724,7 +1724,7 @@
                   
 
   
-    <a href="https://github.com/zyrouge/beize/edit/main/docs/Operators/bitwise-or-assignment.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/zyrouge/beize/edit/main/docs/Operators/this.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1732,12 +1732,19 @@
   
 
 
-<h1 id="bitwise-or-assignment">Bitwise OR Assignment<a class="headerlink" href="#bitwise-or-assignment" title="Permanent link">&para;</a></h1>
-<p>Bitwise OR assignment operator (<code>|=</code>) can be used to perform bitwise OR operation and assign it to a variable.</p>
-<div class="highlight"><span class="filename">Syntax</span><pre><span></span><code>variable |= expr
+<h1 id="this">This<a class="headerlink" href="#this" title="Permanent link">&para;</a></h1>
+<p>This operator (<code>this</code>) points to the enclosed object scope.</p>
+<div class="highlight"><span class="filename">Syntax</span><pre><span></span><code>this
 </code></pre></div>
-<div class="highlight"><span class="filename">Example</span><pre><span></span><code>a |= 0
-b |= 1
+<div class="highlight"><span class="filename">Example</span><pre><span></span><code>obj := {
+    value: &quot;Hello World&quot;,
+    printValue: -&gt; {
+        print(this.value);
+    },
+};
+
+# prints &quot;Hello World&quot;
+obj.printValue();
 </code></pre></div>
 
 

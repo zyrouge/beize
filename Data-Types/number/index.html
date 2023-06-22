@@ -526,8 +526,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#precisionstring" class="md-nav__link">
-    precisionString
+  <a href="#toprecisionstring" class="md-nav__link">
+    toPrecisionString
   </a>
   
 </li>
@@ -1532,6 +1532,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../Operators/this/" class="md-nav__link">
+        This
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../Operators/unary-negation/" class="md-nav__link">
         Unary Negation
       </a>
@@ -1889,8 +1903,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#precisionstring" class="md-nav__link">
-    precisionString
+  <a href="#toprecisionstring" class="md-nav__link">
+    toPrecisionString
   </a>
   
 </li>
@@ -2027,14 +2041,14 @@ print(num.round());
 # prints 5
 print(num.truncate());
 </code></pre></div>
-<h3 id="precisionstring"><code>precisionString</code><a class="headerlink" href="#precisionstring" title="Permanent link">&para;</a></h3>
-<p>Returns the number string with specified precision.</p>
+<h3 id="toprecisionstring"><code>toPrecisionString</code><a class="headerlink" href="#toprecisionstring" title="Permanent link">&para;</a></h3>
+<p>Returns the number string with specified precision. Precision must satisfy <code>1 &lt;= precision &lt;= 21</code>.</p>
 <div class="highlight"><span class="filename">Signature</span><pre><span></span><code>-&gt; Number digits : String
 </code></pre></div>
 <div class="highlight"><span class="filename">Example</span><pre><span></span><code>num := 5.2512;
 
 # prints &quot;5.25&quot;
-print(num.precisionString(2));
+print(num.toPrecisionString(3));
 </code></pre></div>
 <h3 id="toradixstring"><code>toRadixString</code><a class="headerlink" href="#toradixstring" title="Permanent link">&para;</a></h3>
 <p>Returns the radix equivalent of the number.</p>
