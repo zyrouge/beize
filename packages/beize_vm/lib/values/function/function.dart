@@ -2,7 +2,8 @@ import '../../bytecode.dart';
 import '../../vm/exports.dart';
 import '../exports.dart';
 
-class BeizeFunctionValue extends BeizePrimitiveObjectValue {
+class BeizeFunctionValue extends BeizePrimitiveObjectValue
+    implements BeizeCallableValue {
   BeizeFunctionValue({
     required this.constant,
     required this.namespace,

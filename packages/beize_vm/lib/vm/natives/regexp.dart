@@ -186,7 +186,7 @@ abstract class BeizeRegExpNatives {
     final int? count,
   ]) {
     final BeizeStringValue input = call.argumentAt(0);
-    final BeizeFunctionValue mapper = call.argumentAt(1);
+    final BeizeCallableValue mapper = call.argumentAt(1);
     final String result = input.replacePatternMapped(
       regex,
       (final Match match) {

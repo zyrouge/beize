@@ -13,7 +13,8 @@ typedef BeizeNativeAsyncFunction = Future<BeizeValue> Function(
   BeizeNativeFunctionCall call,
 );
 
-class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue {
+class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
+    implements BeizeCallableValue {
   BeizeNativeFunctionValue(this.function);
 
   factory BeizeNativeFunctionValue.sync(

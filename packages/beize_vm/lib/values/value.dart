@@ -17,6 +17,9 @@ abstract class BeizeValue {
     if (T == BeizePrimitiveObjectValue) {
       return this is BeizePrimitiveObjectValue;
     }
+    if (T == BeizeCallableValue) {
+      return this is BeizeCallableValue;
+    }
     final BeizeValueKind to = getKindFromType(T);
     if (kind == to) return true;
     return false;

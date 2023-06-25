@@ -121,7 +121,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'find':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               for (final BeizeValue x in elements) {
                 final BeizeValue result = call.frame
                     .callValue(predicate, <BeizeValue>[x]).unwrapUnsafe();
@@ -134,7 +134,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'findIndex':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               for (int i = 0; i < elements.length; i++) {
                 final BeizeValue x = elements[i];
                 final BeizeValue result = call.frame
@@ -150,7 +150,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'findLastIndex':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               for (int i = elements.length - 1; i >= 0; i--) {
                 final BeizeValue x = elements[i];
                 final BeizeValue result = call.frame
@@ -166,7 +166,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'filter':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
                 final BeizeValue result = call.frame
@@ -182,7 +182,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'map':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
                 final BeizeValue result = call.frame
@@ -196,7 +196,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'where':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               final BeizeListValue nValue = BeizeListValue();
               for (final BeizeValue x in elements) {
                 final BeizeValue result = call.frame
@@ -212,7 +212,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'sort':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               final List<BeizeValue> sorted = elements.toList();
               for (int i = 0; i < sorted.length; i++) {
                 bool swapped = false;
@@ -266,7 +266,7 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         case 'forEach':
           return BeizeNativeFunctionValue.sync(
             (final BeizeNativeFunctionCall call) {
-              final BeizeFunctionValue predicate = call.argumentAt(0);
+              final BeizeCallableValue predicate = call.argumentAt(0);
               for (final BeizeValue x in elements) {
                 call.frame.callValue(predicate, <BeizeValue>[x]);
               }

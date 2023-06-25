@@ -227,7 +227,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
     final int? count,
   ]) {
     final BeizeStringValue pattern = call.argumentAt(0);
-    final BeizeFunctionValue mapper = call.argumentAt(1);
+    final BeizeCallableValue mapper = call.argumentAt(1);
     final String result = replacePatternMapped(
       pattern.value,
       (final Match match) {

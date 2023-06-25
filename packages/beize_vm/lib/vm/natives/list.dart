@@ -28,7 +28,7 @@ abstract class BeizeListNatives {
       BeizeNativeFunctionValue.sync(
         (final BeizeNativeFunctionCall call) {
           final int length = call.argumentAt<BeizeNumberValue>(0).intValue;
-          final BeizeFunctionValue predicate = call.argumentAt(1);
+          final BeizeCallableValue predicate = call.argumentAt(1);
           final BeizeListValue result = BeizeListValue();
           for (int i = 0; i < length; i++) {
             result.push(
