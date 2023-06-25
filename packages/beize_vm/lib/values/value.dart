@@ -44,6 +44,8 @@ abstract class BeizeValue {
     BeizeModuleValue: BeizeValueKind.module,
     BeizePrimitiveObjectValue: BeizeValueKind.primitiveObject,
     BeizeExceptionValue: BeizeValueKind.exception,
+    // assume callable value as a function
+    BeizeCallableValue: BeizeValueKind.function,
   };
 
   static BeizeValueKind getKindFromType(final Type type) => _typeKindMap[type]!;
