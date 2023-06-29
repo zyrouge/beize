@@ -1,6 +1,6 @@
 # Overview
 
-The language syntax is a mix of Go and JavaScript. It is also highly dynamic with only basic features. Beize script files have an `.beize` extension. The program can be compiled using Beize Compiler and can be run on Beize VM.
+The language syntax is a mix of Go and JavaScript. It is also highly dynamic with necessary basic features. Beize script files have an `.beize` extension. The program can be compiled using Beize Compiler and can be run on Beize VM.
 
 !!! info
 
