@@ -6,6 +6,8 @@
 
 A scripting language made for unknown reasons.
 
+[![GitHub Release](https://img.shields.io/github/v/release/zyrouge/beize)](https://github.com/zyrouge/beize/releases/latest)
+[![GitHub](https://img.shields.io/github/license/zyrouge/beize)](./LICENSE)
 [![Release](https://github.com/zyrouge/beize/actions/workflows/release.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/release.yml)
 [![Test](https://github.com/zyrouge/beize/actions/workflows/test.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/test.yml)
 [![Documentation](https://github.com/zyrouge/beize/actions/workflows/docs.yml/badge.svg)](https://github.com/zyrouge/beize/actions/workflows/docs.yml)
