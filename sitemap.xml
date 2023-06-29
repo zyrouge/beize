@@ -2,427 +2,427 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://zyrouge.github.io/beize/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/boolean/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/function/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/list/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/null/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/number/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/object/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/string/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Data-Types/unawaited/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Examples/area-of-shapes/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Examples/hello-world/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Examples/print-until-100/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/boolean/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/convert/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/datetime/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/exception/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/fiber/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/function/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/globals/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/list/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/number/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/object/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/regex/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Native-APIs/string/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/addition-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/addition/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/await/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-and-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-and/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-not/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-or-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-or/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-xor-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/bitwise-xor/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/call/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/computed-member-access/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/declaration/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/division-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/division/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/equality/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/exponent-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/exponent/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/floor-division-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/floor-division/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/greater-than-or-equal/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/greater-than/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/grouping/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/inequality/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/lesser-than-or-equal/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/lesser-than/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/logical-and-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/logical-and/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/logical-not/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/logical-or-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/logical-or/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/member-access/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/multiplication-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/multiplication/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/nullable-access/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/nullable-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/nullable-or/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/remainder-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/remainder/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/subtraction-assignment/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/subtraction/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/ternary/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/this/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/unary-negation/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Operators/unary-plus/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/block/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/break/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/continue/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/expression/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/for/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/if-else/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/import/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/match/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/print/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/return/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/throw/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/try-catch/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/when/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://zyrouge.github.io/beize/Statements/while/</loc>
-         <lastmod>2023-06-22</lastmod>
+         <lastmod>2023-06-29</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
