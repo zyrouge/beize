@@ -27,7 +27,7 @@ abstract class BeizeFiberNatives {
               (final BeizeValue x) async {
                 BeizeValue value =
                     call.frame.callValue(x, <BeizeValue>[]).unwrapUnsafe();
-                if (value is BeizeUnawaitedValue) {
+                while (value is BeizeUnawaitedValue) {
                   value = await value.execute(call.frame).unwrapUnsafe();
                 }
                 return value;
