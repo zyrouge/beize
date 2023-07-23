@@ -213,7 +213,7 @@ abstract class BeizeParser {
     int moduleId = compiler.moduleNames.indexOf(moduleName);
     if (moduleId == -1) {
       loaded = false;
-      moduleId = compiler.moduleId + 1;
+      moduleId = compiler.moduleNames.length;
     }
     compiler.consume(BeizeTokens.asKw);
     compiler.consume(BeizeTokens.identifier);
