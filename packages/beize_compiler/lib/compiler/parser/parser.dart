@@ -208,8 +208,9 @@ abstract class BeizeParser {
     compiler.consume(BeizeTokens.string);
     final String modulePath =
         compiler.resolveImportPath(compiler.previousToken.literal as String);
+    final String moduleName = compiler.resolveRelativePath(modulePath);
     bool loaded = true;
-    int moduleId = compiler.moduleNames.indexOf(modulePath);
+    int moduleId = compiler.moduleNames.indexOf(moduleName);
     if (moduleId == -1) {
       loaded = false;
       moduleId = compiler.moduleId + 1;
@@ -227,7 +228,7 @@ abstract class BeizeParser {
         modulePath,
         isAsync: false,
       );
-      compiler.moduleNames.add(modulePath);
+      compiler.moduleNames.add(moduleName);
       compiler.modules.add(moduleCompiler.currentFunction);
       await moduleCompiler.compile();
     }

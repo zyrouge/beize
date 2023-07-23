@@ -26,6 +26,7 @@ class BeizeCompiler {
     this.scanner, {
     required this.mode,
     required this.root,
+    required this.modulePath,
     required this.moduleId,
     required this.moduleNames,
     required this.modules,
@@ -38,6 +39,7 @@ class BeizeCompiler {
   final BeizeScanner scanner;
   final BeizeCompilerMode mode;
   final String root;
+  final String modulePath;
   final int moduleId;
   final List<String> moduleNames;
   final List<BeizeFunctionConstant> modules;
@@ -73,6 +75,7 @@ class BeizeCompiler {
       scanner,
       mode: BeizeCompilerMode.function,
       root: root,
+      modulePath: modulePath,
       moduleId: moduleId,
       moduleNames: moduleNames,
       modules: modules,
@@ -88,12 +91,13 @@ class BeizeCompiler {
     final String path, {
     required final bool isAsync,
   }) async {
-    final File file = File(p.join(root, path));
+    final File file = File(path);
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler derived = BeizeCompiler._(
       BeizeScanner(input),
       mode: BeizeCompilerMode.script,
       root: root,
+      modulePath: path,
       moduleId: moduleId,
       moduleNames: moduleNames,
       modules: modules,
@@ -106,7 +110,12 @@ class BeizeCompiler {
   String resolveImportPath(final String path) {
     final String importDir = p.dirname(p.join(root, moduleName));
     final String absolutePath = p.join(importDir, path);
-    return p.relative(p.normalize(absolutePath), from: root);
+    return p.normalize(absolutePath);
+  }
+
+  String resolveRelativePath(final String path) {
+    final String relativePath = p.relative(path, from: root);
+    return relativePath;
   }
 
   Future<BeizeFunctionConstant> compile() async {
@@ -252,9 +261,10 @@ class BeizeCompiler {
     final BeizeInput input = await BeizeInput.fromFile(file);
     final BeizeCompiler compiler = BeizeCompiler._(
       BeizeScanner(input),
+      options: options,
       mode: BeizeCompilerMode.script,
       root: root,
-      options: options,
+      modulePath: fullPath,
       moduleId: 0,
       moduleNames: <String>[],
       modules: <BeizeFunctionConstant>[],
