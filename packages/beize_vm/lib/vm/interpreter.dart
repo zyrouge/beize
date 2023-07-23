@@ -72,16 +72,15 @@ class BeizeInterpreter {
       frame.ip++;
       switch (opCode) {
         case BeizeOpCodes.opAwait:
-          final BeizeValue value = stack.pop();
-          if (value is BeizeUnawaitedValue) {
+          BeizeValue value = stack.pop();
+          while (value is BeizeUnawaitedValue) {
             final BeizeInterpreterResult result = await value.execute(frame);
             if (result.isFailure) {
               return handleExceptionAsync(result.error);
             }
-            stack.push(result.value);
-          } else {
-            stack.push(value);
+            value = result.value;
           }
+          stack.push(value);
           break;
 
         default:
