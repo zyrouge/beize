@@ -270,7 +270,7 @@ class BeizeCompiler {
       modules: <BeizeFunctionConstant>[],
     );
     compiler.prepare(isAsync: true);
-    compiler.moduleNames.add(p.relative(fullPath, from: root));
+    compiler.moduleNames.add(compiler.resolveRelativePath(fullPath));
     compiler.modules.add(compiler.currentFunction);
     await compiler.compile();
     return BeizeProgramConstant(
