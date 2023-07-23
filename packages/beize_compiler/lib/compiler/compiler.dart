@@ -108,7 +108,7 @@ class BeizeCompiler {
   }
 
   String resolveImportPath(final String path) {
-    final String importDir = p.dirname(p.join(root, moduleName));
+    final String importDir = p.dirname(modulePath);
     final String absolutePath = p.join(importDir, path);
     return p.normalize(absolutePath);
   }
