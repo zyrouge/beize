@@ -25,7 +25,7 @@ class BeizeNamespace {
   }
 
   BeizeValue? lookupOrNull(final String name) =>
-      values[name] ?? parent?.lookup(name);
+      values[name] ?? parent?.lookupOrNull(name);
 
   void declare(final String name, final BeizeValue value) {
     if (values.containsKey(name)) {
