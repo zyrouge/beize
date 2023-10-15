@@ -26,7 +26,9 @@ class BeizeInterpreterResult {
 
 extension BeizeValueInterpreterResultUtils on BeizeInterpreterResult {
   BeizeValue unwrapUnsafe() {
-    if (isFailure) throw BeizeInterpreterBridgedException(error);
+    if (isFailure) {
+      throw BeizeInterpreterBridgedException(error);
+    }
     return value;
   }
 }
