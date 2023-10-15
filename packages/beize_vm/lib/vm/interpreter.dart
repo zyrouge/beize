@@ -449,7 +449,12 @@ class BeizeInterpreter {
 
       case BeizeOpCodes.opGetProperty:
         final BeizeValue name = stack.pop();
-        final BeizePrimitiveObjectValue obj = stack.pop();
+        final BeizeValue obj = stack.pop();
+        if (obj is! BeizePrimitiveObjectValue) {
+          return handleInvalidMemberAccess(
+            'Cannot use member accessor on "${obj.kind.code}"',
+          );
+        }
         final BeizeValue value = obj.get(name);
         stack.push(value);
         break;
@@ -457,7 +462,12 @@ class BeizeInterpreter {
       case BeizeOpCodes.opSetProperty:
         final BeizeValue value = stack.pop();
         final BeizeValue name = stack.pop();
-        final BeizePrimitiveObjectValue obj = stack.pop();
+        final BeizeValue obj = stack.pop();
+        if (obj is! BeizePrimitiveObjectValue) {
+          return handleInvalidMemberAccess(
+            'Cannot do member assign on "${obj.kind.code}"',
+          );
+        }
         obj.set(name, value);
         stack.push(value);
         break;
@@ -515,6 +525,9 @@ class BeizeInterpreter {
     );
     return handleException(err);
   }
+
+  BeizeInterpreterResult handleInvalidMemberAccess(final String message) =>
+      handleCustomException('InvalidMemberAccess', message);
 
   BeizeInterpreterResult handleInvalidUnary(final String message) =>
       handleCustomException('InvalidUnaryOperation', message);
