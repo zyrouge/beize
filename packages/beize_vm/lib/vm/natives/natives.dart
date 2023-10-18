@@ -10,6 +10,7 @@ abstract class BeizeNatives {
     BeizeFiberNatives.bind(namespace);
     BeizeFunctionNatives.bind(namespace);
     BeizeListNatives.bind(namespace);
+    BeizeMathNatives.bind(namespace);
     BeizeNumberNatives.bind(namespace);
     BeizeObjectNatives.bind(namespace);
     BeizeRegExpNatives.bind(namespace);
