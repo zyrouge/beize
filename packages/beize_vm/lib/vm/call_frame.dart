@@ -40,7 +40,7 @@ class BeizeCallFrame {
     }
     return BeizeInterpreterResult.fail(
       BeizeExceptionValue(
-        'RuntimeException: Value "${value.kind.code}" is not callable',
+        'BeizeRuntimeException: Value "${value.kind.code}" is not callable',
         getStackTrace(),
       ),
     );

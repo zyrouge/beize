@@ -38,7 +38,7 @@ class BeizeInterpreter {
       state = BeizeInterpreterState.finished;
       return BeizeInterpreterResult.fail(
         BeizeExceptionValue(
-          'RuntimeException: $err',
+          'BeizeRuntimeException: $err',
           frame.getStackTrace(),
           stackTrace.toString(),
         ),
@@ -56,7 +56,7 @@ class BeizeInterpreter {
       state = BeizeInterpreterState.finished;
       return BeizeInterpreterResult.fail(
         BeizeExceptionValue(
-          'RuntimeException: $err',
+          'BeizeRuntimeException: $err',
           frame.getStackTrace(),
           stackTrace.toString(),
         ),
