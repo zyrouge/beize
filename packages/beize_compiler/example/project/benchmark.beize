@@ -1,4 +1,4 @@
-createBenchmarker := -> a, b {
+createBenchmarker := -> {
     return {
         startedAt: null,
         endedAt: null,
