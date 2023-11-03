@@ -2,6 +2,9 @@ name: Documentation
 
 on:
     workflow_dispatch:
+    push:
+        paths:
+            - docs
 
 jobs:
     build:

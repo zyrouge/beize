@@ -6,6 +6,11 @@ The language syntax is a mix of Go and JavaScript. It is also highly dynamic wit
 
     - Optional things are mentioned within brackets (`[]`). Escaped brackets (`\[\]`) says that they are part of the syntax itself.
 
+## Tooling
+
+-   [Beize CLI](https://github.com/zyrouge/beize/releases)
+-   [Beize VSCode Extension](https://github.com/zyrouge/beize-vscode-extension)
+
 ## Comments
 
 Words in a line after `#` are comments. Multi-line comments are not supported.
