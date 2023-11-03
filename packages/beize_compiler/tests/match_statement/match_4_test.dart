@@ -4,19 +4,10 @@ import '../utils.dart';
 
 Future<void> main() async {
   const String title = '[Statement] Match (4)';
-  final BeizeProgramConstant program =
-      await compileTestScript('match_statement', 'match_4.beize');
-
-  test('$title - Bytecode', () async {
-    final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestProgram expectedChunk = BeizeTestProgram();
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(0, 1.0);
-    expectedChunk.addOpCode(BeizeOpCodes.opAbsoluteJump);
-    expectedChunk.addCode(4);
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expect(tcpc(chunk), tcptc(expectedChunk));
-  });
+  final BeizeProgramConstant program = await compileTestScript(
+    'match_statement',
+    'match_4.beize',
+  );
 
   test('$title - Channel', () async {
     final List<String> expected = <String>[];

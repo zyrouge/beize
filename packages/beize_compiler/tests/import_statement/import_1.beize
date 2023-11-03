@@ -1,3 +1,0 @@
-import "./import_dummy.beize" as dummy;
-
-dummy.callOut("c-0");

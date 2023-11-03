@@ -131,7 +131,8 @@ class BeizeDisassembler {
       final BeizeFunctionConstant function =
           program.constantAt(functionIndex) as BeizeFunctionConstant;
       output.write(
-          '> $moduleName (constant [$nameIndex]) at constant [$functionIndex] ${nameIndex == 0 ? "(entrypoint)" : ""}');
+        '> $moduleName (constant [$nameIndex]) at constant [$functionIndex] ${nameIndex == 0 ? "(entrypoint)" : ""}',
+      );
       final BeizeDisassembler disassembler =
           BeizeDisassembler(program, function.chunk, output);
       disassembler.dissassemble();

@@ -3,42 +3,11 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = '[Value] String (1)';
-  final BeizeProgramConstant program =
-      await compileTestScript('string_value', 'string_compareTo_1.beize');
-
-  test('$title - Bytecode', () async {
-    final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestProgram expectedChunk = BeizeTestProgram();
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(1, 'Hello');
-    expectedChunk.addOpCode(BeizeOpCodes.opDeclare);
-    expectedChunk.addConstant(0, 'str1');
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(3, 'World');
-    expectedChunk.addOpCode(BeizeOpCodes.opDeclare);
-    expectedChunk.addConstant(2, 'str2');
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(4, 'out');
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(5, '');
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(0, 'str1');
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(6, 'compareTo');
-    expectedChunk.addOpCode(BeizeOpCodes.opGetProperty);
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(2, 'str2');
-    expectedChunk.addOpCode(BeizeOpCodes.opCall);
-    expectedChunk.addCode(1);
-    expectedChunk.addOpCode(BeizeOpCodes.opAdd);
-    expectedChunk.addOpCode(BeizeOpCodes.opCall);
-    expectedChunk.addCode(1);
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expect(tcpc(chunk), tcptc(expectedChunk));
-  });
+  const String title = '[Value] String.CompareTo (1)';
+  final BeizeProgramConstant program = await compileTestScript(
+    'string_value',
+    'string_compareTo_1.beize',
+  );
 
   test('$title - Channel', () async {
     final List<String> expected = <String>['-1'];

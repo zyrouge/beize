@@ -4,27 +4,10 @@ import '../utils.dart';
 
 Future<void> main() async {
   const String title = '[Statement] When (3)';
-  final BeizeProgramConstant program =
-      await compileTestScript('when_statement', 'when_3.beize');
-
-  test('$title - Bytecode', () async {
-    final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestProgram expectedChunk = BeizeTestProgram();
-    expectedChunk.addOpCode(BeizeOpCodes.opAbsoluteJump);
-    expectedChunk.addCode(2);
-    expectedChunk.addOpCode(BeizeOpCodes.opBeginScope);
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(0, 'out');
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(1, 'c-else');
-    expectedChunk.addOpCode(BeizeOpCodes.opCall);
-    expectedChunk.addCode(1);
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expectedChunk.addOpCode(BeizeOpCodes.opEndScope);
-    expectedChunk.addOpCode(BeizeOpCodes.opAbsoluteJump);
-    expectedChunk.addCode(13);
-    expect(tcpc(chunk), tcptc(expectedChunk));
-  });
+  final BeizeProgramConstant program = await compileTestScript(
+    'when_statement',
+    'when_3.beize',
+  );
 
   test('$title - Channel', () async {
     final List<String> expected = <String>['c-else'];

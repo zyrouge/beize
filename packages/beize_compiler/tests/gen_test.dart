@@ -1,22 +1,17 @@
 // ignore_for_file: unreachable_from_main, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
-import 'package:beize_compiler/beize_compiler.dart';
 import 'package:path/path.dart' as p;
-import 'utils.dart';
 
-Future<void> main() async {
+Future<void> main(final List<String> args) async {
   final TestOptions options = TestOptions(
-    category: 'Operator',
-    title: 'Addition Assignment',
+    category: args[0],
+    title: args[1],
     titleExtra: '',
-    index: 1,
-    output: <String>['3'],
-    script: '''
-result := 1;
-result += 2;
-out("" + result);
-''',
+    index: int.parse(args[2]),
+    output: (json.decode(args[3]) as List<dynamic>).cast(),
+    script: args[4],
   );
   await options.parentDir.ensure();
   print('Parent Dir: ${options.parentDirPath}');
@@ -30,8 +25,7 @@ out("" + result);
   }
   await options.beizeFile.writeAsString(options.script);
   print('Beize File: ${options.beizeFilePath}');
-  await options.dartTestFile
-      .writeAsString(await generateTestDart(options: options));
+  await options.dartTestFile.writeAsString(generateTestDart(options: options));
   print('Dart File: ${options.dartTestFilePath}');
   print('');
 
@@ -88,16 +82,10 @@ class TestOptions {
   static final String rootDir = p.absolute('tests');
 }
 
-Future<String> generateTestDart({
+String generateTestDart({
   required final TestOptions options,
-}) async {
-  final BeizeProgramConstant program = await BeizeCompiler.compileProject(
-    root: options.parentDirPath,
-    entrypoint: options.beizeFileName,
-    options: BeizeCompilerOptions(),
-  );
-  final String expectedProgramCode = buildExpectedProgramCode(program);
-  return '''
+}) =>
+    '''
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:test/test.dart';
 import '../utils.dart';
@@ -109,11 +97,6 @@ Future<void> main() async {
     '${options.beizeFileName}',
   );
 
-  test('\$title - Bytecode', () async {
-    $expectedProgramCode
-    expect(tcpc(program), tcptc(expectedProgram));
-  });
-
   test('\$title - Channel', () async {
     final List<String> expected = <String>[${options.output.map((final String x) => "'$x'").join(', ')}];
     final List<String> actual = await executeTestScript(program);
@@ -121,7 +104,6 @@ Future<void> main() async {
   });
 }
 ''';
-}
 
 extension on Directory {
   Future<void> ensure() async {

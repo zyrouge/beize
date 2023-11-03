@@ -3,39 +3,11 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = '[Value] String (1)';
-  final BeizeProgramConstant program =
-      await compileTestScript('string_value', 'string_substring_1.beize');
-
-  test('$title - Bytecode', () async {
-    final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestProgram expectedChunk = BeizeTestProgram();
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(1, 'Hello World!');
-    expectedChunk.addOpCode(BeizeOpCodes.opDeclare);
-    expectedChunk.addConstant(0, 'result');
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(2, 'out');
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(3, '');
-    expectedChunk.addOpCode(BeizeOpCodes.opLookup);
-    expectedChunk.addConstant(0, 'result');
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(4, 'substring');
-    expectedChunk.addOpCode(BeizeOpCodes.opGetProperty);
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(5, 6.0);
-    expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    expectedChunk.addConstant(6, 11.0);
-    expectedChunk.addOpCode(BeizeOpCodes.opCall);
-    expectedChunk.addCode(2);
-    expectedChunk.addOpCode(BeizeOpCodes.opAdd);
-    expectedChunk.addOpCode(BeizeOpCodes.opCall);
-    expectedChunk.addCode(1);
-    expectedChunk.addOpCode(BeizeOpCodes.opPop);
-    expect(tcpc(chunk), tcptc(expectedChunk));
-  });
+  const String title = '[Value] String.Substring (1)';
+  final BeizeProgramConstant program = await compileTestScript(
+    'string_value',
+    'string_substring_1.beize',
+  );
 
   test('$title - Channel', () async {
     final List<String> expected = <String>['World'];

@@ -57,7 +57,7 @@ class BeizeCompiler {
     currentFunction = BeizeFunctionConstant(
       isAsync: isAsync,
       arguments: <int>[],
-      chunk: BeizeChunk.empty(moduleIndex),
+      chunk: BeizeChunk.empty(),
     );
     scopeDepth = 0;
     loops = <BeizeCompilerLoopState>[];
