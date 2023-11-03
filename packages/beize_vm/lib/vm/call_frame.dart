@@ -110,8 +110,8 @@ class BeizeCallFrame {
       vm.program.constantAt(function.chunk.codeAt(index));
 
   String toStackTraceLine(final int depth) {
-    final int nameIndex = vm.program.modules[function.chunk.moduleIndex];
-    final String moduleName = vm.program.constantAt(nameIndex) as String;
+    final String moduleName =
+        vm.program.moduleNameAt(function.chunk.moduleIndex);
     final int line = function.chunk.lineAt(sip);
     return '#$depth   $moduleName at line $line';
   }

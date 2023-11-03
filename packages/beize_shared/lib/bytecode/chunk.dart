@@ -32,7 +32,9 @@ class BeizeChunk {
   }
 
   int codeAt(final int index) => codes[index];
+
   BeizeOpCodes opCodeAt(final int index) => BeizeOpCodes.values[codeAt(index)];
+
   int lineAt(final int index) => lines[index];
 
   BeizeSerializedConstant serialize() => <dynamic>[moduleIndex, codes, lines];

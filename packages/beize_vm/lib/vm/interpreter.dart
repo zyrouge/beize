@@ -497,16 +497,21 @@ class BeizeInterpreter {
       case BeizeOpCodes.opImport:
         final int moduleIndex = chunk.codeAt(frame.ip);
         final int asIndex = chunk.codeAt(frame.ip + 1);
-        final String name = frame.readConstantAt(asIndex) as String;
+        final String name = frame.vm.program.constantAt(asIndex) as String;
         frame.ip += 2;
-        final BeizePreparedModule module = frame.vm.prepareModule(
-          moduleIndex,
-          isEntrypoint: false,
-        );
-        namespace.declare(name, module.value);
-        final BeizeInterpreterResult result = frame.vm.loadModule(module);
-        if (result.isFailure) {
-          return handleException(result.error);
+        final BeizeModuleValue? pValue = frame.vm.lookupModule(moduleIndex);
+        if (pValue != null) {
+          namespace.declare(name, pValue);
+        } else {
+          final BeizePreparedModule module = frame.vm.prepareModule(
+            moduleIndex,
+            isEntrypoint: false,
+          );
+          namespace.declare(name, module.value);
+          final BeizeInterpreterResult result = frame.vm.loadModule(module);
+          if (result.isFailure) {
+            return handleException(result.error);
+          }
         }
         break;
 

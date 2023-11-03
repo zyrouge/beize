@@ -37,7 +37,7 @@ class BeizeVM {
   final BeizeVMOptions options;
 
   final BeizeNamespace globalNamespace = BeizeNamespace.withNatives();
-  final Map<String, BeizeModuleValue> modules = <String, BeizeModuleValue>{};
+  final Map<int, BeizeModuleValue> modules = <int, BeizeModuleValue>{};
   late final BeizeCallFrame topFrame;
 
   Future<void> run() async {
@@ -51,22 +51,24 @@ class BeizeVM {
     }
   }
 
+  BeizeModuleValue? lookupModule(final int moduleIndex) => modules[moduleIndex];
+
   BeizePreparedModule prepareModule(
     final int moduleIndex, {
     required final bool isEntrypoint,
   }) {
-    final int nameIndex = program.moduleAt(moduleIndex);
-    final String moduleName = program.constantAt(nameIndex) as String;
     final BeizeNamespace namespace = globalNamespace.enclosed;
     final BeizeModuleValue value = BeizeModuleValue(namespace);
-    modules[moduleName] = value;
+    modules[moduleIndex] = value;
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: this,
-      function: program.constantAt(nameIndex + 1) as BeizeFunctionConstant,
+      function: program.moduleFunctionAt(moduleIndex),
       namespace: namespace,
       parent: !isEntrypoint ? topFrame : null,
     );
-    if (isEntrypoint) topFrame = frame;
+    if (isEntrypoint) {
+      topFrame = frame;
+    }
     return BeizePreparedModule(
       moduleIndex: moduleIndex,
       frame: frame,
