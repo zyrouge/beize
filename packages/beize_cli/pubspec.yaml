@@ -12,6 +12,10 @@ dependencies:
         git:
             url: https://github.com/zyrouge/beize.git
             path: packages/beize_compiler
+    beize_shared:
+        git:
+            url: https://github.com/zyrouge/beize.git
+            path: packages/beize_shared
     beize_vm:
         git:
             url: https://github.com/zyrouge/beize.git
@@ -22,6 +26,8 @@ dependencies:
 dependency_overrides:
     beize_compiler:
         path: ../beize_compiler
+    beize_shared:
+        path: ../beize_shared
     beize_vm:
         path: ../beize_vm
 

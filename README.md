@@ -4,7 +4,7 @@
 
 # Beize
 
-A scripting language made for unknown reasons.
+A highly dynamic embeddable scripting language.
 
 [![GitHub Release](https://img.shields.io/github/v/release/zyrouge/beize)](https://github.com/zyrouge/beize/releases/latest)
 [![GitHub](https://img.shields.io/github/license/zyrouge/beize)](./LICENSE)
