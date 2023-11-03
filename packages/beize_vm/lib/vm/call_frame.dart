@@ -64,10 +64,11 @@ class BeizeCallFrame {
   ) {
     final BeizeNamespace namespace = function.namespace.enclosed;
     int i = 0;
-    for (final String arg in function.constant.arguments) {
+    for (final int argIndex in function.constant.arguments) {
+      final String argName = vm.program.constantAt(argIndex) as String;
       final BeizeValue value =
           i < arguments.length ? arguments[i] : BeizeNullValue.value;
-      namespace.declare(arg, value);
+      namespace.declare(argName, value);
       i++;
     }
     final BeizeCallFrame frame = BeizeCallFrame(
@@ -106,10 +107,14 @@ class BeizeCallFrame {
   }
 
   BeizeConstant readConstantAt(final int index) =>
-      function.chunk.constantAt(function.chunk.codeAt(index));
+      vm.program.constantAt(function.chunk.codeAt(index));
 
-  String toStackTraceLine(final int depth) =>
-      '#$depth   ${vm.program.moduleNameAt(function.chunk.moduleId)} at line ${function.chunk.lineAt(sip)}';
+  String toStackTraceLine(final int depth) {
+    final int nameIndex = vm.program.modules[function.chunk.moduleIndex];
+    final String moduleName = vm.program.constantAt(nameIndex) as String;
+    final int line = function.chunk.lineAt(sip);
+    return '#$depth   $moduleName at line $line';
+  }
 
   String getStackTrace([final int depth = 0]) {
     final String current = toStackTraceLine(depth);

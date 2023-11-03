@@ -7,16 +7,16 @@ import 'utils.dart';
 
 Future<void> main() async {
   final TestOptions options = TestOptions(
-    category: 'Native',
-    title: 'String',
-    titleExtra: 'fromCodeUnits',
+    category: 'Operator',
+    title: 'Addition Assignment',
+    titleExtra: '',
     index: 1,
-    output: <String>['Hello'],
+    output: <String>['3'],
     script: '''
-result := String.fromCodeUnits([72, 101, 108, 108, 111]);
-out(result);
+result := 1;
+result += 2;
+out("" + result);
 ''',
-    moduleAt: 0,
   );
   await options.parentDir.ensure();
   print('Parent Dir: ${options.parentDirPath}');
@@ -52,16 +52,14 @@ class TestOptions {
     required this.index,
     required this.output,
     required this.script,
-    required this.moduleAt,
   });
 
   final String category;
   final String title;
-  final String? titleExtra;
+  final String titleExtra;
   final int index;
   final List<String> output;
   final String script;
-  final int moduleAt;
 
   String toPathName(final String text) =>
       text.replaceAll(RegExp(r'\s+'), '_').toLowerCase();
@@ -73,7 +71,7 @@ class TestOptions {
   String get baseFileName {
     final List<String> parts = <String>[
       toPathName(title),
-      if (titleExtra != null) titleExtra!,
+      if (titleExtra != '') titleExtra,
       index.toString(),
     ];
     return parts.join('_');
@@ -98,8 +96,7 @@ Future<String> generateTestDart({
     entrypoint: options.beizeFileName,
     options: BeizeCompilerOptions(),
   );
-  final String expectedChunkCode =
-      buildExpectedChunkCode(program.moduleAt(options.moduleAt).chunk);
+  final String expectedProgramCode = buildExpectedProgramCode(program);
   return '''
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:test/test.dart';
@@ -107,13 +104,14 @@ import '../utils.dart';
 
 Future<void> main() async {
   const String title = '[${options.category}] ${options.title} (${options.index})';
-  final BeizeProgramConstant program =
-      await compileTestScript('${options.parentDirName}', '${options.beizeFileName}');
+  final BeizeProgramConstant program = await compileTestScript(
+    '${options.parentDirName}',
+    '${options.beizeFileName}',
+  );
 
   test('\$title - Bytecode', () async {
-    final BeizeChunk chunk = extractChunk(program);
-    $expectedChunkCode
-    expect(tcpc(chunk), tcptc(expectedChunk));
+    $expectedProgramCode
+    expect(tcpc(program), tcptc(expectedProgram));
   });
 
   test('\$title - Channel', () async {

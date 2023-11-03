@@ -30,7 +30,7 @@ class BeizeDisassembler {
       case BeizeOpCodes.opAssign:
       case BeizeOpCodes.opLookup:
         final int constantPosition = chunk.codeAt(ip + 1);
-        final BeizeConstant constant = chunk.constantAt(constantPosition);
+        final BeizeConstant constant = program.constantAt(constantPosition);
         writeInstruction(
           opCode,
           ip,
@@ -38,8 +38,11 @@ class BeizeDisassembler {
           '{so}(constant [$constantPosition] = ${stringifyConstant(constant)})',
         );
         if (constant is BeizeFunctionConstant) {
+          final List<String> argNames = constant.arguments
+              .map((final int x) => '${program.constantAt(x)} (constant [$x])')
+              .toList();
           output.write(
-            '-> ${constant.isAsync ? 'async' : ''} ${constant.arguments.join(', ')}',
+            '-> ${constant.isAsync ? 'async' : ''} ${argNames.join(', ')}',
           );
           BeizeDisassembler(program, constant.chunk, output.nested)
               .dissassemble(printHeader: false);
@@ -83,16 +86,17 @@ class BeizeDisassembler {
         );
         return 1;
 
-      case BeizeOpCodes.opModule:
-        final int moduleId = chunk.codeAt(ip + 1);
-        final int identifierPosition = chunk.codeAt(ip + 2);
-        final BeizeConstant moduleName = program.moduleNameAt(moduleId);
-        final BeizeConstant identifier = chunk.constantAt(identifierPosition);
+      case BeizeOpCodes.opImport:
+        final int moduleIndex = chunk.codeAt(ip + 1);
+        final int nameIndex = program.moduleAt(moduleIndex);
+        final int asIndex = chunk.codeAt(ip + 2);
+        final String moduleName = program.constantAt(nameIndex) as String;
+        final BeizeConstant importName = program.constantAt(asIndex);
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(module [$moduleId] = $moduleName, identifier [$identifierPosition] = $identifier)',
+          '{so}(module [$moduleIndex] = $moduleName, as [$asIndex] = $importName)',
         );
         return 2;
 
@@ -120,10 +124,11 @@ class BeizeDisassembler {
 
   static void disassembleProgram(final BeizeProgramConstant program) {
     final BeizeDisassemblerOutput output = BeizeDisassemblerConsoleOutput();
-    for (int i = 0; i < program.modules.length; i++) {
-      final String moduleName = program.moduleNameAt(i);
-      final BeizeFunctionConstant function = program.moduleAt(i);
-      output.write('> $moduleName ${i == 0 ? "(entrypoint)" : ""}');
+    for (final int nameIndex in program.modules) {
+      final String moduleName = program.constantAt(nameIndex) as String;
+      final BeizeFunctionConstant function =
+          program.constantAt(nameIndex + 1) as BeizeFunctionConstant;
+      output.write('> $moduleName ${nameIndex == 0 ? "(entrypoint)" : ""}');
       final BeizeDisassembler disassembler =
           BeizeDisassembler(program, function.chunk, output);
       disassembler.dissassemble();

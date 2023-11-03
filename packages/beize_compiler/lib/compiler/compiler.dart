@@ -27,9 +27,9 @@ class BeizeCompiler {
     required this.mode,
     required this.root,
     required this.modulePath,
-    required this.moduleId,
-    required this.moduleNames,
+    required this.moduleIndex,
     required this.modules,
+    required this.constants,
     required this.options,
     this.parent,
   });
@@ -40,9 +40,9 @@ class BeizeCompiler {
   final BeizeCompilerMode mode;
   final String root;
   final String modulePath;
-  final int moduleId;
-  final List<String> moduleNames;
-  final List<BeizeFunctionConstant> modules;
+  final int moduleIndex;
+  final List<int> modules;
+  final List<BeizeConstant> constants;
 
   late BeizeToken previousToken;
   late BeizeToken currentToken;
@@ -56,8 +56,8 @@ class BeizeCompiler {
   }) {
     currentFunction = BeizeFunctionConstant(
       isAsync: isAsync,
-      arguments: <String>[],
-      chunk: BeizeChunk.empty(moduleId),
+      arguments: <int>[],
+      chunk: BeizeChunk.empty(moduleIndex),
     );
     scopeDepth = 0;
     loops = <BeizeCompilerLoopState>[];
@@ -76,9 +76,9 @@ class BeizeCompiler {
       mode: BeizeCompilerMode.function,
       root: root,
       modulePath: modulePath,
-      moduleId: moduleId,
-      moduleNames: moduleNames,
+      moduleIndex: moduleIndex,
       modules: modules,
+      constants: constants,
       parent: this,
       options: options,
     );
@@ -87,7 +87,7 @@ class BeizeCompiler {
   }
 
   Future<BeizeCompiler> createModuleCompiler(
-    final int moduleId,
+    final int moduleIndex,
     final String path, {
     required final bool isAsync,
   }) async {
@@ -98,9 +98,9 @@ class BeizeCompiler {
       mode: BeizeCompilerMode.script,
       root: root,
       modulePath: path,
-      moduleId: moduleId,
-      moduleNames: moduleNames,
+      moduleIndex: moduleIndex,
       modules: modules,
+      constants: constants,
       options: options,
     );
     derived.prepare(isAsync: isAsync);
@@ -172,8 +172,14 @@ class BeizeCompiler {
     emitCode(makeConstant(value));
   }
 
-  int makeConstant(final BeizeConstant value) =>
-      currentChunk.addConstant(value);
+  bool hasConstant(final BeizeConstant value) => constants.contains(value);
+
+  int makeConstant(final BeizeConstant value) {
+    final int existingIndex = constants.indexOf(value);
+    if (existingIndex != -1) return existingIndex;
+    constants.add(value);
+    return constants.length - 1;
+  }
 
   int emitJump(final BeizeOpCodes opCode) {
     emitOpCode(opCode);
@@ -245,7 +251,7 @@ class BeizeCompiler {
 
   bool isEndOfFile() => currentToken.type == BeizeTokens.eof;
 
-  String get moduleName => moduleNames[moduleId];
+  String get moduleName => constants[moduleIndex] as String;
 
   BeizeChunk get currentChunk => currentFunction.chunk;
 
@@ -265,17 +271,19 @@ class BeizeCompiler {
       mode: BeizeCompilerMode.script,
       root: root,
       modulePath: fullPath,
-      moduleId: 0,
-      moduleNames: <String>[],
-      modules: <BeizeFunctionConstant>[],
+      moduleIndex: 0,
+      modules: <int>[],
+      constants: <BeizeConstant>[],
     );
     compiler.prepare(isAsync: true);
-    compiler.moduleNames.add(compiler.resolveRelativePath(fullPath));
-    compiler.modules.add(compiler.currentFunction);
+    final int nameIndex =
+        compiler.makeConstant(compiler.resolveRelativePath(fullPath));
+    compiler.makeConstant(compiler.currentFunction);
+    compiler.modules.add(nameIndex);
     await compiler.compile();
     return BeizeProgramConstant(
-      moduleNames: compiler.moduleNames,
       modules: compiler.modules,
+      constants: compiler.constants,
     );
   }
 }

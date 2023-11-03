@@ -41,5 +41,5 @@ enum BeizeOpCodes {
   opThrow,
   opBeginTry,
   opEndTry,
-  opModule,
+  opImport,
 }

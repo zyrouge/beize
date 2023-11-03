@@ -34,13 +34,52 @@ Future<List<String>> executeTestScript(
   return output;
 }
 
-BeizeChunk extractChunk(final BeizeProgramConstant program) {
-  final BeizeChunk chunk = program.moduleAt(0).chunk;
-  return chunk;
+class BeizeTestProgram {
+  final List<int> modules = <int>[];
+  final List<BeizeConstant> constants = <BeizeConstant>[];
+
+  BeizeTestChunk addModule(
+    final int moduleIndex,
+    final int nameIndex,
+    final String moduleName,
+  ) {
+    int missingCount = moduleIndex - modules.length + 1;
+    while (missingCount > 0) {
+      modules.add(0);
+      missingCount--;
+    }
+    modules[moduleIndex] = nameIndex;
+    final BeizeTestChunk chunk = BeizeTestChunk(
+      this,
+      BeizeChunk.empty(moduleIndex),
+    );
+    addConstant(nameIndex, moduleName);
+    addConstant(
+      nameIndex + 1,
+      BeizeFunctionConstant(
+        isAsync: true,
+        arguments: <int>[],
+        chunk: chunk.chunk,
+      ),
+    );
+    return chunk;
+  }
+
+  void addConstant(final int code, final BeizeConstant constant) {
+    int missingCount = code - constants.length + 1;
+    while (missingCount > 0) {
+      constants.add(null);
+      missingCount--;
+    }
+    constants[code] = constant;
+  }
 }
 
 class BeizeTestChunk {
-  final BeizeChunk chunk = BeizeChunk.empty(0);
+  BeizeTestChunk(this.program, this.chunk);
+
+  final BeizeTestProgram program;
+  final BeizeChunk chunk;
 
   void addOpCode(final BeizeOpCodes opCode) {
     chunk.addOpCode(opCode, 0);
@@ -51,26 +90,50 @@ class BeizeTestChunk {
   }
 
   void addConstant(final int code, final BeizeConstant constant) {
-    int missingCount = code - chunk.constants.length + 1;
-    while (missingCount > 0) {
-      chunk.constants.add(null);
-      missingCount--;
-    }
-    chunk.constants[code] = constant;
+    program.addConstant(code, constant);
     addCode(code);
   }
 
   List<int> get codes => chunk.codes;
-  List<BeizeConstant> get constants => chunk.constants;
+}
+
+String buildExpectedProgramCode(
+  final BeizeProgramConstant program, {
+  final StringBuffer? buffer,
+}) {
+  final StringBuffer output = buffer ?? StringBuffer();
+  output.write('final BeizeTestProgram expectedProgram = BeizeTestProgram();');
+  for (int i = 0; i < program.modules.length; i++) {
+    final int nameIndex = program.moduleAt(i);
+    final String moduleName = program.constantAt(i) as String;
+    final BeizeFunctionConstant function =
+        program.constantAt(nameIndex + 1) as BeizeFunctionConstant;
+    final String variableName = 'expectedModule$i';
+    output.write(
+      "final BeizeTestChunk $variableName = expectedProgram.addModule($i, $nameIndex, '${escapedString(moduleName, "'")}');",
+    );
+    buildExpectedChunkCode(
+      program,
+      function.chunk,
+      variableExists: true,
+      variableName: variableName,
+      buffer: output,
+    );
+  }
+  return output.toString().trim();
 }
 
 String buildExpectedChunkCode(
+  final BeizeProgramConstant program,
   final BeizeChunk chunk, {
+  final bool variableExists = false,
   final String variableName = 'expectedChunk',
   final StringBuffer? buffer,
 }) {
   final StringBuffer output = buffer ?? StringBuffer();
-  output.writeln('final BeizeTestChunk $variableName = BeizeTestChunk();');
+  if (!variableExists) {
+    output.writeln('final BeizeTestChunk $variableName = BeizeTestChunk();');
+  }
   int constantVariableCount = 0;
   int ip = 0;
   while (ip < chunk.codes.length) {
@@ -83,11 +146,12 @@ String buildExpectedChunkCode(
       case BeizeOpCodes.opAssign:
       case BeizeOpCodes.opLookup:
         final int constantPosition = chunk.codeAt(ip + 1);
-        final BeizeConstant constant = chunk.constantAt(constantPosition);
+        final BeizeConstant constant = program.constantAt(constantPosition);
         if (constant is BeizeFunctionConstant) {
           final String constantVariableName =
               '${variableName}_$constantVariableCount';
           buildExpectedChunkCode(
+            program,
             constant.chunk,
             variableName: constantVariableName,
             buffer: output,
@@ -121,15 +185,13 @@ String buildExpectedChunkCode(
         bump++;
         break;
 
-      case BeizeOpCodes.opModule:
-        final int moduleId = chunk.codeAt(ip + 1);
-        final int identifierPosition = chunk.codeAt(ip + 2);
-        final String identifier =
-            chunk.constantAt(identifierPosition) as String;
-        output.writeln('$variableName.addCode($moduleId);');
-        output.writeln(
-          "$variableName.addConstant($identifierPosition, '$identifier');",
-        );
+      case BeizeOpCodes.opImport:
+        final int moduleIndex = chunk.codeAt(ip + 1);
+        final int asIndex = chunk.codeAt(ip + 2);
+        final int nameIndex = program.moduleAt(moduleIndex);
+        final String name = program.constantAt(nameIndex) as String;
+        output.writeln('$variableName.addCode($moduleIndex);');
+        output.writeln("$variableName.addConstant($asIndex, '$name');");
         bump += 2;
         break;
 
@@ -140,9 +202,9 @@ String buildExpectedChunkCode(
   return output.toString().trim();
 }
 
-void printExpectedChunkCode(final BeizeChunk chunk) {
+void printExpectedProgramCode(final BeizeProgramConstant program) {
   // ignore: avoid_print
-  print(buildExpectedChunkCode(chunk));
+  print(buildExpectedProgramCode(program));
 }
 
 String escapedString(final String value, final String char) =>
@@ -151,33 +213,30 @@ String escapedString(final String value, final String char) =>
 typedef BeizeTestComparableProgram = Map<String, dynamic>;
 
 // (transpile to) Test-Comparable-Program (from) (Beize)-Chunk
-BeizeTestComparableProgram tcpc(final BeizeChunk chunk) =>
-    transpileTestComparableProgram(chunk.codes, chunk.constants);
+BeizeTestComparableProgram tcpc(final BeizeProgramConstant program) =>
+    transpileTestComparableProgram(program.modules, program.constants);
 
 // (transpile to) Test-Comparable-Program (from) (Beize)-Test-Chunk
-BeizeTestComparableProgram tcptc(final BeizeTestChunk chunk) =>
-    transpileTestComparableProgram(chunk.codes, chunk.constants);
+BeizeTestComparableProgram tcptc(final BeizeTestProgram program) =>
+    transpileTestComparableProgram(program.modules, program.constants);
 
 BeizeTestComparableProgram transpileTestComparableProgram(
-  final List<int> codes,
+  final List<int> modules,
   final List<BeizeConstant> constants,
 ) {
   final List<dynamic> transpiledConstants = <dynamic>[];
   for (final BeizeConstant x in constants) {
     if (x is BeizeFunctionConstant) {
-      transpiledConstants.add(
-        transpileTestComparableProgram(x.chunk.codes, x.chunk.constants),
-      );
-    } else if (x is BeizeTestChunk) {
-      transpiledConstants.add(
-        transpileTestComparableProgram(x.chunk.codes, x.chunk.constants),
-      );
+      transpiledConstants.add(<String, dynamic>{
+        'moduleIndex': x.chunk.moduleIndex,
+        'codes': x.chunk.codes,
+      });
     } else {
       transpiledConstants.add(x);
     }
   }
   return <String, dynamic>{
-    'codes': codes,
+    'modules': modules,
     'constants': transpiledConstants,
   };
 }

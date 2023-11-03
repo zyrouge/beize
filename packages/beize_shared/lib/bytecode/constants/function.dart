@@ -12,17 +12,17 @@ class BeizeFunctionConstant {
     final BeizeSerializedConstant serialized,
   ) =>
       BeizeFunctionConstant(
-        isAsync: serialized[0] as bool,
-        arguments: (serialized[1] as List<dynamic>).cast<String>(),
+        isAsync: serialized[0] == 1,
+        arguments: (serialized[1] as List<dynamic>).cast<int>(),
         chunk: BeizeChunk.deserialize(
           serialized[2] as BeizeSerializedConstant,
         ),
       );
 
   final bool isAsync;
-  final List<String> arguments;
+  final List<int> arguments;
   final BeizeChunk chunk;
 
   BeizeSerializedConstant serialize() =>
-      <dynamic>[isAsync, arguments, chunk.serialize()];
+      <dynamic>[if (isAsync) 1 else 0, arguments, chunk.serialize()];
 }

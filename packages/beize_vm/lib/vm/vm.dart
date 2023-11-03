@@ -52,21 +52,26 @@ class BeizeVM {
   }
 
   BeizePreparedModule prepareModule(
-    final int moduleId, {
+    final int moduleIndex, {
     required final bool isEntrypoint,
   }) {
-    final String moduleName = program.moduleNameAt(moduleId);
+    final int nameIndex = program.moduleAt(moduleIndex);
+    final String moduleName = program.constantAt(nameIndex) as String;
     final BeizeNamespace namespace = globalNamespace.enclosed;
     final BeizeModuleValue value = BeizeModuleValue(namespace);
     modules[moduleName] = value;
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: this,
-      function: program.modules[moduleId],
+      function: program.constantAt(nameIndex + 1) as BeizeFunctionConstant,
       namespace: namespace,
       parent: !isEntrypoint ? topFrame : null,
     );
     if (isEntrypoint) topFrame = frame;
-    return BeizePreparedModule(moduleId: moduleId, frame: frame, value: value);
+    return BeizePreparedModule(
+      moduleIndex: moduleIndex,
+      frame: frame,
+      value: value,
+    );
   }
 
   BeizeInterpreterResult loadModule(final BeizePreparedModule module) {
@@ -95,12 +100,12 @@ class BeizeVM {
 
 class BeizePreparedModule {
   const BeizePreparedModule({
-    required this.moduleId,
+    required this.moduleIndex,
     required this.frame,
     required this.value,
   });
 
-  final int moduleId;
+  final int moduleIndex;
   final BeizeCallFrame frame;
   final BeizeModuleValue value;
 }

@@ -494,12 +494,13 @@ class BeizeInterpreter {
           'Cannot throw value of "${err.kind.code}"',
         );
 
-      case BeizeOpCodes.opModule:
-        final int moduleId = chunk.codeAt(frame.ip);
-        final String name = frame.readConstantAt(frame.ip + 1) as String;
+      case BeizeOpCodes.opImport:
+        final int moduleIndex = chunk.codeAt(frame.ip);
+        final int asIndex = chunk.codeAt(frame.ip + 1);
+        final String name = frame.readConstantAt(asIndex) as String;
         frame.ip += 2;
         final BeizePreparedModule module = frame.vm.prepareModule(
-          moduleId,
+          moduleIndex,
           isEntrypoint: false,
         );
         namespace.declare(name, module.value);

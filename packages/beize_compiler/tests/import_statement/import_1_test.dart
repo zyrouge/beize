@@ -9,8 +9,8 @@ Future<void> main() async {
 
   test('$title - Bytecode', () async {
     final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestChunk expectedChunk = BeizeTestChunk();
-    expectedChunk.addOpCode(BeizeOpCodes.opModule);
+    final BeizeTestProgram expectedChunk = BeizeTestProgram();
+    expectedChunk.addOpCode(BeizeOpCodes.opImport);
     expectedChunk.addCode(1);
     expectedChunk.addConstant(0, 'dummy');
     expectedChunk.addOpCode(BeizeOpCodes.opLookup);
@@ -28,9 +28,9 @@ Future<void> main() async {
 
   test('$title - Bytecode (Dummy File)', () async {
     final BeizeChunk chunk = program.moduleAt(1).chunk;
-    final BeizeTestChunk expectedChunk = BeizeTestChunk();
+    final BeizeTestProgram expectedChunk = BeizeTestProgram();
     expectedChunk.addOpCode(BeizeOpCodes.opConstant);
-    final BeizeTestChunk expectedChunk_0 = BeizeTestChunk();
+    final BeizeTestProgram expectedChunk_0 = BeizeTestProgram();
     expectedChunk_0.addOpCode(BeizeOpCodes.opLookup);
     expectedChunk_0.addConstant(0, 'out');
     expectedChunk_0.addOpCode(BeizeOpCodes.opLookup);

@@ -9,7 +9,7 @@ Future<void> main() async {
 
   test('$title - Bytecode', () async {
     final BeizeChunk chunk = extractChunk(program);
-    final BeizeTestChunk expectedChunk = BeizeTestChunk();
+    final BeizeTestProgram expectedChunk = BeizeTestProgram();
     expectedChunk.addOpCode(BeizeOpCodes.opNull);
     expectedChunk.addOpCode(BeizeOpCodes.opDeclare);
     expectedChunk.addConstant(0, 'value');

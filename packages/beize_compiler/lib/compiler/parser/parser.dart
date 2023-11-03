@@ -209,29 +209,32 @@ abstract class BeizeParser {
     final String modulePath =
         compiler.resolveImportPath(compiler.previousToken.literal as String);
     final String moduleName = compiler.resolveRelativePath(modulePath);
-    bool loaded = true;
-    int moduleId = compiler.moduleNames.indexOf(moduleName);
-    if (moduleId == -1) {
-      loaded = false;
-      moduleId = compiler.moduleNames.length;
+    int moduleIndex = -1;
+    for (int i = 0; i < compiler.modules.length; i++) {
+      final int x = compiler.modules[i];
+      if (compiler.constants[x] == moduleName) {
+        moduleIndex = x;
+      }
     }
     compiler.consume(BeizeTokens.asKw);
     compiler.consume(BeizeTokens.identifier);
     final int asIndex = parseIdentifierConstant(compiler);
     compiler.consume(BeizeTokens.semi);
-    compiler.emitOpCode(BeizeOpCodes.opModule);
-    compiler.emitCode(moduleId);
-    compiler.emitCode(asIndex);
-    if (!loaded) {
+    compiler.emitOpCode(BeizeOpCodes.opImport);
+    if (moduleIndex == -1) {
+      moduleIndex = compiler.modules.length;
+      final int nameIndex = compiler.makeConstant(moduleName);
       final BeizeCompiler moduleCompiler = await compiler.createModuleCompiler(
-        moduleId,
+        nameIndex,
         modulePath,
         isAsync: false,
       );
-      compiler.moduleNames.add(moduleName);
-      compiler.modules.add(moduleCompiler.currentFunction);
+      compiler.makeConstant(moduleCompiler.currentFunction);
+      compiler.modules.add(nameIndex);
       await moduleCompiler.compile();
     }
+    compiler.emitCode(moduleIndex);
+    compiler.emitCode(asIndex);
   }
 
   static void parseMatchableStatement(
@@ -602,8 +605,9 @@ abstract class BeizeParser {
     bool cont = true;
     while (cont && functionCompiler.check(BeizeTokens.identifier)) {
       functionCompiler.consume(BeizeTokens.identifier);
-      final String arg = functionCompiler.previousToken.literal as String;
-      functionCompiler.currentFunction.arguments.add(arg);
+      final String argName = functionCompiler.previousToken.literal as String;
+      final int argIndex = compiler.makeConstant(argName);
+      functionCompiler.currentFunction.arguments.add(argIndex);
       cont = functionCompiler.match(BeizeTokens.comma);
     }
     if (functionCompiler.match(BeizeTokens.colon)) {

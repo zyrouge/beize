@@ -10,9 +10,10 @@ Future<void> main() async {
     entrypoint: 'main.beize',
     options: BeizeCompilerOptions(),
   );
-  print(program.serialize());
+  final BeizeSerializedConstant serialized = program.serialize();
+  print(serialized);
   final BeizeProgramConstant real =
-      BeizeProgramConstant.deserialize(program.serialize());
+      BeizeProgramConstant.deserialize(serialized);
   BeizeDisassembler.disassembleProgram(real);
   final BeizeVM vm = BeizeVM(real, BeizeVMOptions());
   await vm.run();
