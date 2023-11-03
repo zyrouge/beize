@@ -1,4 +1,5 @@
 import "./benchmark.beize" as benchmark;
+import "./benchmark.beize" as benchmarask;
 
 benchmarker := benchmark.createBenchmarker();
 benchmarker.start();

@@ -210,10 +210,10 @@ abstract class BeizeParser {
         compiler.resolveImportPath(compiler.previousToken.literal as String);
     final String moduleName = compiler.resolveRelativePath(modulePath);
     int moduleIndex = -1;
-    for (int i = 0; i < compiler.modules.length; i++) {
+    for (int i = 0; i < compiler.modules.length; i += 2) {
       final int x = compiler.modules[i];
       if (compiler.constants[x] == moduleName) {
-        moduleIndex = x;
+        moduleIndex = i;
       }
     }
     compiler.consume(BeizeTokens.asKw);
@@ -229,8 +229,10 @@ abstract class BeizeParser {
         modulePath,
         isAsync: false,
       );
-      compiler.makeConstant(moduleCompiler.currentFunction);
+      final int functionIndex =
+          compiler.makeConstant(moduleCompiler.currentFunction);
       compiler.modules.add(nameIndex);
+      compiler.modules.add(functionIndex);
       await moduleCompiler.compile();
     }
     compiler.emitCode(moduleIndex);

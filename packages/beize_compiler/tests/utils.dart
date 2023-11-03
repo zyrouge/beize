@@ -40,22 +40,23 @@ class BeizeTestProgram {
 
   BeizeTestChunk addModule(
     final int moduleIndex,
-    final int nameIndex,
+    final int moduleNameIndex,
     final String moduleName,
+    final int functionIndex,
   ) {
     int missingCount = moduleIndex - modules.length + 1;
     while (missingCount > 0) {
       modules.add(0);
       missingCount--;
     }
-    modules[moduleIndex] = nameIndex;
+    modules[moduleIndex] = moduleNameIndex;
     final BeizeTestChunk chunk = BeizeTestChunk(
       this,
       BeizeChunk.empty(moduleIndex),
     );
-    addConstant(nameIndex, moduleName);
+    addConstant(moduleNameIndex, moduleName);
     addConstant(
-      nameIndex + 1,
+      functionIndex,
       BeizeFunctionConstant(
         isAsync: true,
         arguments: <int>[],
@@ -104,13 +105,14 @@ String buildExpectedProgramCode(
   final StringBuffer output = buffer ?? StringBuffer();
   output.write('final BeizeTestProgram expectedProgram = BeizeTestProgram();');
   for (int i = 0; i < program.modules.length; i++) {
-    final int nameIndex = program.moduleAt(i);
-    final String moduleName = program.constantAt(i) as String;
+    final int moduleNameIndex = program.modules[i];
+    final int functionIndex = program.modules[i + 1];
+    final String moduleName = program.constantAt(moduleNameIndex) as String;
     final BeizeFunctionConstant function =
-        program.constantAt(nameIndex + 1) as BeizeFunctionConstant;
+        program.constantAt(functionIndex) as BeizeFunctionConstant;
     final String variableName = 'expectedModule$i';
     output.write(
-      "final BeizeTestChunk $variableName = expectedProgram.addModule($i, $nameIndex, '${escapedString(moduleName, "'")}');",
+      "final BeizeTestChunk $variableName = expectedProgram.addModule($i, $moduleNameIndex, '${escapedString(moduleName, "'")}', $functionIndex);",
     );
     buildExpectedChunkCode(
       program,
@@ -188,8 +190,7 @@ String buildExpectedChunkCode(
       case BeizeOpCodes.opImport:
         final int moduleIndex = chunk.codeAt(ip + 1);
         final int asIndex = chunk.codeAt(ip + 2);
-        final int nameIndex = program.moduleAt(moduleIndex);
-        final String name = program.constantAt(nameIndex) as String;
+        final String name = program.constantAt(asIndex) as String;
         output.writeln('$variableName.addCode($moduleIndex);');
         output.writeln("$variableName.addConstant($asIndex, '$name');");
         bump += 2;

@@ -278,8 +278,9 @@ class BeizeCompiler {
     compiler.prepare(isAsync: true);
     final int nameIndex =
         compiler.makeConstant(compiler.resolveRelativePath(fullPath));
-    compiler.makeConstant(compiler.currentFunction);
+    final int functionIndex = compiler.makeConstant(compiler.currentFunction);
     compiler.modules.add(nameIndex);
+    compiler.modules.add(functionIndex);
     await compiler.compile();
     return BeizeProgramConstant(
       modules: compiler.modules,
