@@ -2,7 +2,7 @@ import 'constant.dart';
 import 'function.dart';
 
 class BeizeProgramConstant {
-  const BeizeProgramConstant({
+  BeizeProgramConstant({
     required this.modules,
     required this.constants,
   });
