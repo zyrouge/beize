@@ -335,11 +335,9 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
   }
 
   List<BeizeValue> flat(final int level) {
-    final List<BeizeValue> flat = <BeizeValue>[];
+    List<BeizeValue> flat = elements.toList();
     for (int i = 0; i < level; i++) {
-      for (final BeizeValue x in elements) {
-        flat.addAll(x.cast<BeizeListValue>().elements);
-      }
+      flat = _flatOnce(flat.cast<BeizeListValue>());
     }
     return flat;
   }
@@ -373,4 +371,12 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
 
   @override
   int get kHashCode => elements.hashCode;
+}
+
+List<BeizeValue> _flatOnce(final List<BeizeValue> elements) {
+  final List<BeizeValue> flat = <BeizeValue>[];
+  for (final BeizeValue x in elements) {
+    flat.addAll(x.cast<BeizeListValue>().elements);
+  }
+  return flat;
 }
