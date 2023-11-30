@@ -76,7 +76,7 @@ class BeizeCallFrame {
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: vm,
       parent: this,
-      moduleIndex: moduleIndex,
+      moduleIndex: function.constant.moduleIndex,
       function: function.constant,
       namespace: namespace,
     );
