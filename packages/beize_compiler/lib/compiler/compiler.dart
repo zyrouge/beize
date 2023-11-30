@@ -55,6 +55,7 @@ class BeizeCompiler {
     required final bool isAsync,
   }) {
     currentFunction = BeizeFunctionConstant(
+      moduleIndex: moduleIndex,
       isAsync: isAsync,
       arguments: <int>[],
       chunk: BeizeChunk.empty(),
