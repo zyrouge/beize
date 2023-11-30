@@ -62,7 +62,6 @@ class BeizeVM {
     modules[moduleIndex] = value;
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: this,
-      moduleIndex: moduleIndex,
       function: program.moduleFunctionAt(moduleIndex),
       namespace: namespace,
       parent: !isEntrypoint ? topFrame : null,

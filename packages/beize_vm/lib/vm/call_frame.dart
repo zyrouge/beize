@@ -9,7 +9,6 @@ import 'vm.dart';
 class BeizeCallFrame {
   BeizeCallFrame({
     required this.vm,
-    required this.moduleIndex,
     required this.function,
     required this.namespace,
     this.parent,
@@ -22,7 +21,6 @@ class BeizeCallFrame {
 
   final BeizeVM vm;
   final BeizeCallFrame? parent;
-  final int moduleIndex;
   final BeizeFunctionConstant function;
   final BeizeNamespace namespace;
 
@@ -76,7 +74,6 @@ class BeizeCallFrame {
     final BeizeCallFrame frame = BeizeCallFrame(
       vm: vm,
       parent: this,
-      moduleIndex: function.constant.moduleIndex,
       function: function.constant,
       namespace: namespace,
     );
@@ -113,7 +110,7 @@ class BeizeCallFrame {
       vm.program.constantAt(function.chunk.codeAt(index));
 
   String toStackTraceLine(final int depth) {
-    final String moduleName = vm.program.moduleNameAt(moduleIndex);
+    final String moduleName = vm.program.moduleNameAt(function.moduleIndex);
     final int line = function.chunk.lineAt(sip);
     return '#$depth   $moduleName at line $line';
   }
