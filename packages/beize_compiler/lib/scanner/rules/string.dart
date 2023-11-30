@@ -62,31 +62,24 @@ abstract class BeizeStringScanner {
       switch (char) {
         case r'\':
           buffer.write(r'\');
-          break;
 
         case 't':
           buffer.write('\t');
-          break;
 
         case 'r':
           buffer.write('\r');
-          break;
 
         case 'n':
           buffer.write('\n');
-          break;
 
         case 'f':
           buffer.write('\f');
-          break;
 
         case 'b':
           buffer.write('\b');
-          break;
 
         case 'v':
           buffer.write('\v');
-          break;
 
         case 'u':
           final int end = i + 4;

@@ -364,15 +364,12 @@ abstract class BeizeParser {
 
       case BeizeTokens.minus:
         compiler.emitOpCode(BeizeOpCodes.opNegate);
-        break;
 
       case BeizeTokens.bang:
         compiler.emitOpCode(BeizeOpCodes.opNot);
-        break;
 
       case BeizeTokens.tilde:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseNot);
-        break;
 
       default:
         throw UnreachableException();
@@ -386,70 +383,54 @@ abstract class BeizeParser {
     switch (operator) {
       case BeizeTokens.equal:
         compiler.emitOpCode(BeizeOpCodes.opEqual);
-        break;
 
       case BeizeTokens.notEqual:
         compiler.emitOpCode(BeizeOpCodes.opEqual);
         compiler.emitOpCode(BeizeOpCodes.opNot);
-        break;
 
       case BeizeTokens.lesserThan:
         compiler.emitOpCode(BeizeOpCodes.opLess);
-        break;
 
       case BeizeTokens.lesserThanEqual:
         compiler.emitOpCode(BeizeOpCodes.opGreater);
         compiler.emitOpCode(BeizeOpCodes.opNot);
-        break;
 
       case BeizeTokens.greaterThan:
         compiler.emitOpCode(BeizeOpCodes.opGreater);
-        break;
 
       case BeizeTokens.greaterThanEqual:
         compiler.emitOpCode(BeizeOpCodes.opLess);
         compiler.emitOpCode(BeizeOpCodes.opNot);
-        break;
 
       case BeizeTokens.plus:
         compiler.emitOpCode(BeizeOpCodes.opAdd);
-        break;
 
       case BeizeTokens.minus:
         compiler.emitOpCode(BeizeOpCodes.opSubtract);
-        break;
 
       case BeizeTokens.asterisk:
         compiler.emitOpCode(BeizeOpCodes.opMultiply);
-        break;
 
       case BeizeTokens.slash:
         compiler.emitOpCode(BeizeOpCodes.opDivide);
-        break;
 
       case BeizeTokens.floor:
         compiler.emitOpCode(BeizeOpCodes.opFloor);
-        break;
 
       case BeizeTokens.modulo:
         compiler.emitOpCode(BeizeOpCodes.opModulo);
-        break;
 
       case BeizeTokens.exponent:
         compiler.emitOpCode(BeizeOpCodes.opExponent);
-        break;
 
       case BeizeTokens.ampersand:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseAnd);
-        break;
 
       case BeizeTokens.pipe:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseOr);
-        break;
 
       case BeizeTokens.caret:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseXor);
-        break;
 
       default:
         throw UnreachableException();

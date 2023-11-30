@@ -81,7 +81,6 @@ class BeizeInterpreter {
             value = result.value;
           }
           stack.push(value);
-          break;
 
         default:
           result = interpretCurrent();
@@ -108,12 +107,10 @@ class BeizeInterpreter {
       case BeizeOpCodes.opBeginScope:
         frame.scopeDepth++;
         namespace = namespace.enclosed;
-        break;
 
       case BeizeOpCodes.opEndScope:
         frame.scopeDepth--;
         namespace = namespace.parent!;
-        break;
 
       case BeizeOpCodes.opConstant:
         final BeizeConstant constant = frame.readConstantAt(frame.ip);
@@ -134,27 +131,21 @@ class BeizeInterpreter {
         }
         stack.push(value);
         frame.ip++;
-        break;
 
       case BeizeOpCodes.opTrue:
         stack.push(BeizeBooleanValue.trueValue);
-        break;
 
       case BeizeOpCodes.opFalse:
         stack.push(BeizeBooleanValue.falseValue);
-        break;
 
       case BeizeOpCodes.opNull:
         stack.push(BeizeNullValue.value);
-        break;
 
       case BeizeOpCodes.opPop:
         stack.pop();
-        break;
 
       case BeizeOpCodes.opTop:
         stack.push(stack.top());
-        break;
 
       case BeizeOpCodes.opJumpIfNull:
         final int offset = chunk.codeAt(frame.ip);
@@ -162,7 +153,6 @@ class BeizeInterpreter {
         if (stack.top() is BeizeNullValue) {
           frame.ip += offset;
         }
-        break;
 
       case BeizeOpCodes.opJumpIfFalse:
         final int offset = chunk.codeAt(frame.ip);
@@ -170,17 +160,14 @@ class BeizeInterpreter {
         if (stack.top().isFalsey) {
           frame.ip += offset;
         }
-        break;
 
       case BeizeOpCodes.opJump:
         final int offset = chunk.codeAt(frame.ip);
         frame.ip += offset + 1;
-        break;
 
       case BeizeOpCodes.opAbsoluteJump:
         final int offset = chunk.codeAt(frame.ip);
         frame.ip = offset;
-        break;
 
       case BeizeOpCodes.opCall:
         final int count = chunk.codeAt(frame.ip);
@@ -196,7 +183,6 @@ class BeizeInterpreter {
           return handleException(result.error);
         }
         stack.push(result.value);
-        break;
 
       case BeizeOpCodes.opReturn:
         frame.ip = chunk.length;
@@ -214,7 +200,6 @@ class BeizeInterpreter {
             print(text);
           }
         }
-        break;
 
       case BeizeOpCodes.opNegate:
         final BeizeValue a = stack.pop();
@@ -224,7 +209,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(a.negate);
-        break;
 
       case BeizeOpCodes.opBitwiseNot:
         final BeizeValue a = stack.pop();
@@ -234,17 +218,14 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue((~a.unsafeIntValue).toDouble()));
-        break;
 
       case BeizeOpCodes.opEqual:
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
         stack.push(BeizeBooleanValue(a.kHashCode == b.kHashCode));
-        break;
 
       case BeizeOpCodes.opNot:
         stack.push(BeizeBooleanValue(!stack.pop().isTruthy));
-        break;
 
       case BeizeOpCodes.opAdd:
         final BeizeValue b = stack.pop();
@@ -258,7 +239,6 @@ class BeizeInterpreter {
             'Cannot perform addition between "${a.kind.code}" and "${b.kind.code}"',
           );
         }
-        break;
 
       case BeizeOpCodes.opSubtract:
         final BeizeValue b = stack.pop();
@@ -269,7 +249,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue(a.value - b.value));
-        break;
 
       case BeizeOpCodes.opMultiply:
         final BeizeValue b = stack.pop();
@@ -280,7 +259,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue(a.value * b.value));
-        break;
 
       case BeizeOpCodes.opDivide:
         final BeizeValue b = stack.pop();
@@ -291,7 +269,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue(a.value / b.value));
-        break;
 
       case BeizeOpCodes.opFloor:
         final BeizeValue b = stack.pop();
@@ -302,7 +279,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue((a.value ~/ b.value).toDouble()));
-        break;
 
       case BeizeOpCodes.opModulo:
         final BeizeValue b = stack.pop();
@@ -313,7 +289,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue(a.value % b.value));
-        break;
 
       case BeizeOpCodes.opExponent:
         final BeizeValue b = stack.pop();
@@ -324,7 +299,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeNumberValue(pow(a.value, b.value).toDouble()));
-        break;
 
       case BeizeOpCodes.opLess:
         final BeizeValue b = stack.pop();
@@ -335,7 +309,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeBooleanValue(a.value < b.value));
-        break;
 
       case BeizeOpCodes.opGreater:
         final BeizeValue b = stack.pop();
@@ -346,7 +319,6 @@ class BeizeInterpreter {
           );
         }
         stack.push(BeizeBooleanValue(a.value > b.value));
-        break;
 
       case BeizeOpCodes.opBitwiseAnd:
         final BeizeValue b = stack.pop();
@@ -364,7 +336,6 @@ class BeizeInterpreter {
             'Cannot perform bitwise AND between "${a.kind.code}" and "${b.kind.code}"',
           );
         }
-        break;
 
       case BeizeOpCodes.opBitwiseOr:
         final BeizeValue b = stack.pop();
@@ -380,7 +351,6 @@ class BeizeInterpreter {
             'Cannot perform bitwise OR between "${a.kind.code}" and "${b.kind.code}"',
           );
         }
-        break;
 
       case BeizeOpCodes.opBitwiseXor:
         final BeizeValue b = stack.pop();
@@ -396,27 +366,23 @@ class BeizeInterpreter {
             'Cannot perform bitwise XOR between "${a.kind.code}" and "${b.kind.code}"',
           );
         }
-        break;
 
       case BeizeOpCodes.opDeclare:
         final BeizeValue value = stack.top();
         final String name = frame.readConstantAt(frame.ip) as String;
         frame.ip++;
         namespace.declare(name, value);
-        break;
 
       case BeizeOpCodes.opAssign:
         final BeizeValue value = stack.top();
         final String name = frame.readConstantAt(frame.ip) as String;
         frame.ip++;
         namespace.assign(name, value);
-        break;
 
       case BeizeOpCodes.opLookup:
         final String name = frame.readConstantAt(frame.ip) as String;
         frame.ip++;
         stack.push(namespace.lookup(name));
-        break;
 
       case BeizeOpCodes.opList:
         final int count = chunk.codeAt(frame.ip);
@@ -430,7 +396,6 @@ class BeizeInterpreter {
           values[i] = stack.pop();
         }
         stack.push(BeizeListValue(values));
-        break;
 
       case BeizeOpCodes.opObject:
         final int count = chunk.codeAt(frame.ip);
@@ -445,7 +410,6 @@ class BeizeInterpreter {
           obj.set(key, value);
         }
         stack.push(obj);
-        break;
 
       case BeizeOpCodes.opGetProperty:
         final BeizeValue name = stack.pop();
@@ -457,7 +421,6 @@ class BeizeInterpreter {
         }
         final BeizeValue value = obj.get(name);
         stack.push(value);
-        break;
 
       case BeizeOpCodes.opSetProperty:
         final BeizeValue value = stack.pop();
@@ -470,7 +433,6 @@ class BeizeInterpreter {
         }
         obj.set(name, value);
         stack.push(value);
-        break;
 
       case BeizeOpCodes.opBeginTry:
         final int offset = chunk.codeAt(frame.ip);
@@ -478,11 +440,9 @@ class BeizeInterpreter {
         frame.tryFrames.add(
           BeizeTryFrame(offset: offset, scopeDepth: frame.scopeDepth),
         );
-        break;
 
       case BeizeOpCodes.opEndTry:
         frame.tryFrames.removeLast();
-        break;
 
       case BeizeOpCodes.opThrow:
         final BeizeValue err = stack.pop();
@@ -513,7 +473,6 @@ class BeizeInterpreter {
             return handleException(result.error);
           }
         }
-        break;
 
       default:
         throw BeizeRuntimeExpection.unknownOpCode(opCode);
