@@ -42,10 +42,10 @@ packages:
     dependency: transitive
     description:
       name: lint
-      sha256: f4bd4dbaa39f4ae8836f2d1275f2f32bc68b3a8cce0a0735dd1f7a601f06682a
+      sha256: "77b3777e8e9adca8e942da1e835882ae3248dfa00488a2ebbdbc1f1a4aa3f4a7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.2.0"
   path:
     dependency: "direct main"
     description:
@@ -59,9 +59,9 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "9a635be15e5dead4913b1231fe9e53c060a13640"
+      resolved-ref: "9f3fc307c43ccb41de401083ff16b1e2db4479b0"
       url: "https://github.com/zyrouge/dart_zlint.git"
     source: git
     version: "0.0.0"
 sdks:
-  dart: ">=3.0.0 <4.0.0"
+  dart: ">=3.1.0 <4.0.0"
