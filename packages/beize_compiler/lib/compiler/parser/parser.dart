@@ -225,7 +225,7 @@ abstract class BeizeParser {
       moduleIndex = compiler.modules.length;
       final int nameIndex = compiler.makeConstant(moduleName);
       final BeizeCompiler moduleCompiler = await compiler.createModuleCompiler(
-        nameIndex,
+        moduleIndex,
         modulePath,
         isAsync: false,
       );
