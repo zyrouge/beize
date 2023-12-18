@@ -216,11 +216,6 @@ abstract class BeizeParser {
         moduleIndex = i;
       }
     }
-    compiler.consume(BeizeTokens.asKw);
-    compiler.consume(BeizeTokens.identifier);
-    final int asIndex = parseIdentifierConstant(compiler);
-    compiler.consume(BeizeTokens.semi);
-    compiler.emitOpCode(BeizeOpCodes.opImport);
     if (moduleIndex == -1) {
       moduleIndex = compiler.modules.length;
       final int nameIndex = compiler.makeConstant(moduleName);
@@ -235,8 +230,31 @@ abstract class BeizeParser {
       compiler.modules.add(functionIndex);
       await moduleCompiler.compile();
     }
-    compiler.emitCode(moduleIndex);
-    compiler.emitCode(asIndex);
+    if (compiler.match(BeizeTokens.onlyKw)) {
+      bool cont = true;
+      while (cont && !compiler.check(BeizeTokens.semi)) {
+        compiler.emitOpCode(BeizeOpCodes.opImport);
+        compiler.emitCode(moduleIndex);
+        compiler.consume(BeizeTokens.identifier);
+        final int onlyIndex = parseIdentifierConstant(compiler);
+        compiler.emitOpCode(BeizeOpCodes.opConstant);
+        compiler.emitCode(onlyIndex);
+        compiler.emitOpCode(BeizeOpCodes.opGetProperty);
+        compiler.emitOpCode(BeizeOpCodes.opDeclare);
+        compiler.emitCode(onlyIndex);
+        cont = compiler.match(BeizeTokens.comma);
+      }
+      compiler.consume(BeizeTokens.semi);
+    } else {
+      compiler.emitOpCode(BeizeOpCodes.opImport);
+      compiler.emitCode(moduleIndex);
+      compiler.consume(BeizeTokens.asKw);
+      compiler.consume(BeizeTokens.identifier);
+      final int asIndex = parseIdentifierConstant(compiler);
+      compiler.consume(BeizeTokens.semi);
+      compiler.emitOpCode(BeizeOpCodes.opDeclare);
+      compiler.emitCode(asIndex);
+    }
   }
 
   static void parseMatchableStatement(

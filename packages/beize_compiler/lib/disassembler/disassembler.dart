@@ -88,17 +88,15 @@ class BeizeDisassembler {
 
       case BeizeOpCodes.opImport:
         final int moduleIndex = chunk.codeAt(ip + 1);
-        final int asIndex = chunk.codeAt(ip + 2);
         final int nameIndex = program.modules[moduleIndex];
         final String moduleName = program.constantAt(nameIndex) as String;
-        final BeizeConstant importName = program.constantAt(asIndex);
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(module [$moduleIndex] = $moduleName, as [$asIndex] = $importName)',
+          '{so}(module [$moduleIndex] = $moduleName)',
         );
-        return 2;
+        return 1;
 
       default:
         writeInstruction(opCode, ip, chunk.lineAt(ip));

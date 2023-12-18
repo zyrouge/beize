@@ -456,22 +456,20 @@ class BeizeInterpreter {
 
       case BeizeOpCodes.opImport:
         final int moduleIndex = chunk.codeAt(frame.ip);
-        final int asIndex = chunk.codeAt(frame.ip + 1);
-        final String name = frame.vm.program.constantAt(asIndex) as String;
-        frame.ip += 2;
+        frame.ip++;
         final BeizeModuleValue? pValue = frame.vm.lookupModule(moduleIndex);
         if (pValue != null) {
-          namespace.declare(name, pValue);
+          stack.push(pValue);
         } else {
           final BeizePreparedModule module = frame.vm.prepareModule(
             moduleIndex,
             isEntrypoint: false,
           );
-          namespace.declare(name, module.value);
           final BeizeInterpreterResult result = frame.vm.loadModule(module);
           if (result.isFailure) {
             return handleException(result.error);
           }
+          stack.push(module.value);
         }
 
       default:

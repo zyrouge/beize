@@ -3,10 +3,10 @@ import 'package:test/test.dart';
 import '../utils.dart';
 
 Future<void> main() async {
-  const String title = '[Statement] If-ElseIf-Else (1)';
+  const String title = '[Statement] If-Else (1)';
   final BeizeProgramConstant program = await compileTestScript(
-    'if-elseif-else_statement',
-    'if-elseif-else_1.beize',
+    'if_else_statement',
+    'if_else_1.beize',
   );
 
   test('$title - Channel', () async {
