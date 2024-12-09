@@ -28,15 +28,12 @@ class BeizeCallFrame {
     final BeizeValue value,
     final List<BeizeValue> arguments,
   ) {
-    if (value is BeizeFunctionValue) {
-      if (value.isAsync) {
-        return callAsyncFunctionValue(arguments, value);
-      } else {
-        return callFunctionValue(arguments, value);
-      }
-    }
-    if (value is BeizeNativeFunctionValue) {
-      return callNativeFunction(value, arguments);
+    if (value is BeizeCallableValue) {
+      final BeizeCallableCall call = BeizeCallableCall(
+        frame: this,
+        arguments: arguments,
+      );
+      return value.kCall(call);
     }
     return BeizeInterpreterResult.fail(
       BeizeExceptionValue(
@@ -44,18 +41,6 @@ class BeizeCallFrame {
         getStackTrace(),
       ),
     );
-  }
-
-  BeizeInterpreterResult callNativeFunction(
-    final BeizeNativeFunctionValue function,
-    final List<BeizeValue> arguments,
-  ) {
-    final BeizeNativeFunctionCall call = BeizeNativeFunctionCall(
-      frame: this,
-      arguments: arguments,
-    );
-    final BeizeInterpreterResult result = function.execute(call);
-    return result;
   }
 
   BeizeCallFrame prepareCallFunctionValue(
@@ -95,7 +80,7 @@ class BeizeCallFrame {
   ) {
     final BeizeUnawaitedValue value = BeizeUnawaitedValue(
       arguments,
-      (final BeizeNativeFunctionCall call) async {
+      (final BeizeCallableCall call) async {
         final BeizeCallFrame frame =
             prepareCallFunctionValue(call.arguments, function);
         final BeizeInterpreterResult result =

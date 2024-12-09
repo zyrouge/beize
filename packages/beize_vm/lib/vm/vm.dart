@@ -3,8 +3,10 @@ import '../bytecode.dart';
 import '../errors/exports.dart';
 import '../values/exports.dart';
 import 'call_frame.dart';
+import 'globals.dart';
 import 'interpreter.dart';
 import 'namespace.dart';
+import 'natives/exports.dart';
 import 'result.dart';
 
 enum BeizeVMState {
@@ -31,12 +33,16 @@ class BeizeVMOptions {
 }
 
 class BeizeVM {
-  BeizeVM(this.program, this.options);
+  BeizeVM(this.program, this.options) {
+    globals.bind(globalNamespace);
+    BeizeNatives.bind(globalNamespace);
+  }
 
   final BeizeProgramConstant program;
   final BeizeVMOptions options;
 
-  final BeizeNamespace globalNamespace = BeizeNamespace.withNatives();
+  final BeizeGlobals globals = BeizeGlobals();
+  final BeizeNamespace globalNamespace = BeizeNamespace();
   final Map<int, BeizeModuleValue> modules = <int, BeizeModuleValue>{};
   late final BeizeCallFrame topFrame;
 

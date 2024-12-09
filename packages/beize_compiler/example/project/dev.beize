@@ -7,3 +7,4 @@ main := -> async {
 };
 
 main().await;
+print();

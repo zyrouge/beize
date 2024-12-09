@@ -1,15 +1,8 @@
 import '../errors/runtime_exception.dart';
 import '../values/exports.dart';
-import 'natives/exports.dart';
 
 class BeizeNamespace {
   BeizeNamespace([this.parent]);
-
-  factory BeizeNamespace.withNatives() {
-    final BeizeNamespace namespace = BeizeNamespace();
-    BeizeNatives.bind(namespace);
-    return namespace;
-  }
 
   final BeizeNamespace? parent;
   final Map<String, BeizeValue> values = <String, BeizeValue>{};

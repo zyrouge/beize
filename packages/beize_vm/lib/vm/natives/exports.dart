@@ -1,15 +1,7 @@
-export 'boolean.dart';
 export 'convert.dart';
 export 'datetime.dart';
-export 'exception.dart';
 export 'fiber.dart';
-export 'function.dart';
 export 'globals.dart';
-export 'list.dart';
 export 'math.dart';
 export 'natives.dart';
-export 'number.dart';
-export 'object.dart';
 export 'regexp.dart';
-export 'string.dart';
-export 'unawaited.dart';

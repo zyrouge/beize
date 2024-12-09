@@ -16,9 +16,7 @@ class BeizeFunctionConstant {
         moduleIndex: serialized[0] as int,
         isAsync: serialized[1] == 1,
         arguments: (serialized[2] as List<dynamic>).cast<int>(),
-        chunk: BeizeChunk.deserialize(
-          serialized[3] as BeizeSerializedConstant,
-        ),
+        chunk: BeizeChunk.deserialize(serialized[3] as BeizeSerializedConstant),
       );
 
   final int moduleIndex;
