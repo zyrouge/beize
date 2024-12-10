@@ -7,6 +7,9 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
   final String value;
 
   @override
+  final BeizeValueKind kind = BeizeValueKind.string;
+
+  @override
   BeizeValue get(final BeizeValue key) {
     if (key is BeizeStringValue) {
       switch (key.value) {
@@ -285,9 +288,6 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
     );
     return result;
   }
-
-  @override
-  final BeizeValueKind kind = BeizeValueKind.string;
 
   @override
   BeizeStringValue kClone() => BeizeStringValue(value);

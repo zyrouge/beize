@@ -1,8 +1,6 @@
 enum BeizeValueKind {
   boolean,
   function,
-  nativeFunction,
-  nativeAsyncFunction,
   unawaited,
   nullValue,
   number,
@@ -10,15 +8,12 @@ enum BeizeValueKind {
   object,
   list,
   module,
-  primitiveObject,
   exception,
 }
 
 final Map<BeizeValueKind, String> _kindCodeMap = <BeizeValueKind, String>{
   BeizeValueKind.boolean: 'Boolean',
   BeizeValueKind.function: 'Function',
-  BeizeValueKind.nativeFunction: 'NativeFunction',
-  BeizeValueKind.nativeAsyncFunction: 'NativeAsyncFunction',
   BeizeValueKind.unawaited: 'Unawaited',
   BeizeValueKind.nullValue: 'Null',
   BeizeValueKind.number: 'Number',
@@ -26,7 +21,6 @@ final Map<BeizeValueKind, String> _kindCodeMap = <BeizeValueKind, String>{
   BeizeValueKind.object: 'Object',
   BeizeValueKind.list: 'List',
   BeizeValueKind.module: 'Module',
-  BeizeValueKind.primitiveObject: 'PrimitiveObject',
   BeizeValueKind.exception: 'Exception',
 };
 

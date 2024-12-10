@@ -30,7 +30,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   final BeizeNativeExecuteFunction function;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.nativeFunction;
+  final BeizeValueKind kind = BeizeValueKind.function;
 
   @override
   BeizeInterpreterResult kCall(final BeizeFunctionCall call) => function(call);

@@ -9,10 +9,10 @@ class BeizeBooleanValue extends BeizePrimitiveObjectValue {
 
   final bool value;
 
-  BeizeBooleanValue get inversed => BeizeBooleanValue(!value);
-
   @override
   final BeizeValueKind kind = BeizeValueKind.boolean;
+
+  BeizeBooleanValue get inversed => BeizeBooleanValue(!value);
 
   @override
   BeizeBooleanValue kClone() => BeizeBooleanValue(value);

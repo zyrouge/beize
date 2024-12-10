@@ -7,6 +7,9 @@ class BeizeModuleValue extends BeizePrimitiveObjectValue {
   final BeizeNamespace namespace;
 
   @override
+  final BeizeValueKind kind = BeizeValueKind.module;
+
+  @override
   BeizeValue get(final BeizeValue key) {
     if (key is BeizeStringValue) {
       final BeizeValue? value = namespace.lookupOrNull(key.value);
@@ -25,9 +28,6 @@ class BeizeModuleValue extends BeizePrimitiveObjectValue {
     }
     return super.set(key, value);
   }
-
-  @override
-  final BeizeValueKind kind = BeizeValueKind.module;
 
   @override
   BeizeModuleValue kClone() => BeizeModuleValue(namespace);

@@ -8,6 +8,9 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
   final List<BeizeValue> elements;
 
   @override
+  final BeizeValueKind kind = BeizeValueKind.list;
+
+  @override
   BeizeValue get(final BeizeValue key) {
     if (key is BeizeStringValue) {
       switch (key.value) {
@@ -294,13 +297,17 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
         default:
       }
     }
-    if (key is BeizeNumberValue) return getIndex(key.intValue);
+    if (key is BeizeNumberValue) {
+      return getIndex(key.intValue);
+    }
     return super.get(key);
   }
 
   @override
   void set(final BeizeValue key, final BeizeValue value) {
-    if (key is BeizeNumberValue) return setIndex(key.intValue, value);
+    if (key is BeizeNumberValue) {
+      return setIndex(key.intValue, value);
+    }
     super.set(key, value);
   }
 
@@ -357,14 +364,22 @@ class BeizeListValue extends BeizePrimitiveObjectValue {
   int get length => elements.length;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.list;
-
-  @override
   BeizeListValue kClone() => BeizeListValue(elements.toList());
 
   @override
-  String kToString() =>
-      '[${elements.map((final BeizeValue x) => x.kToString()).join(', ')}]';
+  String kToString() {
+    final StringBuffer buffer = StringBuffer('[');
+    bool hasValues = false;
+    for (final BeizeValue x in elements) {
+      if (hasValues) {
+        buffer.write(', ');
+      }
+      hasValues = true;
+      buffer.write(x.kToString());
+    }
+    buffer.write(']');
+    return buffer.toString();
+  }
 
   @override
   bool get isTruthy => elements.isNotEmpty;

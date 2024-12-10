@@ -6,6 +6,9 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
 
   final double value;
 
+  @override
+  final BeizeValueKind kind = BeizeValueKind.number;
+
   int get unsafeIntValue => value.toInt();
 
   int get intValue {
@@ -92,9 +95,6 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
     }
     return super.get(key);
   }
-
-  @override
-  final BeizeValueKind kind = BeizeValueKind.number;
 
   @override
   BeizeNumberValue kClone() => BeizeNumberValue(value);

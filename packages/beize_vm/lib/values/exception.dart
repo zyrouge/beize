@@ -8,6 +8,9 @@ class BeizeExceptionValue extends BeizePrimitiveObjectValue {
   final String? dartStackTrace;
 
   @override
+  final BeizeValueKind kind = BeizeValueKind.exception;
+
+  @override
   BeizeValue get(final BeizeValue key) {
     if (key is BeizeStringValue) {
       switch (key.value) {
@@ -22,9 +25,6 @@ class BeizeExceptionValue extends BeizePrimitiveObjectValue {
     }
     return super.get(key);
   }
-
-  @override
-  final BeizeValueKind kind = BeizeValueKind.exception;
 
   @override
   BeizeExceptionValue kClone() =>

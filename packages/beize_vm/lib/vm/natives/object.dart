@@ -19,8 +19,8 @@ abstract class BeizeObjectNatives {
         (final BeizeFunctionCall call) {
           final BeizeListValue value = call.argumentAt(0);
           final BeizeObjectValue nValue = BeizeObjectValue();
-          for (final int x in value.keys.keys) {
-            nValue.set(value.keys[x]!, value.values[x]!);
+          for (final MapEntry<BeizeValue, BeizeValue> x in value.entries()) {
+            nValue.set(x.key, x.value);
           }
           return nValue;
         },
@@ -32,8 +32,8 @@ abstract class BeizeObjectNatives {
         (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue a = call.argumentAt(0);
           final BeizePrimitiveObjectValue b = call.argumentAt(1);
-          for (final int x in b.keys.keys) {
-            a.set(b.keys[x]!, b.values[x]!);
+          for (final MapEntry<BeizeValue, BeizeValue> x in b.entries()) {
+            a.set(x.key, x.value);
           }
           return a;
         },
@@ -53,7 +53,7 @@ abstract class BeizeObjectNatives {
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
-          return BeizeListValue(value.keys.values.toList());
+          return BeizeListValue(value.keys());
         },
       ),
     );
@@ -62,7 +62,7 @@ abstract class BeizeObjectNatives {
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
-          return BeizeListValue(value.values.values.toList());
+          return BeizeListValue(value.values());
         },
       ),
     );
@@ -90,15 +90,10 @@ abstract class BeizeObjectNatives {
   }
 
   static BeizeListValue entries(final BeizePrimitiveObjectValue value) {
-    final BeizeListValue result = BeizeListValue();
-    for (final int x in value.keys.keys) {
-      result.push(
-        BeizeListValue(<BeizeValue>[
-          value.keys[x]!,
-          value.values[x]!,
-        ]),
-      );
+    final BeizeListValue nValue = BeizeListValue();
+    for (final MapEntry<BeizeValue, BeizeValue> x in value.entries()) {
+      nValue.push(BeizeListValue(<BeizeValue>[x.key, x.value]));
     }
-    return result;
+    return nValue;
   }
 }
