@@ -7,7 +7,7 @@ abstract class BeizeExceptionNatives {
     value.set(
       BeizeStringValue('new'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue message = call.argumentAt(0);
           final BeizeValue stackTrace = call.argumentAt(1);
           return BeizeExceptionValue(

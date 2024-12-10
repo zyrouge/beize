@@ -8,7 +8,7 @@ abstract class BeizeFiberNatives {
     value.set(
       BeizeStringValue('wait'),
       BeizeNativeFunctionValue.async(
-        (final BeizeNativeFunctionCall call) async {
+        (final BeizeFunctionCall call) async {
           final BeizeNumberValue value = call.argumentAt(0);
           await Future<void>.delayed(
             Duration(milliseconds: value.unsafeIntValue),
@@ -20,7 +20,7 @@ abstract class BeizeFiberNatives {
     value.set(
       BeizeStringValue('runConcurrently'),
       BeizeNativeFunctionValue.async(
-        (final BeizeNativeFunctionCall call) async {
+        (final BeizeFunctionCall call) async {
           final BeizeListValue fns = call.argumentAt(0);
           final List<BeizeValue> result = await Future.wait(
             fns.elements.map(

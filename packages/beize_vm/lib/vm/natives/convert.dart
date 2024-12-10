@@ -9,7 +9,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('newBytesList'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeValue value = call.argumentAt(0);
           if (value is BeizeNullValue) {
             return newBytesList(<int>[]);
@@ -28,7 +28,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeAscii'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(ascii.encode(input.value));
         },
@@ -37,7 +37,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeAscii'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(ascii.decode(toBytes(input)));
         },
@@ -46,7 +46,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeBase64'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(base64Encode(toBytes(input)));
         },
@@ -55,7 +55,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeBase64'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(base64Decode(input.value));
         },
@@ -64,7 +64,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeLatin1'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(latin1.encode(input.value));
         },
@@ -73,7 +73,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeLatin1'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(latin1.decode(toBytes(input)));
         },
@@ -82,7 +82,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeUtf8'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(utf8.encode(input.value));
         },
@@ -91,7 +91,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeUtf8'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(utf8.decode(toBytes(input)));
         },
@@ -100,7 +100,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeJson'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeValue input = call.argumentAt(0);
           return BeizeStringValue(jsonEncode(toJson(input)));
         },
@@ -109,7 +109,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeJson'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return fromJson(jsonDecode(input.value));
         },

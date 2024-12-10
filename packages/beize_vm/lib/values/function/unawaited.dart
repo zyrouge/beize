@@ -2,7 +2,7 @@ import '../../vm/exports.dart';
 import '../exports.dart';
 
 typedef BeizeUnawaitedFunction = Future<BeizeInterpreterResult> Function(
-  BeizeNativeFunctionCall call,
+  BeizeFunctionCall call,
 );
 
 class BeizeUnawaitedValue extends BeizePrimitiveObjectValue {
@@ -13,7 +13,7 @@ class BeizeUnawaitedValue extends BeizePrimitiveObjectValue {
 
   Future<BeizeInterpreterResult> execute(final BeizeCallFrame frame) async {
     try {
-      final BeizeNativeFunctionCall call = BeizeNativeFunctionCall(
+      final BeizeFunctionCall call = BeizeFunctionCall(
         arguments: arguments,
         frame: frame,
       );

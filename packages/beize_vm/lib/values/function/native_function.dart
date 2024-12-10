@@ -2,15 +2,15 @@ import '../../vm/exports.dart';
 import '../exports.dart';
 
 typedef BeizeNativeExecuteFunction = BeizeInterpreterResult Function(
-  BeizeNativeFunctionCall call,
+  BeizeFunctionCall call,
 );
 
 typedef BeizeNativeSyncFunction = BeizeValue Function(
-  BeizeNativeFunctionCall call,
+  BeizeFunctionCall call,
 );
 
 typedef BeizeNativeAsyncFunction = Future<BeizeValue> Function(
-  BeizeNativeFunctionCall call,
+  BeizeFunctionCall call,
 );
 
 class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
@@ -29,13 +29,11 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
 
   final BeizeNativeExecuteFunction function;
 
-  BeizeInterpreterResult execute(final BeizeNativeFunctionCall call) {
-    final BeizeInterpreterResult result = function(call);
-    return result;
-  }
-
   @override
   final BeizeValueKind kind = BeizeValueKind.nativeFunction;
+
+  @override
+  BeizeInterpreterResult kCall(final BeizeFunctionCall call) => function(call);
 
   @override
   BeizeNativeFunctionValue kClone() => BeizeNativeFunctionValue(function);
@@ -52,7 +50,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   static BeizeNativeExecuteFunction convertSyncFunction(
     final BeizeNativeSyncFunction function,
   ) =>
-      (final BeizeNativeFunctionCall call) {
+      (final BeizeFunctionCall call) {
         try {
           final BeizeValue value = function(call);
           return BeizeInterpreterResult.success(value);
@@ -68,7 +66,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   static BeizeNativeExecuteFunction convertAsyncFunction(
     final BeizeNativeAsyncFunction function,
   ) =>
-      (final BeizeNativeFunctionCall call) {
+      (final BeizeFunctionCall call) {
         final BeizeValue value = BeizeUnawaitedValue(
           call.arguments,
           wrapAsyncFunction(function),
@@ -79,7 +77,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   static BeizeUnawaitedFunction wrapAsyncFunction(
     final BeizeNativeAsyncFunction function,
   ) =>
-      (final BeizeNativeFunctionCall call) async {
+      (final BeizeFunctionCall call) async {
         try {
           final BeizeValue value = await function(call);
           return BeizeInterpreterResult.success(value);

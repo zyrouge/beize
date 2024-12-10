@@ -7,7 +7,7 @@ abstract class BeizeBooleanNatives {
     value.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeValue value = call.argumentAt(0);
           return BeizeBooleanValue(value.isTruthy);
         },

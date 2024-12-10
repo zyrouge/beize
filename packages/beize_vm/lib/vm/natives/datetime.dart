@@ -7,7 +7,7 @@ abstract class BeizeDateTimeNatives {
     value.set(
       BeizeStringValue('fromMillisecondsSinceEpoch'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeNumberValue ms = call.argumentAt(0);
           return newDateTimeInst(
             DateTime.fromMillisecondsSinceEpoch(ms.intValue),
@@ -18,7 +18,7 @@ abstract class BeizeDateTimeNatives {
     value.set(
       BeizeStringValue('parse'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeStringValue value = call.argumentAt(0);
           return newDateTimeInst(DateTime.parse(value.value));
         },

@@ -7,7 +7,7 @@ abstract class BeizeUnawaitedNatives {
     value.set(
       BeizeStringValue('value'),
       BeizeNativeFunctionValue.async(
-        (final BeizeNativeFunctionCall call) async {
+        (final BeizeFunctionCall call) async {
           final BeizeValue value = call.argumentAt(0);
           return value;
         },

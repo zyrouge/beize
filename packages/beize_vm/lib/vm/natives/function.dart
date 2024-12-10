@@ -7,7 +7,7 @@ abstract class BeizeFunctionNatives {
     value.set(
       BeizeStringValue('call'),
       BeizeNativeFunctionValue(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeCallableValue fn = call.argumentAt(0);
           final BeizeListValue arguments = call.argumentAt(1);
           return call.frame.callValue(fn, arguments.elements);

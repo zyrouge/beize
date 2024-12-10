@@ -11,7 +11,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('random'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double value = random.nextDouble();
           return BeizeNumberValue(value);
         },
@@ -20,13 +20,13 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('pi'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) => BeizeNumberValue(pi),
+        (final BeizeFunctionCall call) => BeizeNumberValue(pi),
       ),
     );
     value.set(
       BeizeStringValue('sin'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(sin(a));
         },
@@ -35,7 +35,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('cos'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(cos(a));
         },
@@ -44,7 +44,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('tan'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(tan(a));
         },
@@ -53,7 +53,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('asin'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(asin(a));
         },
@@ -62,7 +62,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('acos'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(acos(a));
         },
@@ -71,7 +71,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('atan'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(atan(a));
         },
@@ -80,7 +80,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('atan2'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           final double b = call.argumentAt<BeizeNumberValue>(1).value;
           return BeizeNumberValue(atan2(a, b));
@@ -90,7 +90,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('exp'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(exp(a));
         },
@@ -99,7 +99,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('log'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(log(a));
         },
@@ -108,7 +108,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('min'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           final double b = call.argumentAt<BeizeNumberValue>(1).value;
           return BeizeNumberValue(min(a, b));
@@ -118,7 +118,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('max'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           final double b = call.argumentAt<BeizeNumberValue>(1).value;
           return BeizeNumberValue(max(a, b));
@@ -128,7 +128,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('pow'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           final double b = call.argumentAt<BeizeNumberValue>(1).value;
           return BeizeNumberValue(pow(a, b).toDouble());
@@ -138,7 +138,7 @@ abstract class BeizeMathNatives {
     value.set(
       BeizeStringValue('sqrt'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final double a = call.argumentAt<BeizeNumberValue>(0).value;
           return BeizeNumberValue(sqrt(a));
         },

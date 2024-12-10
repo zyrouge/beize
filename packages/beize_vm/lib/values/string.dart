@@ -27,7 +27,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'compareTo':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeNumberValue(
                 value.compareTo(other.value).toDouble(),
@@ -37,7 +37,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'contains':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeBooleanValue(value.contains(other.value));
             },
@@ -45,7 +45,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'startsWith':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeBooleanValue(value.startsWith(other.value));
             },
@@ -53,7 +53,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'endsWith':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeBooleanValue(value.endsWith(other.value));
             },
@@ -61,7 +61,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'indexOf':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeNumberValue(
                 value.indexOf(other.value).toDouble(),
@@ -71,7 +71,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'lastIndexOf':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue other = call.argumentAt(0);
               return BeizeNumberValue(
                 value.lastIndexOf(other.value).toDouble(),
@@ -81,7 +81,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'substring':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeNumberValue start = call.argumentAt(0);
               final BeizeNumberValue end = call.argumentAt(1);
               return BeizeStringValue(
@@ -92,7 +92,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'replaceFirst':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue from = call.argumentAt(0);
               final BeizeStringValue to = call.argumentAt(1);
               return BeizeStringValue(
@@ -103,7 +103,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'replaceAll':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue from = call.argumentAt(0);
               final BeizeStringValue to = call.argumentAt(1);
               return BeizeStringValue(
@@ -114,7 +114,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'replaceFirstMapped':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue result = replaceMapped(call, 1);
               return result;
             },
@@ -122,7 +122,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'replaceAllMapped':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeStringValue result = replaceMapped(call);
               return result;
             },
@@ -144,24 +144,21 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
           );
 
         case 'padLeft':
-          return BeizeNativeFunctionValue.sync(
-              (final BeizeNativeFunctionCall call) {
+          return BeizeNativeFunctionValue.sync((final BeizeFunctionCall call) {
             final BeizeNumberValue amount = call.argumentAt(0);
             final BeizeStringValue by = call.argumentAt(1);
             return BeizeStringValue(value.padLeft(amount.intValue, by.value));
           });
 
         case 'padRight':
-          return BeizeNativeFunctionValue.sync(
-              (final BeizeNativeFunctionCall call) {
+          return BeizeNativeFunctionValue.sync((final BeizeFunctionCall call) {
             final BeizeNumberValue amount = call.argumentAt(0);
             final BeizeStringValue by = call.argumentAt(1);
             return BeizeStringValue(value.padRight(amount.intValue, by.value));
           });
 
         case 'split':
-          return BeizeNativeFunctionValue.sync(
-              (final BeizeNativeFunctionCall call) {
+          return BeizeNativeFunctionValue.sync((final BeizeFunctionCall call) {
             final BeizeStringValue delimiter = call.argumentAt(0);
             return BeizeListValue(
               value
@@ -173,7 +170,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'codeUnitAt':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeNumberValue index = call.argumentAt(0);
               return BeizeNumberValue(
                 value.codeUnitAt(index.intValue).toDouble(),
@@ -183,7 +180,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'charAt':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeNumberValue index = call.argumentAt(0);
               return BeizeStringValue(value[index.intValue]);
             },
@@ -210,7 +207,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
 
         case 'format':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizePrimitiveObjectValue value = call.argumentAt(0);
               return BeizeStringValue(format(value));
             },
@@ -223,7 +220,7 @@ class BeizeStringValue extends BeizePrimitiveObjectValue {
   }
 
   BeizeStringValue replaceMapped(
-    final BeizeNativeFunctionCall call, [
+    final BeizeFunctionCall call, [
     final int? count,
   ]) {
     final BeizeStringValue pattern = call.argumentAt(0);

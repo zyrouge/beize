@@ -8,7 +8,7 @@ abstract class BeizeListNatives {
     value.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeValue value = call.argumentAt(0);
           if (value is BeizeListValue) {
             return value.kClone();
@@ -26,7 +26,7 @@ abstract class BeizeListNatives {
     value.set(
       BeizeStringValue('generate'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final int length = call.argumentAt<BeizeNumberValue>(0).intValue;
           final BeizeCallableValue predicate = call.argumentAt(1);
           final BeizeListValue result = BeizeListValue();
@@ -45,7 +45,7 @@ abstract class BeizeListNatives {
     value.set(
       BeizeStringValue('filled'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final int length = call.argumentAt<BeizeNumberValue>(0).intValue;
           final BeizeValue value = call.argumentAt(1);
           final BeizeListValue result =

@@ -71,7 +71,7 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
 
         case 'toPrecisionString':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) => BeizeStringValue(
+            (final BeizeFunctionCall call) => BeizeStringValue(
               value.toStringAsPrecision(
                 call.argumentAt<BeizeNumberValue>(0).intValue,
               ),
@@ -80,7 +80,7 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
 
         case 'toRadixString':
           return BeizeNativeFunctionValue.sync(
-            (final BeizeNativeFunctionCall call) => BeizeStringValue(
+            (final BeizeFunctionCall call) => BeizeStringValue(
               intValue.toRadixString(
                 call.argumentAt<BeizeNumberValue>(0).intValue,
               ),

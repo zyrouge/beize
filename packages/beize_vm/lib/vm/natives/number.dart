@@ -24,7 +24,7 @@ abstract class BeizeNumberNatives {
     value.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final String value = call.argumentAt(0).kToString();
           final double? parsed = double.tryParse(value);
           if (parsed is double) return BeizeNumberValue(parsed);
@@ -35,7 +35,7 @@ abstract class BeizeNumberNatives {
     value.set(
       BeizeStringValue('fromOrNull'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final String value = call.argumentAt(0).kToString();
           final double? parsed = double.tryParse(value);
           if (parsed is double) return BeizeNumberValue(parsed);
@@ -46,7 +46,7 @@ abstract class BeizeNumberNatives {
     value.set(
       BeizeStringValue('fromRadix'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final String value = call.argumentAt(0).kToString();
           final BeizeNumberValue radix = call.argumentAt(1);
           final double? parsed =
@@ -59,7 +59,7 @@ abstract class BeizeNumberNatives {
     value.set(
       BeizeStringValue('fromRadixOrNull'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final String value = call.argumentAt(0).kToString();
           final BeizeNumberValue radix = call.argumentAt(1);
           final double? parsed =

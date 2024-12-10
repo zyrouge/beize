@@ -7,7 +7,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeObjectValue value = call.argumentAt(0);
           return value.kClone();
         },
@@ -16,7 +16,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('fromEntries'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeListValue value = call.argumentAt(0);
           final BeizeObjectValue nValue = BeizeObjectValue();
           for (final int x in value.keys.keys) {
@@ -29,7 +29,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('apply'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue a = call.argumentAt(0);
           final BeizePrimitiveObjectValue b = call.argumentAt(1);
           for (final int x in b.keys.keys) {
@@ -42,7 +42,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('entries'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
           return entries(value);
         },
@@ -51,7 +51,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('keys'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
           return BeizeListValue(value.keys.values.toList());
         },
@@ -60,7 +60,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('values'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
           return BeizeListValue(value.values.values.toList());
         },
@@ -69,7 +69,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('clone'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
           return value.kClone();
         },
@@ -78,7 +78,7 @@ abstract class BeizeObjectNatives {
     value.set(
       BeizeStringValue('deleteProperty'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
           final BeizeValue key = call.argumentAt(1);
           value.delete(key);

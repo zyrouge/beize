@@ -18,7 +18,7 @@ class BeizeFunctionValue extends BeizePrimitiveObjectValue
       switch (key.value) {
         case 'call':
           return BeizeNativeFunctionValue(
-            (final BeizeNativeFunctionCall call) {
+            (final BeizeFunctionCall call) {
               final BeizeListValue arguments = call.argumentAt(0);
               return call.frame.callValue(this, arguments.elements);
             },
@@ -32,6 +32,26 @@ class BeizeFunctionValue extends BeizePrimitiveObjectValue
 
   @override
   final BeizeValueKind kind = BeizeValueKind.function;
+
+  @override
+  BeizeInterpreterResult kCall(final BeizeFunctionCall call) {
+    if (!constant.isAsync) {
+      final BeizeCallFrame frame =
+          call.frame.prepareCallFunctionValue(call.arguments, this);
+      return BeizeInterpreter(frame).run();
+    }
+    final BeizeUnawaitedValue value = BeizeUnawaitedValue(
+      call.arguments,
+      (final BeizeFunctionCall nCall) async {
+        final BeizeCallFrame frame =
+            nCall.frame.prepareCallFunctionValue(nCall.arguments, this);
+        final BeizeInterpreterResult result =
+            await BeizeInterpreter(frame).runAsync();
+        return result;
+      },
+    );
+    return BeizeInterpreterResult.success(value);
+  }
 
   @override
   BeizeFunctionValue kClone() =>

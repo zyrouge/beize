@@ -7,7 +7,7 @@ abstract class BeizeStringNatives {
     value.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final String value = call.argumentAt(0).kToString();
           return BeizeStringValue(value);
         },
@@ -16,7 +16,7 @@ abstract class BeizeStringNatives {
     value.set(
       BeizeStringValue('fromCodeUnit'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeNumberValue value = call.argumentAt(0);
           return BeizeStringValue(String.fromCharCode(value.intValue));
         },
@@ -25,7 +25,7 @@ abstract class BeizeStringNatives {
     value.set(
       BeizeStringValue('fromCodeUnits'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeNativeFunctionCall call) {
+        (final BeizeFunctionCall call) {
           final BeizeListValue value = call.argumentAt(0);
           return BeizeStringValue(
             String.fromCharCodes(

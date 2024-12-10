@@ -2,8 +2,8 @@ import '../../errors/exports.dart';
 import '../../vm/exports.dart';
 import '../exports.dart';
 
-class BeizeNativeFunctionCall {
-  BeizeNativeFunctionCall({
+class BeizeFunctionCall {
+  BeizeFunctionCall({
     required this.frame,
     required this.arguments,
   });

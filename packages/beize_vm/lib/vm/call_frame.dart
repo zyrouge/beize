@@ -1,6 +1,5 @@
 import '../bytecode.dart';
 import '../values/exports.dart';
-import 'interpreter.dart';
 import 'namespace.dart';
 import 'result.dart';
 import 'try_frame.dart';
@@ -28,15 +27,12 @@ class BeizeCallFrame {
     final BeizeValue value,
     final List<BeizeValue> arguments,
   ) {
-    if (value is BeizeFunctionValue) {
-      if (value.isAsync) {
-        return callAsyncFunctionValue(arguments, value);
-      } else {
-        return callFunctionValue(arguments, value);
-      }
-    }
-    if (value is BeizeNativeFunctionValue) {
-      return callNativeFunction(value, arguments);
+    if (value is BeizeCallableValue) {
+      final BeizeFunctionCall call = BeizeFunctionCall(
+        frame: this,
+        arguments: arguments,
+      );
+      return value.kCall(call);
     }
     return BeizeInterpreterResult.fail(
       BeizeExceptionValue(
@@ -44,18 +40,6 @@ class BeizeCallFrame {
         getStackTrace(),
       ),
     );
-  }
-
-  BeizeInterpreterResult callNativeFunction(
-    final BeizeNativeFunctionValue function,
-    final List<BeizeValue> arguments,
-  ) {
-    final BeizeNativeFunctionCall call = BeizeNativeFunctionCall(
-      frame: this,
-      arguments: arguments,
-    );
-    final BeizeInterpreterResult result = function.execute(call);
-    return result;
   }
 
   BeizeCallFrame prepareCallFunctionValue(
@@ -78,32 +62,6 @@ class BeizeCallFrame {
       namespace: namespace,
     );
     return frame;
-  }
-
-  BeizeInterpreterResult callFunctionValue(
-    final List<BeizeValue> arguments,
-    final BeizeFunctionValue function,
-  ) {
-    final BeizeCallFrame frame = prepareCallFunctionValue(arguments, function);
-    final BeizeInterpreterResult result = BeizeInterpreter(frame).run();
-    return result;
-  }
-
-  BeizeInterpreterResult callAsyncFunctionValue(
-    final List<BeizeValue> arguments,
-    final BeizeFunctionValue function,
-  ) {
-    final BeizeUnawaitedValue value = BeizeUnawaitedValue(
-      arguments,
-      (final BeizeNativeFunctionCall call) async {
-        final BeizeCallFrame frame =
-            prepareCallFunctionValue(call.arguments, function);
-        final BeizeInterpreterResult result =
-            await BeizeInterpreter(frame).runAsync();
-        return result;
-      },
-    );
-    return BeizeInterpreterResult.success(value);
   }
 
   BeizeConstant readConstantAt(final int index) =>
