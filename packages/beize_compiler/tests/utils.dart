@@ -23,7 +23,7 @@ Future<List<String>> executeTestScript(
   final BeizeVM vm = BeizeVM(program, BeizeVMOptions());
   final List<String> output = <String>[];
   final BeizeNativeFunctionValue out = BeizeNativeFunctionValue.sync(
-    (final BeizeCallableCall call) {
+    (final BeizeNativeFunctionCall call) {
       final BeizeStringValue value = call.argumentAt(0).cast();
       output.add(value.value);
       return BeizeNullValue.value;

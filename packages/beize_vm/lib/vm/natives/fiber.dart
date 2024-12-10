@@ -4,11 +4,11 @@ import '../exports.dart';
 
 abstract class BeizeFiberNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeObjectValue();
     value.set(
       BeizeStringValue('wait'),
       BeizeNativeFunctionValue.async(
-        (final BeizeCallableCall call) async {
+        (final BeizeNativeFunctionCall call) async {
           final BeizeNumberValue value = call.argumentAt(0);
           await Future<void>.delayed(
             Duration(milliseconds: value.unsafeIntValue),
@@ -20,7 +20,7 @@ abstract class BeizeFiberNatives {
     value.set(
       BeizeStringValue('runConcurrently'),
       BeizeNativeFunctionValue.async(
-        (final BeizeCallableCall call) async {
+        (final BeizeNativeFunctionCall call) async {
           final BeizeListValue fns = call.argumentAt(0);
           final List<BeizeValue> result = await Future.wait(
             fns.elements.map(
@@ -28,7 +28,7 @@ abstract class BeizeFiberNatives {
                 BeizeValue value =
                     call.frame.callValue(x, <BeizeValue>[]).unwrapUnsafe();
                 while (value is BeizeUnawaitedValue) {
-                  value = await value.kExecute(call.frame).unwrapUnsafe();
+                  value = await value.execute(call.frame).unwrapUnsafe();
                 }
                 return value;
               },

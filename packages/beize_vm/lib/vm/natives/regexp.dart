@@ -3,11 +3,11 @@ import '../exports.dart';
 
 abstract class BeizeRegExpNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeObjectValue();
     value.set(
       BeizeStringValue('new'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue value = call.argumentAt(0);
           final BeizeValue flags = call.argumentAt(1);
           return newRegExp(
@@ -28,7 +28,7 @@ abstract class BeizeRegExpNatives {
       multiLine: flags.contains('m'),
       unicode: flags.contains('u'),
     );
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeObjectValue();
     value.set(
       BeizeStringValue('isCaseInsensitive'),
       BeizeBooleanValue(!regex.isCaseSensitive),
@@ -52,7 +52,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('hasMatch'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return BeizeBooleanValue(regex.hasMatch(input.value));
         },
@@ -61,7 +61,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('stringMatch'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final String? match = regex.stringMatch(input.value);
           return match is String
@@ -73,7 +73,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('firstMatch'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final RegExpMatch? match = regex.firstMatch(input.value);
           return match is RegExpMatch
@@ -85,7 +85,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('allMatches'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final Iterable<RegExpMatch> matches = regex.allMatches(input.value);
           return BeizeListValue(matches.map(newRegExpMatch).toList());
@@ -95,7 +95,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('replaceFirst'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
@@ -107,7 +107,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('replaceAll'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
@@ -119,7 +119,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('replaceFirstMapped'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue result = replaceMapped(regex, call, 1);
           return result;
         },
@@ -128,7 +128,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('replaceAllMapped'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue result = replaceMapped(regex, call);
           return result;
         },
@@ -138,7 +138,7 @@ abstract class BeizeRegExpNatives {
   }
 
   static BeizeValue newRegExpMatch(final RegExpMatch match) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeObjectValue();
     value.set(
       BeizeStringValue('input'),
       BeizeStringValue(match.input),
@@ -156,7 +156,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('namedGroup'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           final String? result = match.namedGroup(input.value);
           return result is String
@@ -168,7 +168,7 @@ abstract class BeizeRegExpNatives {
     value.set(
       BeizeStringValue('group'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeNumberValue input = call.argumentAt(0);
           final String? result = match.group(input.intValue);
           return result is String
@@ -182,7 +182,7 @@ abstract class BeizeRegExpNatives {
 
   static BeizeStringValue replaceMapped(
     final RegExp regex,
-    final BeizeCallableCall call, [
+    final BeizeNativeFunctionCall call, [
     final int? count,
   ]) {
     final BeizeStringValue input = call.argumentAt(0);

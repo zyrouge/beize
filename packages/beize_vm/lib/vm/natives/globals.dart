@@ -5,7 +5,7 @@ abstract class BeizeGlobalsNatives {
   static void bind(final BeizeNamespace namespace) {
     namespace.declare(
       'typeof',
-      BeizeNativeFunctionValue.sync((final BeizeCallableCall call) {
+      BeizeNativeFunctionValue.sync((final BeizeNativeFunctionCall call) {
         final BeizeValue value = call.argumentAt(0);
         return BeizeStringValue(value.kind.code);
       }),

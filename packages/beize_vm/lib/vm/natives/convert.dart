@@ -5,11 +5,11 @@ import '../namespace.dart';
 
 abstract class BeizeConvertNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeObjectValue();
     value.set(
       BeizeStringValue('newBytesList'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeValue value = call.argumentAt(0);
           if (value is BeizeNullValue) {
             return newBytesList(<int>[]);
@@ -28,7 +28,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeAscii'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(ascii.encode(input.value));
         },
@@ -37,8 +37,8 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeAscii'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
-          final BeizeMapValue input = call.argumentAt(0);
+        (final BeizeNativeFunctionCall call) {
+          final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(ascii.decode(toBytes(input)));
         },
       ),
@@ -46,8 +46,8 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeBase64'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
-          final BeizeMapValue input = call.argumentAt(0);
+        (final BeizeNativeFunctionCall call) {
+          final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(base64Encode(toBytes(input)));
         },
       ),
@@ -55,7 +55,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeBase64'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(base64Decode(input.value));
         },
@@ -64,7 +64,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeLatin1'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(latin1.encode(input.value));
         },
@@ -73,8 +73,8 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeLatin1'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
-          final BeizeMapValue input = call.argumentAt(0);
+        (final BeizeNativeFunctionCall call) {
+          final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(latin1.decode(toBytes(input)));
         },
       ),
@@ -82,7 +82,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeUtf8'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return newBytesList(utf8.encode(input.value));
         },
@@ -91,8 +91,8 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeUtf8'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
-          final BeizeMapValue input = call.argumentAt(0);
+        (final BeizeNativeFunctionCall call) {
+          final BeizeObjectValue input = call.argumentAt(0);
           return BeizeStringValue(utf8.decode(toBytes(input)));
         },
       ),
@@ -100,7 +100,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('encodeJson'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeValue input = call.argumentAt(0);
           return BeizeStringValue(jsonEncode(toJson(input)));
         },
@@ -109,7 +109,7 @@ abstract class BeizeConvertNatives {
     value.set(
       BeizeStringValue('decodeJson'),
       BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
+        (final BeizeNativeFunctionCall call) {
           final BeizeStringValue input = call.argumentAt(0);
           return fromJson(jsonDecode(input.value));
         },
@@ -118,7 +118,7 @@ abstract class BeizeConvertNatives {
     namespace.declare('Convert', value);
   }
 
-  static List<int> toBytes(final BeizeMapValue bytesList) {
+  static List<int> toBytes(final BeizeObjectValue bytesList) {
     if (bytesList.internals.containsKey('bytes')) {
       return bytesList.internals['bytes'] as List<int>;
     }
@@ -126,7 +126,7 @@ abstract class BeizeConvertNatives {
   }
 
   static BeizeValue newBytesList(final List<int> bytes) {
-    final BeizeMapValue bytesList = BeizeMapValue();
+    final BeizeObjectValue bytesList = BeizeObjectValue();
     bytesList.internals['bytes'] = bytes;
     bytesList.set(
       BeizeStringValue('bytes'),
@@ -153,7 +153,7 @@ abstract class BeizeConvertNatives {
       return list;
     }
     if (json is Map<dynamic, dynamic>) {
-      final BeizeMapValue obj = BeizeMapValue();
+      final BeizeObjectValue obj = BeizeObjectValue();
       for (final MapEntry<Object?, Object?> x in json.entries) {
         final BeizeValue key = fromJson(x.key);
         final BeizeValue value = fromJson(x.value);
@@ -179,9 +179,9 @@ abstract class BeizeConvertNatives {
         return value.cast<BeizeNumberValue>().numValue;
 
       case BeizeValueKind.object:
-        final BeizeMapValue obj = value.cast();
+        final BeizeObjectValue obj = value.cast();
         final Map<Object?, Object?> json = <Object?, Object?>{};
-        for (final BeizeValuePair x in obj.entries()) {
+        for (final MapEntry<BeizeValue, BeizeValue> x in obj.entries()) {
           final Object? key = toJson(x.key);
           final Object? value = toJson(x.value);
           json[key] = value;

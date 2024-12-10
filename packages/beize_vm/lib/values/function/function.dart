@@ -2,7 +2,7 @@ import '../../bytecode.dart';
 import '../../vm/exports.dart';
 import '../exports.dart';
 
-class BeizeFunctionValue extends BeizeNativeObjectValue
+class BeizeFunctionValue extends BeizePrimitiveObjectValue
     implements BeizeCallableValue {
   BeizeFunctionValue({
     required this.constant,
@@ -12,44 +12,33 @@ class BeizeFunctionValue extends BeizeNativeObjectValue
   final BeizeFunctionConstant constant;
   final BeizeNamespace namespace;
 
+  @override
+  BeizeValue get(final BeizeValue key) {
+    if (key is BeizeStringValue) {
+      switch (key.value) {
+        case 'call':
+          return BeizeNativeFunctionValue(
+            (final BeizeNativeFunctionCall call) {
+              final BeizeListValue arguments = call.argumentAt(0);
+              return call.frame.callValue(this, arguments.elements);
+            },
+          );
+      }
+    }
+    return super.get(key);
+  }
+
   bool get isAsync => constant.isAsync;
 
   @override
   final BeizeValueKind kind = BeizeValueKind.function;
 
   @override
-  BeizeInterpreterResult kCall(final BeizeCallableCall call) {
-    if (!constant.isAsync) {
-      final BeizeInterpreterResult result = BeizeInterpreter(call.frame).run();
-      return result;
-    }
-    final BeizeUnawaitedValue value = BeizeUnawaitedValue(
-      call.arguments,
-      (final BeizeCallableCall nCall) async {
-        final BeizeCallFrame frame =
-            nCall.frame.prepareCallFunctionValue(nCall.arguments, this);
-        final BeizeInterpreterResult result =
-            await BeizeInterpreter(frame).runAsync();
-        return result;
-      },
-    );
-    return BeizeInterpreterResult.success(value);
-  }
-
-  @override
-  BeizeFunctionValue kClone() => BeizeFunctionValue(
-        constant: constant,
-        namespace: namespace,
-      );
+  BeizeFunctionValue kClone() =>
+      BeizeFunctionValue(constant: constant, namespace: namespace);
 
   @override
   String kToString() => '<function>';
-
-  @override
-  BeizeClassValue kClassInternal(final BeizeVM vm) => vm.globals.functionClass;
-
-  @override
-  BeizeClassValue get kClass => throw UnimplementedError();
 
   @override
   bool get isTruthy => true;

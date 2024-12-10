@@ -74,7 +74,7 @@ class BeizeInterpreter {
         case BeizeOpCodes.opAwait:
           BeizeValue value = stack.pop();
           while (value is BeizeUnawaitedValue) {
-            final BeizeInterpreterResult result = await value.kExecute(frame);
+            final BeizeInterpreterResult result = await value.execute(frame);
             if (result.isFailure) {
               return handleExceptionAsync(result.error);
             }
@@ -133,10 +133,10 @@ class BeizeInterpreter {
         frame.ip++;
 
       case BeizeOpCodes.opTrue:
-        stack.push(frame.vm.globals.trueValue);
+        stack.push(BeizeBooleanValue.trueValue);
 
       case BeizeOpCodes.opFalse:
-        stack.push(frame.vm.globals.falseValue);
+        stack.push(BeizeBooleanValue.falseValue);
 
       case BeizeOpCodes.opNull:
         stack.push(BeizeNullValue.value);
@@ -208,7 +208,7 @@ class BeizeInterpreter {
             'Cannot perform negate on "${a.kind.code}"',
           );
         }
-        stack.push(BeizeNumberValue(-a.value));
+        stack.push(a.negate);
 
       case BeizeOpCodes.opBitwiseNot:
         final BeizeValue a = stack.pop();
@@ -400,7 +400,7 @@ class BeizeInterpreter {
       case BeizeOpCodes.opObject:
         final int count = chunk.codeAt(frame.ip);
         frame.ip++;
-        final BeizeMapValue obj = BeizeMapValue();
+        final BeizeObjectValue obj = BeizeObjectValue();
         for (int i = 0; i < count; i++) {
           final BeizeValue value = stack.pop();
           final BeizeValue key = stack.pop();
@@ -414,7 +414,7 @@ class BeizeInterpreter {
       case BeizeOpCodes.opGetProperty:
         final BeizeValue name = stack.pop();
         final BeizeValue obj = stack.pop();
-        if (obj is! BeizeObjectValue) {
+        if (obj is! BeizePrimitiveObjectValue) {
           return handleInvalidMemberAccess(
             'Cannot use member accessor on "${obj.kind.code}"',
           );
@@ -426,7 +426,7 @@ class BeizeInterpreter {
         final BeizeValue value = stack.pop();
         final BeizeValue name = stack.pop();
         final BeizeValue obj = stack.pop();
-        if (obj is! BeizeObjectValue) {
+        if (obj is! BeizePrimitiveObjectValue) {
           return handleInvalidMemberAccess(
             'Cannot do member assign on "${obj.kind.code}"',
           );
