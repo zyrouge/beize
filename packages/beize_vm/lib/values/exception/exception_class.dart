@@ -2,6 +2,9 @@ import '../exports.dart';
 
 class BeizeExceptionClassValue extends BeizeNativeClassValue {
   @override
+  bool kInstance(final BeizeObjectValue value) => value is BeizeExceptionValue;
+
+  @override
   BeizeExceptionValue kInstantiate(final BeizeCallableCall call) {
     final BeizeStringValue message = call.argumentAt(0);
     final BeizeValue stackTrace = call.argumentAt(1);

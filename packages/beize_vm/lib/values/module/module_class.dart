@@ -2,9 +2,11 @@ import '../exports.dart';
 
 class BeizeModuleClassValue extends BeizeNativeClassValue {
   @override
-  BeizeObjectValue kInstantiate(final BeizeCallableCall call) {
-    throw UnimplementedError();
-  }
+  bool kInstance(final BeizeObjectValue value) => true;
+
+  @override
+  BeizeObjectValue kInstantiate(final BeizeCallableCall call) =>
+      throw UnimplementedError();
 
   @override
   BeizeModuleClassValue kClone() => this;

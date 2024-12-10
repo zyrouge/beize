@@ -450,6 +450,9 @@ abstract class BeizeParser {
       case BeizeTokens.caret:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseXor);
 
+      case BeizeTokens.isKw:
+        compiler.emitOpCode(BeizeOpCodes.opIs);
+
       default:
         throw UnreachableException();
     }

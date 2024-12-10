@@ -2,8 +2,8 @@ import '../exports.dart';
 
 class BeizeFunctionClassValue extends BeizeNativeClassValue {
   BeizeFunctionClassValue() {
-    set(
-      BeizeStringValue('call'),
+    setField(
+      'call',
       BeizeNativeFunctionValue(
         (final BeizeCallableCall call) {
           final BeizeCallableValue function = call.argumentAt(0);
@@ -15,9 +15,12 @@ class BeizeFunctionClassValue extends BeizeNativeClassValue {
   }
 
   @override
+  bool kInstance(final BeizeObjectValue value) => value is BeizeCallableValue;
+
+  @override
   BeizeCallableValue kInstantiate(final BeizeCallableCall call) {
     final BeizeCallableValue value = call.argumentAt(0);
-    return value;
+    return value.kClone() as BeizeCallableValue;
   }
 
   @override

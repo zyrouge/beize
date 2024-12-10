@@ -96,7 +96,7 @@ class BeizeNumberValue extends BeizeNativeObjectValue {
   final BeizeValueKind kind = BeizeValueKind.number;
 
   @override
-  BeizeNumberValue kClone() => BeizeNumberValue(value);
+  BeizeNumberValue kClone() => BeizeNumberValue(value)..kCopyFrom(this);
 
   @override
   String kToString() {

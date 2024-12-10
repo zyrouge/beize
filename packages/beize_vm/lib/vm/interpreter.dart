@@ -367,6 +367,15 @@ class BeizeInterpreter {
           );
         }
 
+      case BeizeOpCodes.opIs:
+        final BeizeValue b = stack.pop();
+        final BeizeValue a = stack.pop();
+        stack.push(
+          BeizeClassValueUtils.isClassInstance(a, b)
+              ? frame.vm.globals.trueValue
+              : frame.vm.globals.falseValue,
+        );
+
       case BeizeOpCodes.opDeclare:
         final BeizeValue value = stack.top();
         final String name = frame.readConstantAt(frame.ip) as String;

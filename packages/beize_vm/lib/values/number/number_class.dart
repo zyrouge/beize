@@ -3,24 +3,12 @@ import '../exports.dart';
 
 class BeizeNumberClassValue extends BeizeNativeClassValue {
   BeizeNumberClassValue() {
-    set(
-      BeizeStringValue('infinity'),
-      BeizeNumberValue(double.infinity),
-    );
-    set(
-      BeizeStringValue('negativeInfinity'),
-      BeizeNumberValue(double.negativeInfinity),
-    );
-    set(
-      BeizeStringValue('NaN'),
-      BeizeNumberValue(double.nan),
-    );
-    set(
-      BeizeStringValue('maxFinite'),
-      BeizeNumberValue(double.maxFinite),
-    );
-    set(
-      BeizeStringValue('from'),
+    setField('infinity', BeizeNumberValue(double.infinity));
+    setField('negativeInfinity', BeizeNumberValue(double.negativeInfinity));
+    setField('NaN', BeizeNumberValue(double.nan));
+    setField('maxFinite', BeizeNumberValue(double.maxFinite));
+    setField(
+      'from',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final String value = call.argumentAt(0).kToString();
@@ -30,8 +18,8 @@ class BeizeNumberClassValue extends BeizeNativeClassValue {
         },
       ),
     );
-    set(
-      BeizeStringValue('fromOrNull'),
+    setField(
+      'fromOrNull',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final String value = call.argumentAt(0).kToString();
@@ -41,8 +29,8 @@ class BeizeNumberClassValue extends BeizeNativeClassValue {
         },
       ),
     );
-    set(
-      BeizeStringValue('fromRadix'),
+    setField(
+      'fromRadix',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final String value = call.argumentAt(0).kToString();
@@ -54,8 +42,8 @@ class BeizeNumberClassValue extends BeizeNativeClassValue {
         },
       ),
     );
-    set(
-      BeizeStringValue('fromRadixOrNull'),
+    setField(
+      'fromRadixOrNull',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final String value = call.argumentAt(0).kToString();
@@ -70,9 +58,12 @@ class BeizeNumberClassValue extends BeizeNativeClassValue {
   }
 
   @override
+  bool kInstance(final BeizeObjectValue value) => value is BeizeNumberValue;
+
+  @override
   BeizeNumberValue kInstantiate(final BeizeCallableCall call) {
     final BeizeNumberValue value = call.argumentAt(0);
-    return value;
+    return value.kClone();
   }
 
   @override

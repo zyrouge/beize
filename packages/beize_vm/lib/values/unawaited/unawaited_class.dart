@@ -2,9 +2,12 @@ import '../exports.dart';
 
 class BeizeUnawaitedClassValue extends BeizeNativeClassValue {
   @override
-  BeizeFunctionValue kInstantiate(final BeizeCallableCall call) {
-    final BeizeFunctionValue value = call.argumentAt(0);
-    return value;
+  bool kInstance(final BeizeObjectValue value) => value is BeizeUnawaitedValue;
+
+  @override
+  BeizeUnawaitedValue kInstantiate(final BeizeCallableCall call) {
+    final BeizeUnawaitedValue value = call.argumentAt(0);
+    return value.kClone();
   }
 
   @override

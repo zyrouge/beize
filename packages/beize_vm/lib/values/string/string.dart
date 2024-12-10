@@ -290,7 +290,7 @@ class BeizeStringValue extends BeizeNativeObjectValue {
   final BeizeValueKind kind = BeizeValueKind.string;
 
   @override
-  BeizeStringValue kClone() => BeizeStringValue(value);
+  BeizeStringValue kClone() => BeizeStringValue(value)..kCopyFrom(this);
 
   @override
   String kToString() => value;

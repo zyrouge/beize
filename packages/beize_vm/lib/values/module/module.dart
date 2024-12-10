@@ -30,7 +30,7 @@ class BeizeModuleValue extends BeizeNativeObjectValue {
   final BeizeValueKind kind = BeizeValueKind.module;
 
   @override
-  BeizeModuleValue kClone() => BeizeModuleValue(namespace);
+  BeizeModuleValue kClone() => BeizeModuleValue(namespace)..kCopyFrom(this);
 
   @override
   String kToString() => kind.code;

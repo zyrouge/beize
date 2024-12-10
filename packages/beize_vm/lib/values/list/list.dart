@@ -360,7 +360,7 @@ class BeizeListValue extends BeizeNativeObjectValue {
   final BeizeValueKind kind = BeizeValueKind.list;
 
   @override
-  BeizeListValue kClone() => BeizeListValue(elements.toList());
+  BeizeListValue kClone() => BeizeListValue(elements.toList())..kCopyFrom(this);
 
   @override
   String kToString() =>

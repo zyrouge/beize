@@ -10,7 +10,7 @@ class BeizeBooleanValue extends BeizeNativeObjectValue {
   final BeizeValueKind kind = BeizeValueKind.boolean;
 
   @override
-  BeizeBooleanValue kClone() => BeizeBooleanValue(value);
+  BeizeBooleanValue kClone() => BeizeBooleanValue(value)..kCopyFrom(this);
 
   @override
   String kToString() => value.toString();

@@ -74,6 +74,10 @@ class BeizeParseRule {
       precedence: BeizePrecedence.comparison,
       infix: BeizeParser.parseBinaryExpression,
     ),
+    BeizeTokens.isKw: BeizeParseRule(
+      precedence: BeizePrecedence.comparison,
+      infix: BeizeParser.parseBinaryExpression,
+    ),
     BeizeTokens.plus: BeizeParseRule(
       precedence: BeizePrecedence.sum,
       prefix: BeizeParser.parseUnaryExpression,

@@ -2,8 +2,8 @@ import '../exports.dart';
 
 class BeizeStringClassValue extends BeizeNativeClassValue {
   BeizeStringClassValue() {
-    set(
-      BeizeStringValue('fromCodeUnit'),
+    setField(
+      'fromCodeUnit',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final BeizeNumberValue value = call.argumentAt(0);
@@ -11,8 +11,8 @@ class BeizeStringClassValue extends BeizeNativeClassValue {
         },
       ),
     );
-    set(
-      BeizeStringValue('fromCodeUnits'),
+    setField(
+      'fromCodeUnits',
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final BeizeListValue value = call.argumentAt(0);
@@ -27,6 +27,9 @@ class BeizeStringClassValue extends BeizeNativeClassValue {
       ),
     );
   }
+
+  @override
+  bool kInstance(final BeizeObjectValue value) => value is BeizeStringValue;
 
   @override
   BeizeStringValue kInstantiate(final BeizeCallableCall call) {
