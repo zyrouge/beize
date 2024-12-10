@@ -98,6 +98,17 @@ class BeizeDisassembler {
         );
         return 1;
 
+      case BeizeOpCodes.opClass:
+        final bool hasParentClass = chunk.codeAt(ip + 1) == 1;
+        final int popCount = chunk.codeAt(ip + 2);
+        writeInstruction(
+          opCode,
+          ip,
+          chunk.lineAt(ip),
+          '{so}(parent = $hasParentClass, popCount = $popCount)',
+        );
+        return 2;
+
       default:
         writeInstruction(opCode, ip, chunk.lineAt(ip));
         return 0;

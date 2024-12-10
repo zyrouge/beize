@@ -3,7 +3,7 @@ import '../namespace.dart';
 
 abstract class BeizeDateTimeNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeVMObjectValue();
     value.set(
       BeizeStringValue('fromMillisecondsSinceEpoch'),
       BeizeNativeFunctionValue.sync(
@@ -33,8 +33,8 @@ abstract class BeizeDateTimeNatives {
     namespace.declare('DateTime', value);
   }
 
-  static BeizeMapValue newDateTimeInst(final DateTime dateTime) {
-    final BeizeMapValue value = BeizeMapValue();
+  static BeizeObjectValue newDateTimeInst(final DateTime dateTime) {
+    final BeizeObjectValue value = BeizeVMObjectValue();
     value.set(
       BeizeStringValue('day'),
       BeizeNumberValue(dateTime.day.toDouble()),

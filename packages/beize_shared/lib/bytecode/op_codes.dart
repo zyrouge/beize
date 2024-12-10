@@ -39,6 +39,7 @@ enum BeizeOpCodes {
   opSetProperty,
   opList,
   opObject,
+  opClass,
   opThrow,
   opBeginTry,
   opEndTry,

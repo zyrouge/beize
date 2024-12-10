@@ -31,6 +31,7 @@ abstract class BeizeIdentifierScanner {
     BeizeTokens.awaitKw,
     BeizeTokens.onlyKw,
     BeizeTokens.isKw,
+    BeizeTokens.staticKw,
   };
 
   static final Map<String, BeizeTokens> keywordsMap = keywords.asNameMap().map(
@@ -52,7 +53,9 @@ abstract class BeizeIdentifierScanner {
     BeizeInputIteration current = start;
     while (!scanner.input.isEndOfLine()) {
       current = scanner.input.peek();
-      if (!BeizeLexerUtils.isAlphaNumeric(current.char)) break;
+      if (!BeizeLexerUtils.isAlphaNumeric(current.char)) {
+        break;
+      }
       buffer.write(current.char);
       scanner.input.advance();
     }

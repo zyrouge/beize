@@ -6,7 +6,7 @@ class BeizeLexerUtils {
   static bool isQuote(final String char) =>
       char == "'" || char == '"' || char == '`';
   static bool isAlpha(final String char) =>
-      r'$_abcdefghijklmnopqrstuvwxyz'.contains(char.toLowerCase());
+      '_abcdefghijklmnopqrstuvwxyz'.contains(char.toLowerCase());
   static bool isAlphaNumeric(final String char) =>
       isAlpha(char) || isNumeric(char);
 }

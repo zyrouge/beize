@@ -3,7 +3,7 @@ import '../exports.dart';
 
 abstract class BeizeRegExpNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeVMObjectValue();
     value.set(
       BeizeStringValue('new'),
       BeizeNativeFunctionValue.sync(
@@ -28,7 +28,7 @@ abstract class BeizeRegExpNatives {
       multiLine: flags.contains('m'),
       unicode: flags.contains('u'),
     );
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeObjectValue value = BeizeVMObjectValue();
     value.set(
       BeizeStringValue('isCaseInsensitive'),
       BeizeBooleanValue(!regex.isCaseSensitive),
@@ -138,7 +138,7 @@ abstract class BeizeRegExpNatives {
   }
 
   static BeizeValue newRegExpMatch(final RegExpMatch match) {
-    final BeizeMapValue value = BeizeMapValue();
+    final BeizeVMObjectValue value = BeizeVMObjectValue();
     value.set(
       BeizeStringValue('input'),
       BeizeStringValue(match.input),

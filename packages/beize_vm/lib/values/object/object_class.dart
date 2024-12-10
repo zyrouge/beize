@@ -7,7 +7,7 @@ class BeizeObjectClassValue extends BeizeNativeClassValue {
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final BeizeListValue value = call.argumentAt(0);
-          final BeizeMapValue nValue = BeizeMapValue();
+          final BeizeObjectValue nValue = BeizeVMObjectValue();
           for (final MapEntry<BeizeValue, BeizeValue> x in value.entries()) {
             nValue.set(x.key, x.value);
           }

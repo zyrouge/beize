@@ -128,6 +128,7 @@ class BeizeParseRule {
       precedence: BeizePrecedence.caret,
       infix: BeizeParser.parseBinaryExpression,
     ),
+    BeizeTokens.dollar: BeizeParseRule(prefix: BeizeParser.parseClass),
     BeizeTokens.identifier: BeizeParseRule(prefix: BeizeParser.parseIdentifier),
     BeizeTokens.number: BeizeParseRule(prefix: BeizeParser.parseNumber),
     BeizeTokens.string: BeizeParseRule(prefix: BeizeParser.parseString),

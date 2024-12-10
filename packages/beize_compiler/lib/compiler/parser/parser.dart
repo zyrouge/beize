@@ -625,6 +625,46 @@ abstract class BeizeParser {
     compiler.copyTokenState(functionCompiler);
   }
 
+  static void parseClass(final BeizeCompiler compiler) {
+    final bool hasParentClass = !compiler.check(BeizeTokens.braceLeft);
+    if (hasParentClass) {
+      parseExpression(compiler);
+    }
+    final BeizeCompiler classCompiler = compiler.createClassCompiler();
+    classCompiler.emitOpCode(BeizeOpCodes.opBeginScope);
+    compiler.emitConstant(classCompiler.currentFunction);
+    int staticCount = 0;
+    int objectCount = 0;
+    bool cont = true;
+    compiler.consume(BeizeTokens.braceLeft);
+    while (cont && !compiler.check(BeizeTokens.braceRight)) {
+      final bool isStatic = compiler.match(BeizeTokens.staticKw);
+      if (isStatic) {
+        parseObjectKey(compiler);
+        compiler.consume(BeizeTokens.colon);
+        parseExpression(compiler);
+        staticCount++;
+      } else {
+        classCompiler.copyTokenState(compiler);
+        parseObjectKey(classCompiler);
+        classCompiler.consume(BeizeTokens.colon);
+        parseExpression(classCompiler);
+        compiler.copyTokenState(classCompiler);
+        objectCount++;
+      }
+      cont = compiler.match(BeizeTokens.comma);
+    }
+    classCompiler.copyTokenState(compiler);
+    classCompiler.emitOpCode(BeizeOpCodes.opObject);
+    classCompiler.emitCode(objectCount);
+    classCompiler.emitOpCode(BeizeOpCodes.opReturn);
+    classCompiler.emitOpCode(BeizeOpCodes.opEndScope);
+    compiler.consume(BeizeTokens.braceRight);
+    compiler.emitOpCode(BeizeOpCodes.opClass);
+    compiler.emitCode(hasParentClass ? 1 : 0);
+    compiler.emitCode(staticCount);
+  }
+
   static void parseCall(final BeizeCompiler compiler) {
     int count = 0;
     bool cont = true;
@@ -651,18 +691,22 @@ abstract class BeizeParser {
     compiler.emitCode(count);
   }
 
+  static void parseObjectKey(final BeizeCompiler compiler) {
+    if (compiler.match(BeizeTokens.bracketLeft)) {
+      parseExpression(compiler);
+      compiler.consume(BeizeTokens.bracketRight);
+      return;
+    }
+    compiler.consume(BeizeTokens.identifier);
+    final String key = compiler.previousToken.literal as String;
+    compiler.emitConstant(key);
+  }
+
   static void parseObject(final BeizeCompiler compiler) {
     int count = 0;
     bool cont = true;
     while (cont && !compiler.check(BeizeTokens.braceRight)) {
-      if (compiler.match(BeizeTokens.bracketLeft)) {
-        parseExpression(compiler);
-        compiler.consume(BeizeTokens.bracketRight);
-      } else {
-        compiler.consume(BeizeTokens.identifier);
-        final String key = compiler.previousToken.literal as String;
-        compiler.emitConstant(key);
-      }
+      parseObjectKey(compiler);
       compiler.consume(BeizeTokens.colon);
       parseExpression(compiler);
       count++;
