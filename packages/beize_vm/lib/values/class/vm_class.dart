@@ -10,15 +10,12 @@ class BeizeVMClassValue extends BeizeClassValue {
   final BeizeValueKind kind = BeizeValueKind.clazz;
 
   @override
-  bool kInstance(final BeizeObjectValue value) => value is BeizeClassValue;
-
-  @override
   BeizeObjectValue kInstantiate(final BeizeCallableCall call) {
     throw UnimplementedError();
   }
 
   @override
-  BeizeVMClassValue kClone() => BeizeVMClassValue(constant)..kCopyFrom(this);
+  BeizeVMClassValue kClone() => BeizeVMClassValue(constant);
 
   @override
   String kToString() => '<class>';

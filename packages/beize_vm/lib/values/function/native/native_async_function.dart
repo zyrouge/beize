@@ -32,7 +32,10 @@ class BeizeNativeAsyncFunctionValue extends BeizeNativeFunctionValue {
 
   @override
   BeizeNativeAsyncFunctionValue kClone() =>
-      BeizeNativeAsyncFunctionValue(function)..kCopyFrom(this);
+      BeizeNativeAsyncFunctionValue(function);
+
+  @override
+  BeizeClassValue get kClass => throw UnimplementedError();
 
   @override
   bool get isTruthy => true;

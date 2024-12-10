@@ -27,8 +27,5 @@ abstract class BeizeNativeFunctionValue extends BeizeNativeObjectValue
   String kToString() => '<native function>';
 
   @override
-  BeizeClassValue get kClass => throw UnimplementedError();
-
-  @override
   BeizeClassValue kClassInternal(final BeizeVM vm) => vm.globals.functionClass;
 }

@@ -178,11 +178,10 @@ abstract class BeizeConvertNatives {
       case BeizeValueKind.number:
         return value.cast<BeizeNumberValue>().numValue;
 
-      case BeizeValueKind.map:
       case BeizeValueKind.object:
-        final BeizeObjectValue obj = value.cast();
+        final BeizeMapValue obj = value.cast();
         final Map<Object?, Object?> json = <Object?, Object?>{};
-        for (final MapEntry<BeizeValue, BeizeValue> x in obj.entries()) {
+        for (final BeizeValuePair x in obj.entries()) {
           final Object? key = toJson(x.key);
           final Object? value = toJson(x.value);
           json[key] = value;

@@ -3,8 +3,6 @@ import '../exports.dart';
 
 abstract class BeizeClassValue extends BeizeNativeObjectValue
     implements BeizeCallableValue {
-  bool kInstance(final BeizeObjectValue value);
-
   BeizeObjectValue kInstantiate(final BeizeCallableCall call);
 
   @override

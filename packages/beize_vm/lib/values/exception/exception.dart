@@ -29,7 +29,7 @@ class BeizeExceptionValue extends BeizeNativeObjectValue {
 
   @override
   BeizeExceptionValue kClone() =>
-      BeizeExceptionValue(message, stackTrace, dartStackTrace)..kCopyFrom(this);
+      BeizeExceptionValue(message, stackTrace, dartStackTrace);
 
   @override
   String kToString() => 'Exception: $message\nStack Trace:\n$stackTrace';

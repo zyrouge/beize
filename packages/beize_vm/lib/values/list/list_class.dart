@@ -3,8 +3,8 @@ import '../exports.dart';
 
 class BeizeListClassValue extends BeizeNativeClassValue {
   BeizeListClassValue() {
-    setField(
-      'generate',
+    set(
+      BeizeStringValue('generate'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final int length = call.argumentAt<BeizeNumberValue>(0).intValue;
@@ -23,8 +23,8 @@ class BeizeListClassValue extends BeizeNativeClassValue {
         },
       ),
     );
-    setField(
-      'filled',
+    set(
+      BeizeStringValue('filled'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final int length = call.argumentAt<BeizeNumberValue>(0).intValue;
@@ -36,9 +36,6 @@ class BeizeListClassValue extends BeizeNativeClassValue {
       ),
     );
   }
-
-  @override
-  bool kInstance(final BeizeObjectValue value) => value is BeizeListValue;
 
   @override
   BeizeListValue kInstantiate(final BeizeCallableCall call) {

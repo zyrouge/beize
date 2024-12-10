@@ -32,8 +32,7 @@ class BeizeUnawaitedValue extends BeizeNativeObjectValue {
   }
 
   @override
-  BeizeUnawaitedValue kClone() =>
-      BeizeUnawaitedValue(arguments, function)..kCopyFrom(this);
+  BeizeUnawaitedValue kClone() => BeizeUnawaitedValue(arguments, function);
 
   @override
   String kToString() => '<unawaited>';

@@ -23,7 +23,6 @@ enum BeizeOpCodes {
   opBitwiseOr,
   opBitwiseXor,
   opBitwiseNot,
-  opIs,
   opDeclare,
   opAssign,
   opLookup,

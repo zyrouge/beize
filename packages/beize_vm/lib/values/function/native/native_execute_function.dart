@@ -18,7 +18,10 @@ class BeizeNativeExecuteFunctionValue extends BeizeNativeFunctionValue {
 
   @override
   BeizeNativeFunctionValue kClone() =>
-      BeizeNativeExecuteFunctionValue(function)..kCopyFrom(this);
+      BeizeNativeExecuteFunctionValue(function);
+
+  @override
+  BeizeClassValue get kClass => throw UnimplementedError();
 
   @override
   bool get isTruthy => true;

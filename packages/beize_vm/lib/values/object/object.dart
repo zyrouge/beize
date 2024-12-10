@@ -1,64 +1,104 @@
 import '../../vm/exports.dart';
 import '../exports.dart';
 
+typedef BeizeValuePair = ({
+  BeizeValue key,
+  BeizeValue value,
+});
+
 abstract class BeizeObjectValue extends BeizeValue {
   BeizeObjectValue({
-    final Map<String, BeizeValue>? fields,
+    final Map<int, List<BeizeValuePair>>? fields,
     final Map<String, dynamic>? internals,
-  })  : fields = fields ?? <String, BeizeValue>{},
+  })  : fields = fields ?? <int, List<BeizeValuePair>>{},
         internals = internals ?? <String, dynamic>{};
 
-  final Map<String, BeizeValue> fields;
+  final Map<int, List<BeizeValuePair>> fields;
   final Map<String, dynamic> internals;
 
-  bool has(final BeizeValue key) => hasField(key.kToString());
-  bool hasField(final String key) => fields.containsKey(key);
+  bool has(final BeizeValue key) {
+    final List<BeizeValuePair>? pairs = fields[key.kHashCode];
+    if (pairs != null) {
+      for (final BeizeValuePair x in pairs) {
+        if (x.key.kEquals(key)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
-  BeizeValue? getOrNull(final BeizeValue key) =>
-      getFieldOrNull(key.kToString());
-
-  BeizeValue? getFieldOrNull(final String key) => fields[key];
+  BeizeValue? getOrNull(final BeizeValue key) {
+    final List<BeizeValuePair>? pairs = fields[key.kHashCode];
+    if (pairs != null) {
+      for (final BeizeValuePair x in pairs) {
+        if (x.key.kEquals(key)) {
+          return x.value;
+        }
+      }
+    }
+    return null;
+  }
 
   BeizeValue get(final BeizeValue key) =>
       getOrNull(key) ?? BeizeNullValue.value;
 
-  BeizeValue getField(final String key) =>
-      getFieldOrNull(key) ?? BeizeNullValue.value;
-
   void set(final BeizeValue key, final BeizeValue value) {
-    setField(key.kToString(), value);
-  }
-
-  void setField(final String key, final BeizeValue value) {
-    fields[key] = value;
+    final List<BeizeValuePair>? pairs = fields[key.kHashCode];
+    if (pairs != null) {
+      for (int i = 0; i < pairs.length; i++) {
+        final BeizeValuePair x = pairs[i];
+        if (x.key.kEquals(key)) {
+          pairs[i] = (key: x.key, value: value);
+          return;
+        }
+      }
+      pairs.add((key: key, value: value));
+      return;
+    }
+    fields[key.kHashCode] = <BeizeValuePair>[(key: key, value: value)];
   }
 
   void delete(final BeizeValue key) {
-    deleteField(key.kToString());
+    final List<BeizeValuePair>? pairs = fields[key.kHashCode];
+    if (pairs == null) {
+      return;
+    }
+    for (int i = 0; i < pairs.length; i++) {
+      final BeizeValuePair x = pairs[i];
+      if (x.key.kEquals(key)) {
+        pairs.removeAt(i);
+        break;
+      }
+    }
   }
 
-  void deleteField(final String key) {
-    fields.remove(key);
+  List<BeizeValue> keys() {
+    final List<BeizeValue> keys = <BeizeValue>[];
+    for (final List<BeizeValuePair> x in fields.values) {
+      for (final BeizeValuePair y in x) {
+        keys.add(y.key);
+      }
+    }
+    return keys;
   }
 
-  List<BeizeValue> keys() =>
-      fields.keys.map((final String x) => BeizeStringValue(x)).toList();
+  List<BeizeValue> values() {
+    final List<BeizeValue> keys = <BeizeValue>[];
+    for (final List<BeizeValuePair> x in fields.values) {
+      for (final BeizeValuePair y in x) {
+        keys.add(y.value);
+      }
+    }
+    return keys;
+  }
 
-  List<BeizeValue> values() => fields.values.toList();
-
-  List<MapEntry<BeizeValue, BeizeValue>> entries() {
-    final List<MapEntry<BeizeValue, BeizeValue>> entries =
-        <MapEntry<BeizeValue, BeizeValue>>[];
-    for (final MapEntry<String, BeizeValue> x in fields.entries) {
-      final BeizeStringValue key = BeizeStringValue(x.key);
-      entries.add(MapEntry<BeizeValue, BeizeValue>(key, x.value));
+  List<BeizeValuePair> entries() {
+    final List<BeizeValuePair> entries = <BeizeValuePair>[];
+    for (final List<BeizeValuePair> x in fields.values) {
+      entries.addAll(x);
     }
     return entries;
-  }
-
-  void kCopyFrom(final BeizeObjectValue other) {
-    fields.addAll(other.fields);
-    internals.addAll(other.internals);
   }
 
   BeizeValue kClone();

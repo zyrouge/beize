@@ -37,9 +37,10 @@ class BeizeFunctionValue extends BeizeNativeObjectValue
   }
 
   @override
-  BeizeFunctionValue kClone() =>
-      BeizeFunctionValue(constant: constant, namespace: namespace)
-        ..kCopyFrom(this);
+  BeizeFunctionValue kClone() => BeizeFunctionValue(
+        constant: constant,
+        namespace: namespace,
+      );
 
   @override
   String kToString() => '<function>';

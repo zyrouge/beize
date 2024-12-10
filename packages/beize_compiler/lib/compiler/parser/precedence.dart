@@ -14,6 +14,7 @@ enum BeizePrecedence {
   unary, // ! ~ + -
   call, // () . [] ?.
   grouping, // (...)
+  kekw,
 }
 
 extension BeizePrecedenceUtils on BeizePrecedence {

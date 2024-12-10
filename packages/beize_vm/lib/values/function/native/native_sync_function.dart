@@ -26,7 +26,10 @@ class BeizeNativeSyncFunctionValue extends BeizeNativeFunctionValue {
 
   @override
   BeizeNativeSyncFunctionValue kClone() =>
-      BeizeNativeSyncFunctionValue(function)..kCopyFrom(this);
+      BeizeNativeSyncFunctionValue(function);
+
+  @override
+  BeizeClassValue get kClass => throw UnimplementedError();
 
   @override
   bool get isTruthy => true;

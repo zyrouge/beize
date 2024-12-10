@@ -2,9 +2,6 @@ import '../exports.dart';
 
 class BeizeBooleanClassValue extends BeizeNativeClassValue {
   @override
-  bool kInstance(final BeizeObjectValue value) => value is BeizeBooleanValue;
-
-  @override
   BeizeBooleanValue kInstantiate(final BeizeCallableCall call) {
     final BeizeValue value = call.argumentAt(0);
     return BeizeBooleanValue(value.isTruthy);

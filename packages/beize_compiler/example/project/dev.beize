@@ -7,4 +7,4 @@ main := -> async {
 };
 
 main().await;
-print(Function is null);
+print();

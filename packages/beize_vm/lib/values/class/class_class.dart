@@ -3,31 +3,16 @@ import '../exports.dart';
 // what the fuck is this naming
 class BeizeClassClassValue extends BeizeNativeClassValue {
   BeizeClassClassValue() {
-    setField(
-      'of',
+    set(
+      BeizeStringValue('of'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
           final BeizeObjectValue value = call.argumentAt(0);
-          return BeizeClassValueUtils.getClass(call.frame.vm, value);
-        },
-      ),
-    );
-    setField(
-      'isInstance',
-      BeizeNativeFunctionValue.sync(
-        (final BeizeCallableCall call) {
-          final BeizeClassValue clazz = call.argumentAt(0);
-          final BeizeValue value = call.argumentAt(1);
-          return BeizeClassValueUtils.isClassInstance(clazz, value)
-              ? call.frame.vm.globals.trueValue
-              : call.frame.vm.globals.falseValue;
+          return value.kClassInternal(call.frame.vm) ?? value.kClass;
         },
       ),
     );
   }
-
-  @override
-  bool kInstance(final BeizeObjectValue value) => value is BeizeClassValue;
 
   @override
   BeizeClassValue kInstantiate(final BeizeCallableCall call) {
