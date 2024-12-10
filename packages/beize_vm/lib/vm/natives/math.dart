@@ -7,7 +7,7 @@ abstract class BeizeMathNatives {
   static Random random = Random();
 
   static void bind(final BeizeNamespace namespace) {
-    final BeizeObjectValue value = BeizeVMObjectValue();
+    final BeizeMapValue value = BeizeMapValue();
     value.set(
       BeizeStringValue('random'),
       BeizeNativeFunctionValue.sync(

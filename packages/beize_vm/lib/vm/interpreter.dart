@@ -85,9 +85,7 @@ class BeizeInterpreter {
         default:
           result = interpretCurrent();
       }
-      if (result != null) {
-        break;
-      }
+      if (result != null) break;
     }
     return result ?? BeizeInterpreterResult.success(BeizeNullValue.value);
   }
@@ -98,9 +96,7 @@ class BeizeInterpreter {
       frame.sip = frame.ip;
       frame.ip++;
       result = interpretCurrent();
-      if (result != null) {
-        break;
-      }
+      if (result != null) break;
     }
     return result ?? BeizeInterpreterResult.success(BeizeNullValue.value);
   }
@@ -410,29 +406,10 @@ class BeizeInterpreter {
         }
         stack.push(BeizeListValue(values));
 
-      case BeizeOpCodes.opClass:
-        final bool hasParentClass = chunk.codeAt(frame.ip) == 1;
-        final int count = chunk.codeAt(frame.ip + 1);
-        frame.ip += 2;
-        final BeizeVMClassValue clazz = BeizeVMClassValue();
-        for (int i = 0; i < count; i++) {
-          final BeizeValue value = stack.pop();
-          final BeizeValue key = stack.pop();
-          if (value is BeizeFunctionValue) {
-            value.namespace.assign('this', clazz);
-          }
-          clazz.set(key, value);
-        }
-        clazz.constructor = stack.pop();
-        if (hasParentClass) {
-          clazz.parentClass = stack.pop();
-        }
-        stack.push(clazz);
-
       case BeizeOpCodes.opObject:
         final int count = chunk.codeAt(frame.ip);
         frame.ip++;
-        final BeizeObjectValue obj = BeizeVMObjectValue();
+        final BeizeMapValue obj = BeizeMapValue();
         for (int i = 0; i < count; i++) {
           final BeizeValue value = stack.pop();
           final BeizeValue key = stack.pop();

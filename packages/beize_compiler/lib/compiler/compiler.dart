@@ -10,7 +10,6 @@ import 'state.dart';
 
 enum BeizeCompilerMode {
   function,
-  clazz,
   script,
 }
 
@@ -85,22 +84,6 @@ class BeizeCompiler {
       options: options,
     );
     derived.prepare(isAsync: isAsync);
-    return derived;
-  }
-
-  BeizeCompiler createClassCompiler() {
-    final BeizeCompiler derived = BeizeCompiler._(
-      scanner,
-      mode: BeizeCompilerMode.clazz,
-      root: root,
-      modulePath: modulePath,
-      moduleIndex: moduleIndex,
-      modules: modules,
-      constants: constants,
-      parent: this,
-      options: options,
-    );
-    derived.prepare(isAsync: false);
     return derived;
   }
 

@@ -5,7 +5,7 @@ import '../namespace.dart';
 
 abstract class BeizeConvertNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeObjectValue value = BeizeVMObjectValue();
+    final BeizeMapValue value = BeizeMapValue();
     value.set(
       BeizeStringValue('newBytesList'),
       BeizeNativeFunctionValue.sync(
@@ -38,7 +38,7 @@ abstract class BeizeConvertNatives {
       BeizeStringValue('decodeAscii'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
-          final BeizeObjectValue input = call.argumentAt(0);
+          final BeizeMapValue input = call.argumentAt(0);
           return BeizeStringValue(ascii.decode(toBytes(input)));
         },
       ),
@@ -47,7 +47,7 @@ abstract class BeizeConvertNatives {
       BeizeStringValue('encodeBase64'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
-          final BeizeObjectValue input = call.argumentAt(0);
+          final BeizeMapValue input = call.argumentAt(0);
           return BeizeStringValue(base64Encode(toBytes(input)));
         },
       ),
@@ -74,7 +74,7 @@ abstract class BeizeConvertNatives {
       BeizeStringValue('decodeLatin1'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
-          final BeizeObjectValue input = call.argumentAt(0);
+          final BeizeMapValue input = call.argumentAt(0);
           return BeizeStringValue(latin1.decode(toBytes(input)));
         },
       ),
@@ -92,7 +92,7 @@ abstract class BeizeConvertNatives {
       BeizeStringValue('decodeUtf8'),
       BeizeNativeFunctionValue.sync(
         (final BeizeCallableCall call) {
-          final BeizeObjectValue input = call.argumentAt(0);
+          final BeizeMapValue input = call.argumentAt(0);
           return BeizeStringValue(utf8.decode(toBytes(input)));
         },
       ),
@@ -118,7 +118,7 @@ abstract class BeizeConvertNatives {
     namespace.declare('Convert', value);
   }
 
-  static List<int> toBytes(final BeizeObjectValue bytesList) {
+  static List<int> toBytes(final BeizeMapValue bytesList) {
     if (bytesList.internals.containsKey('bytes')) {
       return bytesList.internals['bytes'] as List<int>;
     }
@@ -126,7 +126,7 @@ abstract class BeizeConvertNatives {
   }
 
   static BeizeValue newBytesList(final List<int> bytes) {
-    final BeizeObjectValue bytesList = BeizeVMObjectValue();
+    final BeizeMapValue bytesList = BeizeMapValue();
     bytesList.internals['bytes'] = bytes;
     bytesList.set(
       BeizeStringValue('bytes'),
@@ -140,21 +140,11 @@ abstract class BeizeConvertNatives {
   }
 
   static BeizeValue fromJson(final Object? json) {
-    if (json is bool) {
-      return BeizeBooleanValue(json);
-    }
-    if (json == null) {
-      return BeizeNullValue.value;
-    }
-    if (json is int) {
-      return BeizeNumberValue(json.toDouble());
-    }
-    if (json is double) {
-      return BeizeNumberValue(json);
-    }
-    if (json is String) {
-      return BeizeStringValue(json);
-    }
+    if (json is bool) return BeizeBooleanValue(json);
+    if (json == null) return BeizeNullValue.value;
+    if (json is int) return BeizeNumberValue(json.toDouble());
+    if (json is double) return BeizeNumberValue(json);
+    if (json is String) return BeizeStringValue(json);
     if (json is List<dynamic>) {
       final BeizeListValue list = BeizeListValue();
       for (final Object? x in json) {
@@ -163,7 +153,7 @@ abstract class BeizeConvertNatives {
       return list;
     }
     if (json is Map<dynamic, dynamic>) {
-      final BeizeObjectValue obj = BeizeVMObjectValue();
+      final BeizeMapValue obj = BeizeMapValue();
       for (final MapEntry<Object?, Object?> x in json.entries) {
         final BeizeValue key = fromJson(x.key);
         final BeizeValue value = fromJson(x.value);

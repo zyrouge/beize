@@ -1,8 +1,10 @@
-test := $ {
-    hi: "hi",
-    static hi: "hi static",
+printHello := -> async {
+    print("Hello World");
 };
 
-print(test.hi);
-print(test().hi);
-print(test() is test);
+main := -> async {
+    printHello().await;
+};
+
+main().await;
+print(Function is null);

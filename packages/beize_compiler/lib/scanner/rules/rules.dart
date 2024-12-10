@@ -55,7 +55,6 @@ class BeizeScannerRules {
       constructOffset1ScanFn(BeizeTokens.bang),
       constructOffset1ScanFn(BeizeTokens.lesserThan),
       constructOffset1ScanFn(BeizeTokens.greaterThan),
-      constructOffset1ScanFn(BeizeTokens.dollar),
     ],
   );
 

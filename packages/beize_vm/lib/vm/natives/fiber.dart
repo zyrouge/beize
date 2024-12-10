@@ -4,7 +4,7 @@ import '../exports.dart';
 
 abstract class BeizeFiberNatives {
   static void bind(final BeizeNamespace namespace) {
-    final BeizeObjectValue value = BeizeVMObjectValue();
+    final BeizeMapValue value = BeizeMapValue();
     value.set(
       BeizeStringValue('wait'),
       BeizeNativeFunctionValue.async(

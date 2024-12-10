@@ -20,9 +20,8 @@ class BeizeFunctionValue extends BeizeNativeObjectValue
   @override
   BeizeInterpreterResult kCall(final BeizeCallableCall call) {
     if (!constant.isAsync) {
-      final BeizeCallFrame frame =
-          call.frame.prepareCallFunctionValue(call.arguments, this);
-      return BeizeInterpreter(frame).run();
+      final BeizeInterpreterResult result = BeizeInterpreter(call.frame).run();
+      return result;
     }
     final BeizeUnawaitedValue value = BeizeUnawaitedValue(
       call.arguments,

@@ -1,9 +1,10 @@
-import '../../vm/exports.dart';
+import '../../bytecode.dart';
 import '../exports.dart';
 
 class BeizeVMClassValue extends BeizeClassValue {
-  late final BeizeClassValue? parentClass;
-  late final BeizeCallableValue constructor;
+  BeizeVMClassValue(this.constant);
+
+  final BeizeClassConstant constant;
 
   @override
   final BeizeValueKind kind = BeizeValueKind.clazz;
@@ -12,14 +13,12 @@ class BeizeVMClassValue extends BeizeClassValue {
   bool kInstance(final BeizeObjectValue value) => value is BeizeClassValue;
 
   @override
-  BeizeInterpreterResult kCall(final BeizeCallableCall call) =>
-      constructor.kCall(call);
+  BeizeObjectValue kInstantiate(final BeizeCallableCall call) {
+    throw UnimplementedError();
+  }
 
   @override
-  BeizeVMClassValue kClone() => BeizeVMClassValue()
-    ..parentClass = parentClass
-    ..constructor = constructor
-    ..kCopyFrom(this);
+  BeizeVMClassValue kClone() => BeizeVMClassValue(constant)..kCopyFrom(this);
 
   @override
   String kToString() => '<class>';
@@ -28,5 +27,5 @@ class BeizeVMClassValue extends BeizeClassValue {
   bool get isTruthy => true;
 
   @override
-  int get kHashCode => Object.hash(parentClass, constructor);
+  int get kHashCode => constant.hashCode;
 }
