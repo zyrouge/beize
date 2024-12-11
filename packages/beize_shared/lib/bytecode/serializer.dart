@@ -6,19 +6,21 @@ import 'constants/function.dart';
 import 'constants/program.dart';
 
 abstract class BeizeConstantSerializer {
-  static const int brandMarking = 0;
+  static const String brandMarking = 'github.com/zyrouge/beize';
   static const int doubleMarking = 1;
   static const int stringMarking = 2;
   static const int functionMarking = 3;
 
   static Uint8List serialize(final BeizeProgramConstant program) {
     final BeizeBytecodeBuilder builder = BeizeBytecodeBuilder();
+    builder.addString(brandMarking);
     serializeProgram(builder, program);
     return builder.toBytes();
   }
 
   static BeizeProgramConstant deserialize(final Uint8List bytes) {
     final BeizeBytecodeReader reader = BeizeBytecodeReader(bytes);
+    reader.readString();
     return deserializeProgram(reader);
   }
 
@@ -26,6 +28,7 @@ abstract class BeizeConstantSerializer {
     final BeizeBytecodeBuilder builder,
     final BeizeProgramConstant program,
   ) {
+    builder.addInteger(program.version);
     builder.addInteger(program.modules.length);
     for (final int x in program.modules) {
       builder.addInteger(x);
@@ -39,6 +42,7 @@ abstract class BeizeConstantSerializer {
   static BeizeProgramConstant deserializeProgram(
     final BeizeBytecodeReader reader,
   ) {
+    final int version = reader.readInteger();
     final List<int> modules = <int>[];
     final int modulesCount = reader.readInteger();
     for (int i = 0; i < modulesCount; i++) {
@@ -49,7 +53,11 @@ abstract class BeizeConstantSerializer {
     for (int i = 0; i < constantsCount; i++) {
       constants.add(deserializeConstant(reader));
     }
-    return BeizeProgramConstant(modules: modules, constants: constants);
+    return BeizeProgramConstant(
+      version: version,
+      modules: modules,
+      constants: constants,
+    );
   }
 
   static void serializeConstant(
@@ -70,7 +78,7 @@ abstract class BeizeConstantSerializer {
       builder.addString(constant);
       return;
     }
-    throw FormatException('Invalid constant "$constant"');
+    throw UnimplementedError('Invalid constant "$constant"');
   }
 
   static BeizeConstant deserializeConstant(
@@ -87,7 +95,7 @@ abstract class BeizeConstantSerializer {
       case stringMarking:
         return reader.readString();
     }
-    throw FormatException('Invalid constant marking "$marking"');
+    throw UnimplementedError('Invalid constant marking "$marking"');
   }
 
   static void serializeFunction(

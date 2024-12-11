@@ -258,6 +258,8 @@ class BeizeCompiler {
 
   int get currentAbsoluteOffset => currentChunk.length;
 
+  static int version = 0;
+
   static Future<BeizeProgramConstant> compileProject({
     required final String root,
     required final String entrypoint,
@@ -284,6 +286,7 @@ class BeizeCompiler {
     compiler.modules.add(functionIndex);
     await compiler.compile();
     return BeizeProgramConstant(
+      version: version,
       modules: compiler.modules,
       constants: compiler.constants,
     );
