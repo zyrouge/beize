@@ -1,4 +1,3 @@
-import 'constants/exports.dart';
 import 'op_codes.dart';
 
 class BeizeChunk {
@@ -8,12 +7,6 @@ class BeizeChunk {
   });
 
   factory BeizeChunk.empty() => BeizeChunk(codes: <int>[], lines: <int>[]);
-
-  factory BeizeChunk.deserialize(final BeizeSerializedConstant serialized) =>
-      BeizeChunk(
-        codes: (serialized[0] as List<dynamic>).cast<int>(),
-        lines: (serialized[1] as List<dynamic>).cast<int>(),
-      );
 
   final List<int> codes;
   final List<int> lines;
@@ -32,8 +25,6 @@ class BeizeChunk {
   BeizeOpCodes opCodeAt(final int index) => BeizeOpCodes.values[codeAt(index)];
 
   int lineAt(final int index) => lines[index];
-
-  BeizeSerializedConstant serialize() => <dynamic>[codes, lines];
 
   int get length => codes.length;
 }

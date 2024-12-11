@@ -54,13 +54,11 @@ class RunCommand extends Command<Future<void>> {
     }
 
     try {
-      final BeizeVM vm = BeizeVM(
-        program,
-        BeizeVMOptions(
-          disablePrint: disablePrint,
-          printPrefix: '',
-        ),
+      final BeizeVMOptions options = BeizeVMOptions(
+        disablePrint: disablePrint,
+        printPrefix: '',
       );
+      final BeizeVM vm = BeizeVM(program, options);
       await vm.run();
     } catch (err) {
       print(err);

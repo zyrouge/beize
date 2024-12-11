@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:args/command_runner.dart';
 import 'package:beize_vm/beize_vm.dart';
 import 'package:collection/collection.dart';
@@ -45,9 +45,8 @@ class InterpretCommand extends Command<Future<void>> {
 
     late final BeizeProgramConstant program;
     try {
-      final String content = await compiledFile.readAsString();
-      final List<dynamic> parsed = json.decode(content) as List<dynamic>;
-      program = BeizeProgramConstant.deserialize(parsed);
+      final Uint8List content = await compiledFile.readAsBytes();
+      program = BeizeConstantSerializer.deserialize(content);
     } catch (err) {
       print('Parsing "${compiledFile.path}" failed.');
       println();
@@ -56,13 +55,11 @@ class InterpretCommand extends Command<Future<void>> {
     }
 
     try {
-      final BeizeVM vm = BeizeVM(
-        program,
-        BeizeVMOptions(
-          disablePrint: disablePrint,
-          printPrefix: '',
-        ),
+      final BeizeVMOptions options = BeizeVMOptions(
+        disablePrint: disablePrint,
+        printPrefix: '',
       );
+      final BeizeVM vm = BeizeVM(program, options);
       await vm.run();
     } catch (err) {
       print(err);

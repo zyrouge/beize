@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:args/command_runner.dart';
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:collection/collection.dart';
@@ -62,8 +62,8 @@ class CompileCommand extends Command<Future<void>> {
           disablePrint: disablePrint,
         ),
       );
-      final List<dynamic> serialized = program.serialize();
-      await outputFile.writeAsString(json.encode(serialized));
+      final Uint8List bytes = BeizeConstantSerializer.serialize(program);
+      await outputFile.writeAsBytes(bytes);
       print('Compiled to "${p.normalize(output)}"!');
     } catch (err) {
       print('Compilation of "$entrypoint" failed.');

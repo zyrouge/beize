@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:args/command_runner.dart';
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:collection/collection.dart';
@@ -33,10 +33,9 @@ class DisassembleCommand extends Command<Future<void>> {
     }
 
     try {
-      final String content = await compiledFile.readAsString();
-      final List<dynamic> parsed = json.decode(content) as List<dynamic>;
+      final Uint8List bytes = await compiledFile.readAsBytes();
       final BeizeProgramConstant program =
-          BeizeProgramConstant.deserialize(parsed);
+          BeizeConstantSerializer.deserialize(bytes);
       BeizeDisassembler.disassembleProgram(program);
     } catch (err) {
       print('Disassembling "${compiledFile.path}" failed.');
