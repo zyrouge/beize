@@ -1,88 +1,73 @@
 import '../../values/exports.dart';
-import '../namespace.dart';
+import '../exports.dart';
 
-abstract class BeizeDateTimeNatives {
-  static void bind(final BeizeNamespace namespace) {
-    final BeizeObjectValue value = BeizeObjectValue();
-    value.set(
-      BeizeStringValue('fromMillisecondsSinceEpoch'),
-      BeizeNativeFunctionValue.sync(
-        (final BeizeFunctionCall call) {
-          final BeizeNumberValue ms = call.argumentAt(0);
-          return newDateTimeInst(
-            DateTime.fromMillisecondsSinceEpoch(ms.intValue),
+class BeizeDateTimeValue extends BeizePrimitiveObjectValue {
+  BeizeDateTimeValue(this.value);
+
+  final DateTime value;
+
+  @override
+  final String kName = 'BytesList';
+
+  @override
+  BeizeValue getAlongFrame(final BeizeCallFrame frame, final BeizeValue key) {
+    if (key is BeizeStringValue) {
+      switch (key.value) {
+        case 'day':
+          return BeizeNumberValue(value.day.toDouble());
+
+        case 'weekday':
+          return BeizeNumberValue(value.weekday.toDouble());
+
+        case 'month':
+          return BeizeNumberValue(value.month.toDouble());
+
+        case 'year':
+          return BeizeNumberValue(value.year.toDouble());
+
+        case 'hour':
+          return BeizeNumberValue(value.hour.toDouble());
+
+        case 'minute':
+          return BeizeNumberValue(value.minute.toDouble());
+
+        case 'second':
+          return BeizeNumberValue(value.second.toDouble());
+
+        case 'millisecond':
+          return BeizeNumberValue(value.millisecond.toDouble());
+
+        case 'millisecondsSinceEpoch':
+          return BeizeNumberValue(value.millisecondsSinceEpoch.toDouble());
+
+        case 'timeZoneName':
+          return BeizeStringValue(value.timeZoneName);
+
+        case 'timeZoneOffset':
+          return BeizeNumberValue(
+            value.timeZoneOffset.inMilliseconds.toDouble(),
           );
-        },
-      ),
-    );
-    value.set(
-      BeizeStringValue('parse'),
-      BeizeNativeFunctionValue.sync(
-        (final BeizeFunctionCall call) {
-          final BeizeStringValue value = call.argumentAt(0);
-          return newDateTimeInst(DateTime.parse(value.value));
-        },
-      ),
-    );
-    value.set(
-      BeizeStringValue('now'),
-      BeizeNativeFunctionValue.sync(
-        (final _) => newDateTimeInst(DateTime.now()),
-      ),
-    );
-    namespace.declare('DateTime', value);
+
+        case 'iso':
+          return BeizeStringValue(value.toIso8601String());
+      }
+    }
+    return super.get(key);
   }
 
-  static BeizeObjectValue newDateTimeInst(final DateTime dateTime) {
-    final BeizeObjectValue value = BeizeObjectValue();
-    value.set(
-      BeizeStringValue('day'),
-      BeizeNumberValue(dateTime.day.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('weekday'),
-      BeizeNumberValue(dateTime.weekday.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('month'),
-      BeizeNumberValue(dateTime.month.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('year'),
-      BeizeNumberValue(dateTime.year.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('hour'),
-      BeizeNumberValue(dateTime.hour.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('minute'),
-      BeizeNumberValue(dateTime.minute.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('second'),
-      BeizeNumberValue(dateTime.second.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('millisecond'),
-      BeizeNumberValue(dateTime.millisecond.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('millisecondsSinceEpoch'),
-      BeizeNumberValue(dateTime.millisecondsSinceEpoch.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('timeZoneName'),
-      BeizeStringValue(dateTime.timeZoneName),
-    );
-    value.set(
-      BeizeStringValue('timeZoneOffset'),
-      BeizeNumberValue(dateTime.timeZoneOffset.inMilliseconds.toDouble()),
-    );
-    value.set(
-      BeizeStringValue('iso'),
-      BeizeStringValue(dateTime.toIso8601String()),
-    );
-    return value;
-  }
+  @override
+  BeizeDateTimeClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.natives.globals.dateTimeClass;
+
+  @override
+  BeizeDateTimeValue kClone() => BeizeDateTimeValue(value);
+
+  @override
+  String kToString() => value.toIso8601String();
+
+  @override
+  bool get isTruthy => true;
+
+  @override
+  int get kHashCode => value.hashCode;
 }

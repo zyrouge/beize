@@ -1,13 +1,16 @@
-createBenchmarker := -> {
-    return {
-        startedAt: null,
-        endedAt: null,
-        start: -> {
-            this.startedAt = DateTime.now().millisecondsSinceEpoch;
-        },
-        end: -> {
-            this.endedAt = DateTime.now().millisecondsSinceEpoch;
-            print('Took ' + (this.endedAt - this.startedAt) + 'ms');
-        },
-    };
+Benchmarker := $ {
+    static __name__: -> : "Benchmarker",
+    __constructor__: -> {
+        this.startedAt = null;
+        this.endedAt = null;
+    },
+    start: -> {
+        this.startedAt = DateTime.now().millisecondsSinceEpoch;
+    },
+    end: -> {
+        this.endedAt = DateTime.now().millisecondsSinceEpoch;
+        print('Took ' + (this.endedAt - this.startedAt) + 'ms');
+    },
 };
+
+print(Benchmarker);

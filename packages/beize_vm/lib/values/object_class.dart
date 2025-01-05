@@ -1,10 +1,34 @@
-import '../../values/exports.dart';
-import '../namespace.dart';
+import '../vm/exports.dart';
+import 'exports.dart';
 
-abstract class BeizeObjectNatives {
-  static void bind(final BeizeNamespace namespace) {
-    final BeizeObjectValue value = BeizeObjectValue();
-    value.set(
+class BeizeObjectClassValue extends BeizePrimitiveClassValue {
+  BeizeObjectClassValue() {
+    bindClassFields(fields);
+  }
+
+  @override
+  final String kName = 'ObjectClass';
+
+  @override
+  bool kIsInstance(final BeizePrimitiveObjectValue value) => true;
+
+  @override
+  BeizeInterpreterResult kCall(final BeizeFunctionCall call) {
+    final BeizeObjectClassValue value = call.argumentAt(0);
+    return BeizeInterpreterResult.success(value);
+  }
+
+  @override
+  String kToString() => '<object class>';
+
+  @override
+  bool get isTruthy => true;
+
+  @override
+  int get kHashCode => hashCode;
+
+  static void bindClassFields(final BeizeObjectValueFieldsMap fields) {
+    fields.set(
       BeizeStringValue('from'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -13,7 +37,7 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('fromEntries'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -26,7 +50,7 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('apply'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -39,16 +63,16 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('entries'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
           final BeizePrimitiveObjectValue value = call.argumentAt(0);
-          return entries(value);
+          return value.kEntries();
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('keys'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -57,7 +81,7 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('values'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -66,7 +90,7 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('clone'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -75,7 +99,7 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    value.set(
+    fields.set(
       BeizeStringValue('deleteProperty'),
       BeizeNativeFunctionValue.sync(
         (final BeizeFunctionCall call) {
@@ -86,14 +110,5 @@ abstract class BeizeObjectNatives {
         },
       ),
     );
-    namespace.declare('Object', value);
-  }
-
-  static BeizeListValue entries(final BeizePrimitiveObjectValue value) {
-    final BeizeListValue nValue = BeizeListValue();
-    for (final MapEntry<BeizeValue, BeizeValue> x in value.entries()) {
-      nValue.push(BeizeListValue(<BeizeValue>[x.key, x.value]));
-    }
-    return nValue;
   }
 }

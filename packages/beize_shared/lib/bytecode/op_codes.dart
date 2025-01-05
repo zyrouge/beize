@@ -42,4 +42,6 @@ enum BeizeOpCodes {
   opBeginTry,
   opEndTry,
   opImport,
+  opIs,
+  opClass,
 }

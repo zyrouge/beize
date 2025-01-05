@@ -5,6 +5,12 @@ import '../compiler.dart';
 import 'precedence.dart';
 import 'rules.dart';
 
+typedef _BeizeMatchableCase = ({
+  int start,
+  int thenJump,
+  int elseJump,
+});
+
 abstract class BeizeParser {
   static Future<void> parseStatement(final BeizeCompiler compiler) async {
     if (compiler.match(BeizeTokens.braceLeft)) {
@@ -277,7 +283,7 @@ abstract class BeizeParser {
         compiler.consume(BeizeTokens.colon);
         parseStatement(compiler);
         final int exitJump = compiler.emitJump(BeizeOpCodes.opAbsoluteJump);
-        elseCase = _BeizeMatchableCase(start, exitJump, -1);
+        elseCase = (start: start, thenJump: exitJump, elseJump: -1);
       } else {
         matcher();
         compiler.consume(BeizeTokens.colon);
@@ -288,7 +294,7 @@ abstract class BeizeParser {
         compiler.patchJump(localJump);
         compiler.emitOpCode(BeizeOpCodes.opPop);
         final int thenJump = compiler.emitJump(BeizeOpCodes.opAbsoluteJump);
-        cases.add(_BeizeMatchableCase(start, thenJump, exitJump));
+        cases.add((start: start, thenJump: thenJump, elseJump: exitJump));
       }
     }
     final int end = compiler.currentAbsoluteOffset;
@@ -449,6 +455,9 @@ abstract class BeizeParser {
 
       case BeizeTokens.caret:
         compiler.emitOpCode(BeizeOpCodes.opBitwiseXor);
+
+      case BeizeTokens.isKw:
+        compiler.emitOpCode(BeizeOpCodes.opIs);
 
       default:
         throw UnreachableException();
@@ -747,12 +756,57 @@ abstract class BeizeParser {
     parseInfixExpression(compiler, BeizePrecedence.call);
     compiler.patchJump(exitJump);
   }
-}
 
-class _BeizeMatchableCase {
-  const _BeizeMatchableCase(this.start, this.thenJump, this.elseJump);
+  static void parseIs(final BeizeCompiler compiler) {
+    compiler.emitOpCode(BeizeOpCodes.opIs);
+  }
 
-  final int start;
-  final int thenJump;
-  final int elseJump;
+  static void parseClass(final BeizeCompiler compiler) {
+    int currentType = 0;
+    int currentCount = 0;
+    // this will be in format such as
+    // <static count>, <instance count>, <static count>, ...
+    final List<int> markings = <int>[];
+    bool cont = true;
+    compiler.consume(BeizeTokens.braceLeft);
+    while (cont && !compiler.check(BeizeTokens.braceRight)) {
+      final bool isStatic = compiler.match(BeizeTokens.staticKw);
+      if (compiler.match(BeizeTokens.bracketLeft)) {
+        parseExpression(compiler);
+        compiler.consume(BeizeTokens.bracketRight);
+      } else {
+        compiler.consume(BeizeTokens.identifier);
+        final String key = compiler.previousToken.literal as String;
+        compiler.emitConstant(key);
+      }
+      compiler.consume(BeizeTokens.colon);
+      if (isStatic) {
+        parseExpression(compiler);
+        if (currentType != 0) {
+          markings.add(currentCount);
+          currentType = 0;
+          currentCount = 0;
+        }
+      } else {
+        compiler.consume(BeizeTokens.rightArrow);
+        parseFunction(compiler);
+        if (currentType != 1) {
+          markings.add(currentCount);
+          currentType = 1;
+          currentCount = 0;
+        }
+      }
+      currentCount++;
+      cont = compiler.match(BeizeTokens.comma);
+    }
+    if (currentCount != 0) {
+      markings.add(currentCount);
+    }
+    compiler.consume(BeizeTokens.braceRight);
+    compiler.emitOpCode(BeizeOpCodes.opClass);
+    compiler.emitCode(markings.length);
+    for (final int x in markings) {
+      compiler.emitCode(x);
+    }
+  }
 }

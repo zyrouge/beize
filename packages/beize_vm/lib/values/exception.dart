@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeExceptionValue extends BeizePrimitiveObjectValue {
@@ -8,7 +9,7 @@ class BeizeExceptionValue extends BeizePrimitiveObjectValue {
   final String? dartStackTrace;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.exception;
+  final String kName = 'Exception';
 
   @override
   BeizeValue get(final BeizeValue key) {
@@ -25,6 +26,10 @@ class BeizeExceptionValue extends BeizePrimitiveObjectValue {
     }
     return super.get(key);
   }
+
+  @override
+  BeizeExceptionClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.exceptionClass;
 
   @override
   BeizeExceptionValue kClone() =>

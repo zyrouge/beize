@@ -15,11 +15,26 @@ class BeizeFunctionCall {
     final BeizeValue value =
         index < arguments.length ? arguments[index] : BeizeNullValue.value;
     if (!value.canCast<T>()) {
-      throw BeizeRuntimeExpection.unexpectedArgumentType(
+      throw BeizeRuntimeException.unexpectedArgumentType(
         index,
-        BeizeValue.getKindFromType(T),
-        value.kind,
+        T.toString(),
+        value.kName,
       );
+    }
+    return value as T;
+  }
+
+  bool argumentAtIs<T extends BeizeValue>(final int index) {
+    final BeizeValue value =
+        index < arguments.length ? arguments[index] : BeizeNullValue.value;
+    return value.canCast<T>();
+  }
+
+  T? argumentAtOrNull<T extends BeizeValue>(final int index) {
+    final BeizeValue value =
+        index < arguments.length ? arguments[index] : BeizeNullValue.value;
+    if (!value.canCast<T>()) {
+      return null;
     }
     return value as T;
   }

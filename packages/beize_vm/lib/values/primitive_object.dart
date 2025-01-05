@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 typedef BeizeObjectValueField = ({
@@ -5,18 +6,24 @@ typedef BeizeObjectValueField = ({
   BeizeValue value,
 });
 
-abstract class BeizePrimitiveObjectValue extends BeizeValue {
-  BeizePrimitiveObjectValue({
-    final Map<int, List<BeizeObjectValueField>>? fields,
-    final Map<String, dynamic>? internals,
-  })  : fields = fields ?? <int, List<BeizeObjectValueField>>{},
-        internals = internals ?? <String, dynamic>{};
+class BeizeObjectValueFieldsMap {
+  const BeizeObjectValueFieldsMap(this.map);
 
-  final Map<int, List<BeizeObjectValueField>> fields;
-  final Map<String, dynamic> internals;
+  factory BeizeObjectValueFieldsMap.empty() =>
+      // ignore: prefer_const_constructors
+      BeizeObjectValueFieldsMap(<int, List<BeizeObjectValueField>>{});
+
+  factory BeizeObjectValueFieldsMap.fromFields(
+    final BeizeObjectValueFieldsMap fields,
+  ) =>
+      BeizeObjectValueFieldsMap(
+        Map<int, List<BeizeObjectValueField>>.of(fields.map),
+      );
+
+  final Map<int, List<BeizeObjectValueField>> map;
 
   bool has(final BeizeValue key) {
-    final List<BeizeObjectValueField>? found = fields[key.kHashCode];
+    final List<BeizeObjectValueField>? found = map[key.kHashCode];
     if (found == null) {
       return false;
     }
@@ -29,7 +36,7 @@ abstract class BeizePrimitiveObjectValue extends BeizeValue {
   }
 
   BeizeValue? getOrNull(final BeizeValue key) {
-    final List<BeizeObjectValueField>? found = fields[key.kHashCode];
+    final List<BeizeObjectValueField>? found = map[key.kHashCode];
     if (found == null) {
       return null;
     }
@@ -41,15 +48,12 @@ abstract class BeizePrimitiveObjectValue extends BeizeValue {
     return null;
   }
 
-  BeizeValue get(final BeizeValue key) =>
-      getOrNull(key) ?? BeizeNullValue.value;
-
   void set(final BeizeValue key, final BeizeValue value) {
     final int keyHashCode = key.kHashCode;
     final BeizeObjectValueField pair = (key: key, value: value);
-    final List<BeizeObjectValueField>? found = fields[keyHashCode];
+    final List<BeizeObjectValueField>? found = map[keyHashCode];
     if (found == null) {
-      fields[keyHashCode] = <BeizeObjectValueField>[pair];
+      map[keyHashCode] = <BeizeObjectValueField>[pair];
       return;
     }
     for (int i = 0; i < found.length; i++) {
@@ -63,7 +67,7 @@ abstract class BeizePrimitiveObjectValue extends BeizeValue {
   }
 
   void delete(final BeizeValue key) {
-    final List<BeizeObjectValueField>? found = fields[key.kHashCode];
+    final List<BeizeObjectValueField>? found = map[key.kHashCode];
     if (found == null) {
       return;
     }
@@ -76,36 +80,94 @@ abstract class BeizePrimitiveObjectValue extends BeizeValue {
     }
   }
 
-  List<BeizeValue> keys() {
-    final List<BeizeValue> keys = <BeizeValue>[];
-    for (final List<BeizeObjectValueField> x in fields.values) {
+  BeizeObjectValueFieldsMap clone() =>
+      BeizeObjectValueFieldsMap.fromFields(this);
+
+  Iterable<BeizeValue> get keys sync* {
+    for (final List<BeizeObjectValueField> x in map.values) {
       for (final BeizeObjectValueField y in x) {
-        keys.add(y.key);
+        yield y.key;
       }
     }
-    return keys;
   }
 
-  List<BeizeValue> values() {
-    final List<BeizeValue> values = <BeizeValue>[];
-    for (final List<BeizeObjectValueField> x in fields.values) {
+  Iterable<BeizeValue> get values sync* {
+    for (final List<BeizeObjectValueField> x in map.values) {
       for (final BeizeObjectValueField y in x) {
-        values.add(y.value);
+        yield y.value;
       }
     }
-    return values;
   }
 
-  List<MapEntry<BeizeValue, BeizeValue>> entries() {
-    final List<MapEntry<BeizeValue, BeizeValue>> entries =
-        <MapEntry<BeizeValue, BeizeValue>>[];
-    for (final List<BeizeObjectValueField> x in fields.values) {
+  Iterable<MapEntry<BeizeValue, BeizeValue>> get entries sync* {
+    for (final List<BeizeObjectValueField> x in map.values) {
       for (final BeizeObjectValueField y in x) {
-        entries.add(MapEntry<BeizeValue, BeizeValue>(y.key, y.value));
+        yield MapEntry<BeizeValue, BeizeValue>(y.key, y.value);
       }
     }
-    return entries;
   }
+
+  Iterable<BeizeObjectValueField> get fieldEntries sync* {
+    for (final List<BeizeObjectValueField> x in map.values) {
+      yield* x;
+    }
+  }
+}
+
+abstract class BeizePrimitiveObjectValue extends BeizeValue {
+  BeizePrimitiveObjectValue({
+    final BeizeObjectValueFieldsMap? fields,
+    final Map<String, dynamic>? internals,
+  })  : fields = fields ?? BeizeObjectValueFieldsMap.empty(),
+        internals = internals ?? <String, dynamic>{};
+
+  final BeizeObjectValueFieldsMap fields;
+  final Map<String, dynamic> internals;
+
+  bool has(final BeizeValue key) => fields.has(key);
+
+  BeizeValue? getOrNull(final BeizeValue key) => fields.getOrNull(key);
+
+  BeizeValue get(final BeizeValue key) =>
+      getOrNull(key) ?? BeizeNullValue.value;
+
+  BeizeValue getAlongFrame(final BeizeCallFrame frame, final BeizeValue key) =>
+      getOrNull(key) ??
+      kClass(frame).getInstanceFieldOrNull(this, key) ??
+      BeizeNullValue.value;
+
+  BeizeValue? getAlongClassOrNull(
+    final BeizePrimitiveClassValue clazz,
+    final BeizeValue key,
+  ) =>
+      getOrNull(key) ?? clazz.getInstanceFieldOrNull(this, key);
+
+  void set(final BeizeValue key, final BeizeValue value) {
+    fields.set(key, value);
+  }
+
+  void delete(final BeizeValue key) {
+    fields.delete(key);
+  }
+
+  List<BeizeValue> keys() => fields.keys.toList();
+
+  List<BeizeValue> values() => fields.values.toList();
+
+  List<MapEntry<BeizeValue, BeizeValue>> entries() => fields.entries.toList();
+
+  BeizeListValue kEntries() {
+    final BeizeListValue nValue = BeizeListValue();
+    for (final BeizeObjectValueField x in fields.fieldEntries) {
+      nValue.push(BeizeListValue(<BeizeValue>[x.key, x.value]));
+    }
+    return nValue;
+  }
+
+  BeizePrimitiveClassValue kClass(final BeizeCallFrame frame);
+
+  @override
+  bool kEquals(final BeizeValue other) => other == this;
 
   BeizeValue kClone();
 }

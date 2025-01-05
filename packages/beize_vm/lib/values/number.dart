@@ -1,4 +1,5 @@
 import '../errors/exports.dart';
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeNumberValue extends BeizePrimitiveObjectValue {
@@ -7,13 +8,13 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
   final double value;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.number;
+  final String kName = 'Number';
 
   int get unsafeIntValue => value.toInt();
 
   int get intValue {
     if (value % 1 == 0) return value.toInt();
-    throw BeizeRuntimeExpection.cannotConvertDoubleToInteger(value);
+    throw BeizeRuntimeException.cannotConvertDoubleToInteger(value);
   }
 
   num get numValue {
@@ -24,77 +25,12 @@ class BeizeNumberValue extends BeizePrimitiveObjectValue {
   BeizeNumberValue get negate => BeizeNumberValue(-value);
 
   @override
-  BeizeValue get(final BeizeValue key) {
-    if (key is BeizeStringValue) {
-      switch (key.value) {
-        case 'sign':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeNumberValue(value.sign),
-          );
+  BeizeNumberClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.numberClass;
 
-        case 'isFinite':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeBooleanValue(value.isFinite),
-          );
-
-        case 'isInfinite':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeBooleanValue(value.isInfinite),
-          );
-
-        case 'isNaN':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeBooleanValue(value.isNaN),
-          );
-
-        case 'isNegative':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeBooleanValue(value.isNegative),
-          );
-
-        case 'abs':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeNumberValue(value.abs()),
-          );
-
-        case 'ceil':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeNumberValue(value.ceilToDouble()),
-          );
-
-        case 'round':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeNumberValue(value.roundToDouble()),
-          );
-
-        case 'truncate':
-          return BeizeNativeFunctionValue.sync(
-            (final _) => BeizeNumberValue(value.truncateToDouble()),
-          );
-
-        case 'toPrecisionString':
-          return BeizeNativeFunctionValue.sync(
-            (final BeizeFunctionCall call) => BeizeStringValue(
-              value.toStringAsPrecision(
-                call.argumentAt<BeizeNumberValue>(0).intValue,
-              ),
-            ),
-          );
-
-        case 'toRadixString':
-          return BeizeNativeFunctionValue.sync(
-            (final BeizeFunctionCall call) => BeizeStringValue(
-              intValue.toRadixString(
-                call.argumentAt<BeizeNumberValue>(0).intValue,
-              ),
-            ),
-          );
-
-        default:
-      }
-    }
-    return super.get(key);
-  }
+  @override
+  bool kEquals(final BeizeValue other) =>
+      other is BeizeNumberValue && value == other.value;
 
   @override
   BeizeNumberValue kClone() => BeizeNumberValue(value);

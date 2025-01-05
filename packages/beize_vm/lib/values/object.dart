@@ -1,3 +1,4 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeObjectValue extends BeizePrimitiveObjectValue {
@@ -6,34 +7,34 @@ class BeizeObjectValue extends BeizePrimitiveObjectValue {
   });
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.object;
+  final String kName = 'Object';
 
   @override
-  BeizeObjectValue kClone() => BeizeObjectValue(
-        fields: Map<int, List<BeizeObjectValueField>>.of(fields),
-      );
+  BeizePrimitiveClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.objectClass;
+
+  @override
+  BeizeObjectValue kClone() => BeizeObjectValue(fields: fields.clone());
 
   @override
   String kToString() {
     final StringBuffer buffer = StringBuffer('{');
     bool hasValues = false;
-    for (final List<BeizeObjectValueField> x in fields.values) {
-      for (final BeizeObjectValueField y in x) {
-        if (hasValues) {
-          buffer.write(', ');
-        }
-        hasValues = true;
-        final String key = y.key.kToString();
-        final String value = y.value.kToString();
-        buffer.write('$key: $value');
+    for (final BeizeObjectValueField x in fields.fieldEntries) {
+      if (hasValues) {
+        buffer.write(', ');
       }
+      hasValues = true;
+      final String key = x.key.kToString();
+      final String value = x.value.kToString();
+      buffer.write('$key: $value');
     }
     buffer.write('}');
     return buffer.toString();
   }
 
   @override
-  bool get isTruthy => fields.isNotEmpty;
+  bool get isTruthy => fields.map.isNotEmpty;
 
   @override
   int get kHashCode => fields.hashCode;

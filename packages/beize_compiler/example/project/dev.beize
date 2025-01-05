@@ -1,9 +1,9 @@
-printHello := -> async {
-    print("Hello World");
+Welcomer := $ {
+    static hello: "hello",
+    static __toString__: -> : "WelcomerToString",
+    __constructor__: -> {
+        this.hello2 = "hello";
+    },
+    __toString__: -> : "WelcomerToString2",
 };
-
-main := -> async {
-    printHello().await;
-};
-
-main().await;
+print(Welcomer());

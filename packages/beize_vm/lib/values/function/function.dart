@@ -13,25 +13,7 @@ class BeizeFunctionValue extends BeizePrimitiveObjectValue
   final BeizeNamespace namespace;
 
   @override
-  BeizeValue get(final BeizeValue key) {
-    if (key is BeizeStringValue) {
-      switch (key.value) {
-        case 'call':
-          return BeizeNativeFunctionValue(
-            (final BeizeFunctionCall call) {
-              final BeizeListValue arguments = call.argumentAt(0);
-              return call.frame.callValue(this, arguments.elements);
-            },
-          );
-      }
-    }
-    return super.get(key);
-  }
-
-  bool get isAsync => constant.isAsync;
-
-  @override
-  final BeizeValueKind kind = BeizeValueKind.function;
+  final String kName = 'Function';
 
   @override
   BeizeInterpreterResult kCall(final BeizeFunctionCall call) {
@@ -54,11 +36,17 @@ class BeizeFunctionValue extends BeizePrimitiveObjectValue
   }
 
   @override
+  BeizeFunctionClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.functionClass;
+
+  @override
   BeizeFunctionValue kClone() =>
       BeizeFunctionValue(constant: constant, namespace: namespace);
 
   @override
   String kToString() => '<function>';
+
+  bool get isAsync => constant.isAsync;
 
   @override
   bool get isTruthy => true;

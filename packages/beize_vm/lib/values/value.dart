@@ -1,52 +1,27 @@
 import '../errors/exports.dart';
-import 'exports.dart';
 
 abstract class BeizeValue {
-  BeizeValueKind get kind;
+  String get kName;
 
   String kToString();
-  bool kEquals(final BeizeValue other) => other.kHashCode == kHashCode;
+
+  bool kEquals(final BeizeValue other);
 
   T cast<T extends BeizeValue>() {
-    if (canCast<T>()) return this as T;
-    throw BeizeRuntimeExpection.cannotCastTo(getKindFromType(T), kind);
+    if (canCast<T>()) {
+      return this as T;
+    }
+    throw BeizeRuntimeException.cannotCastTo(kName, T.toString());
   }
 
-  bool canCast<T extends BeizeValue>() {
-    if (T == BeizeValue) return true;
-    if (T == BeizePrimitiveObjectValue) {
-      return this is BeizePrimitiveObjectValue;
-    }
-    if (T == BeizeCallableValue) {
-      return this is BeizeCallableValue;
-    }
-    final BeizeValueKind to = getKindFromType(T);
-    if (kind == to) return true;
-    return false;
-  }
+  bool canCast<T extends BeizeValue>() => this is T;
 
   bool get isTruthy;
+
   bool get isFalsey => !isTruthy;
+
   int get kHashCode;
 
   @override
-  String toString() => 'Beize${kind.code}Value: ${kToString()}';
-
-  static final Map<Type, BeizeValueKind> _typeKindMap = <Type, BeizeValueKind>{
-    BeizeBooleanValue: BeizeValueKind.boolean,
-    BeizeFunctionValue: BeizeValueKind.function,
-    BeizeListValue: BeizeValueKind.list,
-    BeizeNativeFunctionValue: BeizeValueKind.function,
-    BeizeNullValue: BeizeValueKind.nullValue,
-    BeizeNumberValue: BeizeValueKind.number,
-    BeizeObjectValue: BeizeValueKind.object,
-    BeizeStringValue: BeizeValueKind.string,
-    BeizeModuleValue: BeizeValueKind.module,
-    BeizePrimitiveObjectValue: BeizeValueKind.object,
-    BeizeExceptionValue: BeizeValueKind.exception,
-    // assume callable value as a function
-    BeizeCallableValue: BeizeValueKind.function,
-  };
-
-  static BeizeValueKind getKindFromType(final Type type) => _typeKindMap[type]!;
+  String toString() => 'Beize${kName}Value: ${kToString()}';
 }

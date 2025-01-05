@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:typed_data';
-
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:beize_vm/beize_vm.dart';
 import 'package:path/path.dart' as p;

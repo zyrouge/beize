@@ -7,7 +7,7 @@ class BeizeModuleValue extends BeizePrimitiveObjectValue {
   final BeizeNamespace namespace;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.module;
+  final String kName = 'Module';
 
   @override
   BeizeValue get(final BeizeValue key) {
@@ -30,10 +30,13 @@ class BeizeModuleValue extends BeizePrimitiveObjectValue {
   }
 
   @override
+  BeizeClassValue kClass(final BeizeCallFrame frame) => frame.vm.globals.clazz;
+
+  @override
   BeizeModuleValue kClone() => BeizeModuleValue(namespace);
 
   @override
-  String kToString() => kind.code;
+  String kToString() => kName;
 
   @override
   bool get isTruthy => true;

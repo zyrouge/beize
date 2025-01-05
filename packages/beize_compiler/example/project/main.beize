@@ -1,6 +1,6 @@
-import "./benchmark.beize" only createBenchmarker;
+import "./benchmark.beize" only Benchmarker;
 
-benchmarker := createBenchmarker();
+benchmarker := Benchmarker();
 benchmarker.start();
 
 increment := -> i {

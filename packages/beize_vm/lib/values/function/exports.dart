@@ -1,6 +1,9 @@
+export 'bound_function.dart';
 export 'call.dart';
 export 'callable.dart';
 export 'function.dart';
+export 'function_class.dart';
 export 'native_function.dart';
 export 'unawaited.dart';
+export 'unawaited_class.dart';
 export 'utils.dart';

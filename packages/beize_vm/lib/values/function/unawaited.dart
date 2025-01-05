@@ -29,7 +29,11 @@ class BeizeUnawaitedValue extends BeizePrimitiveObjectValue {
   }
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.unawaited;
+  final String kName = 'Function';
+
+  @override
+  BeizeUnawaitedClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.unawaitedClass;
 
   @override
   BeizeUnawaitedValue kClone() => BeizeUnawaitedValue(arguments, function);

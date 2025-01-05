@@ -58,6 +58,7 @@ enum BeizeTokens {
   logicalOrEqual, // ||=
   caretEqual, // ^=
   nullOrEqual, // ??=
+  dollar, // $
 
   trueKw, // true
   falseKw, // false
@@ -80,6 +81,8 @@ enum BeizeTokens {
   asyncKw, // async
   awaitKw, // await
   onlyKw, // only
+  isKw, // is
+  staticKw, // static
 }
 
 const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
@@ -140,6 +143,7 @@ const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
   BeizeTokens.logicalOrEqual: '||=',
   BeizeTokens.caretEqual: '^=',
   BeizeTokens.nullOrEqual: '??=',
+  BeizeTokens.dollar: r'$',
   BeizeTokens.trueKw: 'true',
   BeizeTokens.falseKw: 'false',
   BeizeTokens.ifKw: 'if',
@@ -161,6 +165,8 @@ const Map<BeizeTokens, String> _tokensCodeMap = <BeizeTokens, String>{
   BeizeTokens.asyncKw: 'async',
   BeizeTokens.awaitKw: 'await',
   BeizeTokens.onlyKw: 'only',
+  BeizeTokens.isKw: 'is',
+  BeizeTokens.staticKw: 'static',
 };
 
 extension OutreTokensUtils on BeizeTokens {

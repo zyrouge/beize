@@ -127,16 +127,16 @@ class BeizeInterpreter {
         } else if (constant is String) {
           value = BeizeStringValue(constant);
         } else {
-          throw BeizeRuntimeExpection.unknownConstant(constant);
+          throw BeizeRuntimeException.unknownConstant(constant);
         }
         stack.push(value);
         frame.ip++;
 
       case BeizeOpCodes.opTrue:
-        stack.push(BeizeBooleanValue.trueValue);
+        stack.push(frame.vm.globals.trueValue);
 
       case BeizeOpCodes.opFalse:
-        stack.push(BeizeBooleanValue.falseValue);
+        stack.push(frame.vm.globals.falseValue);
 
       case BeizeOpCodes.opNull:
         stack.push(BeizeNullValue.value);
@@ -205,7 +205,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue) {
           return handleInvalidUnary(
-            'Cannot perform negate on "${a.kind.code}"',
+            'Cannot perform negate on "${a.kName}"',
           );
         }
         stack.push(a.negate);
@@ -214,7 +214,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue) {
           return handleInvalidUnary(
-            'Cannot perform bitwise not on "${a.kind.code}"',
+            'Cannot perform bitwise not on "${a.kName}"',
           );
         }
         stack.push(BeizeNumberValue((~a.unsafeIntValue).toDouble()));
@@ -222,10 +222,15 @@ class BeizeInterpreter {
       case BeizeOpCodes.opEqual:
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
-        stack.push(BeizeBooleanValue(a.kHashCode == b.kHashCode));
+        stack.push(
+          BeizeBooleanValue(
+            frame.vm.globals,
+            a.kHashCode == b.kHashCode && a.kEquals(b),
+          ),
+        );
 
       case BeizeOpCodes.opNot:
-        stack.push(BeizeBooleanValue(!stack.pop().isTruthy));
+        stack.push(BeizeBooleanValue(frame.vm.globals, !stack.pop().isTruthy));
 
       case BeizeOpCodes.opAdd:
         final BeizeValue b = stack.pop();
@@ -236,7 +241,7 @@ class BeizeInterpreter {
           stack.push(BeizeNumberValue(a.value + b.value));
         } else {
           return handleInvalidBinary(
-            'Cannot perform addition between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform addition between "${a.kName}" and "${b.kName}"',
           );
         }
 
@@ -245,7 +250,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform subtraction between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform subtraction between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue(a.value - b.value));
@@ -255,7 +260,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform multiplication between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform multiplication between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue(a.value * b.value));
@@ -265,7 +270,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform division between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform division between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue(a.value / b.value));
@@ -275,7 +280,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform floor division between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform floor division between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue((a.value ~/ b.value).toDouble()));
@@ -285,7 +290,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform remainder between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform remainder between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue(a.value % b.value));
@@ -295,7 +300,7 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform exponentiation between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform exponentiation between "${a.kName}" and "${b.kName}"',
           );
         }
         stack.push(BeizeNumberValue(pow(a.value, b.value).toDouble()));
@@ -305,26 +310,26 @@ class BeizeInterpreter {
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform comparison between "${a.kName}" and "${b.kName}"',
           );
         }
-        stack.push(BeizeBooleanValue(a.value < b.value));
+        stack.push(BeizeBooleanValue(frame.vm.globals, a.value < b.value));
 
       case BeizeOpCodes.opGreater:
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
         if (a is! BeizeNumberValue || b is! BeizeNumberValue) {
           return handleInvalidBinary(
-            'Cannot perform comparison between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform comparison between "${a.kName}" and "${b.kName}"',
           );
         }
-        stack.push(BeizeBooleanValue(a.value > b.value));
+        stack.push(BeizeBooleanValue(frame.vm.globals, a.value > b.value));
 
       case BeizeOpCodes.opBitwiseAnd:
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
         if (a is BeizeBooleanValue && b is BeizeBooleanValue) {
-          stack.push(BeizeBooleanValue(a.value & b.value));
+          stack.push(BeizeBooleanValue(frame.vm.globals, a.value & b.value));
         } else if (a is BeizeNumberValue && b is BeizeNumberValue) {
           stack.push(
             BeizeNumberValue(
@@ -333,7 +338,7 @@ class BeizeInterpreter {
           );
         } else {
           return handleInvalidBinary(
-            'Cannot perform bitwise AND between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform bitwise AND between "${a.kName}" and "${b.kName}"',
           );
         }
 
@@ -341,14 +346,14 @@ class BeizeInterpreter {
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
         if (a is BeizeBooleanValue && b is BeizeBooleanValue) {
-          stack.push(BeizeBooleanValue(a.value | b.value));
+          stack.push(BeizeBooleanValue(frame.vm.globals, a.value | b.value));
         } else if (a is BeizeNumberValue && b is BeizeNumberValue) {
           stack.push(
             BeizeNumberValue((a.intValue | b.intValue).toDouble()),
           );
         } else {
           return handleInvalidBinary(
-            'Cannot perform bitwise OR between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform bitwise OR between "${a.kName}" and "${b.kName}"',
           );
         }
 
@@ -356,14 +361,14 @@ class BeizeInterpreter {
         final BeizeValue b = stack.pop();
         final BeizeValue a = stack.pop();
         if (a is BeizeBooleanValue && b is BeizeBooleanValue) {
-          stack.push(BeizeBooleanValue(a.value ^ b.value));
+          stack.push(BeizeBooleanValue(frame.vm.globals, a.value ^ b.value));
         } else if (a is BeizeNumberValue && b is BeizeNumberValue) {
           stack.push(
             BeizeNumberValue((a.intValue ^ b.intValue).toDouble()),
           );
         } else {
           return handleInvalidBinary(
-            'Cannot perform bitwise XOR between "${a.kind.code}" and "${b.kind.code}"',
+            'Cannot perform bitwise XOR between "${a.kName}" and "${b.kName}"',
           );
         }
 
@@ -416,10 +421,10 @@ class BeizeInterpreter {
         final BeizeValue obj = stack.pop();
         if (obj is! BeizePrimitiveObjectValue) {
           return handleInvalidMemberAccess(
-            'Cannot use member accessor on "${obj.kind.code}"',
+            'Cannot use member accessor on "${obj.kName}"',
           );
         }
-        final BeizeValue value = obj.get(name);
+        final BeizeValue value = obj.getAlongFrame(frame, name);
         stack.push(value);
 
       case BeizeOpCodes.opSetProperty:
@@ -428,7 +433,7 @@ class BeizeInterpreter {
         final BeizeValue obj = stack.pop();
         if (obj is! BeizePrimitiveObjectValue) {
           return handleInvalidMemberAccess(
-            'Cannot do member assign on "${obj.kind.code}"',
+            'Cannot do member assign on "${obj.kName}"',
           );
         }
         obj.set(name, value);
@@ -451,7 +456,7 @@ class BeizeInterpreter {
         }
         return handleCustomException(
           'InvalidThrow',
-          'Cannot throw value of "${err.kind.code}"',
+          'Cannot throw value of "${err.kName}"',
         );
 
       case BeizeOpCodes.opImport:
@@ -472,8 +477,49 @@ class BeizeInterpreter {
           stack.push(module.value);
         }
 
+      case BeizeOpCodes.opIs:
+        final BeizeValue clazz = stack.pop();
+        final BeizeValue obj = stack.pop();
+        if (clazz is! BeizePrimitiveClassValue) {
+          return handleInvalidBinary(
+            'Cannot perform instance check with "${clazz.kName}"',
+          );
+        }
+        stack.push(
+          BeizeBooleanValue(
+            frame.vm.globals,
+            obj is BeizePrimitiveObjectValue && clazz.kIsInstance(obj),
+          ),
+        );
+
+      case BeizeOpCodes.opClass:
+        final int count = chunk.codeAt(frame.ip);
+        frame.ip++;
+        final BeizeVMClassValue clazz = BeizeVMClassValue(vm: frame.vm);
+        for (int i = 0; i < count; i += 2) {
+          if (i + 1 != count) {
+            final int instanceCount = chunk.codeAt(frame.ip + i + 1);
+            for (int j = 0; j < instanceCount; j++) {
+              final BeizeValue value = stack.pop();
+              final BeizeValue key = stack.pop();
+              clazz.instanceFields.set(key, value);
+            }
+          }
+          final int staticCount = chunk.codeAt(frame.ip + i);
+          for (int j = 0; j < staticCount; j++) {
+            final BeizeValue value = stack.pop();
+            final BeizeValue key = stack.pop();
+            if (value is BeizeFunctionValue) {
+              value.namespace.assign('this', clazz);
+            }
+            clazz.set(key, value);
+          }
+        }
+        frame.ip += count;
+        stack.push(clazz);
+
       default:
-        throw BeizeRuntimeExpection.unknownOpCode(opCode);
+        throw BeizeRuntimeException.unknownOpCode(opCode);
     }
     return null;
   }

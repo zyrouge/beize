@@ -10,7 +10,10 @@ class BeizeNullValue extends BeizeValue {
   int get kHashCode => null.hashCode;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.nullValue;
+  final String kName = 'Null';
+
+  @override
+  bool kEquals(final BeizeValue other) => other is BeizeNullValue;
 
   @override
   String kToString() => 'null';

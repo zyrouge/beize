@@ -124,12 +124,17 @@ class BeizeParseRule {
       precedence: BeizePrecedence.caret,
       infix: BeizeParser.parseBinaryExpression,
     ),
+    BeizeTokens.isKw: BeizeParseRule(
+      precedence: BeizePrecedence.comparison,
+      infix: BeizeParser.parseBinaryExpression,
+    ),
     BeizeTokens.identifier: BeizeParseRule(prefix: BeizeParser.parseIdentifier),
     BeizeTokens.number: BeizeParseRule(prefix: BeizeParser.parseNumber),
     BeizeTokens.string: BeizeParseRule(prefix: BeizeParser.parseString),
     BeizeTokens.trueKw: BeizeParseRule(prefix: BeizeParser.parseBoolean),
     BeizeTokens.falseKw: BeizeParseRule(prefix: BeizeParser.parseBoolean),
     BeizeTokens.nullKw: BeizeParseRule(prefix: BeizeParser.parseNull),
+    BeizeTokens.dollar: BeizeParseRule(prefix: BeizeParser.parseClass),
   };
 
   static BeizeParseRule of(final BeizeTokens type) => rules[type] ?? none;

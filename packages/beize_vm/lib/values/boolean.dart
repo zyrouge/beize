@@ -1,21 +1,32 @@
+import '../vm/exports.dart';
 import 'exports.dart';
 
 class BeizeBooleanValue extends BeizePrimitiveObjectValue {
-  // ignore: avoid_positional_boolean_parameters
-  factory BeizeBooleanValue(final bool value) => value ? trueValue : falseValue;
+  factory BeizeBooleanValue(final BeizeGlobals globals, final bool value) =>
+      value ? globals.trueValue : globals.falseValue;
 
   // ignore: avoid_positional_boolean_parameters
   BeizeBooleanValue._(this.value);
 
+// new method to prevent multiple instances of just two values
+  factory BeizeBooleanValue.create(final bool value) =>
+      BeizeBooleanValue._(value);
+
   final bool value;
 
   @override
-  final BeizeValueKind kind = BeizeValueKind.boolean;
-
-  BeizeBooleanValue get inversed => BeizeBooleanValue(!value);
+  final String kName = 'Boolean';
 
   @override
-  BeizeBooleanValue kClone() => BeizeBooleanValue(value);
+  BeizeBooleanClassValue kClass(final BeizeCallFrame frame) =>
+      frame.vm.globals.booleanClass;
+
+  @override
+  bool kEquals(final BeizeValue other) =>
+      other is BeizeBooleanValue && value == other.value;
+
+  @override
+  BeizeBooleanValue kClone() => this;
 
   @override
   String kToString() => value.toString();
@@ -25,7 +36,4 @@ class BeizeBooleanValue extends BeizePrimitiveObjectValue {
 
   @override
   int get kHashCode => value.hashCode;
-
-  static final BeizeBooleanValue trueValue = BeizeBooleanValue._(true);
-  static final BeizeBooleanValue falseValue = BeizeBooleanValue._(false);
 }

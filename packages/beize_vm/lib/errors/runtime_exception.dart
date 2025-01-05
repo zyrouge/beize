@@ -1,63 +1,65 @@
 import '../bytecode.dart';
-import '../values/exports.dart';
 import 'native_exception.dart';
 
-class BeizeRuntimeExpection extends BeizeNativeException {
-  BeizeRuntimeExpection(super.message);
+class BeizeRuntimeException extends BeizeNativeException {
+  BeizeRuntimeException(super.message);
 
-  factory BeizeRuntimeExpection.invalidLeftOperandType(
+  factory BeizeRuntimeException.invalidLeftOperandType(
     final String expected,
     final String received,
   ) =>
-      BeizeRuntimeExpection(
+      BeizeRuntimeException(
         'Invalid left operand value type (expected "$expected", received "$received")',
       );
 
-  factory BeizeRuntimeExpection.invalidRightOperandType(
+  factory BeizeRuntimeException.invalidRightOperandType(
     final String expected,
     final String received,
   ) =>
-      BeizeRuntimeExpection(
+      BeizeRuntimeException(
         'Invalid right operand value type (expected "$expected", received "$received")',
       );
 
-  factory BeizeRuntimeExpection.undefinedVariable(final String name) =>
-      BeizeRuntimeExpection('Undefined variable "$name"');
+  factory BeizeRuntimeException.undefinedVariable(final String name) =>
+      BeizeRuntimeException('Undefined variable "$name"');
 
-  factory BeizeRuntimeExpection.cannotRedecalreVariable(final String name) =>
-      BeizeRuntimeExpection('Cannot redeclare variable "$name"');
+  factory BeizeRuntimeException.cannotRedeclareVariable(final String name) =>
+      BeizeRuntimeException('Cannot redeclare variable "$name"');
 
-  factory BeizeRuntimeExpection.unknownOpCode(final BeizeOpCodes opCode) =>
-      BeizeRuntimeExpection('Unknown op code: ${opCode.name}');
+  factory BeizeRuntimeException.unknownOpCode(final BeizeOpCodes opCode) =>
+      BeizeRuntimeException('Unknown op code: ${opCode.name}');
 
-  factory BeizeRuntimeExpection.unknownConstant(final dynamic constant) =>
-      BeizeRuntimeExpection('Unknown constant: $constant');
+  factory BeizeRuntimeException.unknownConstant(final dynamic constant) =>
+      BeizeRuntimeException('Unknown constant: $constant');
 
-  factory BeizeRuntimeExpection.cannotCastTo(
-    final BeizeValueKind expected,
-    final BeizeValueKind received,
+  factory BeizeRuntimeException.cannotCastTo(
+    final String expected,
+    final String received,
   ) =>
-      BeizeRuntimeExpection(
-        'Cannot cast "${received.code}" to "${expected.code}"',
+      BeizeRuntimeException(
+        'Cannot cast "$received" to "$expected"',
       );
 
-  factory BeizeRuntimeExpection.unwrapFailed(final String message) =>
-      BeizeRuntimeExpection('Unwrap failed due to "$message"');
+  factory BeizeRuntimeException.unwrapFailed(final String message) =>
+      BeizeRuntimeException('Unwrap failed due to "$message"');
 
-  factory BeizeRuntimeExpection.cannotConvertDoubleToInteger(
+  factory BeizeRuntimeException.cannotConvertDoubleToInteger(
     final double value,
   ) =>
-      BeizeRuntimeExpection('Cannot convert "$value" to integer');
+      BeizeRuntimeException('Cannot convert "$value" to integer');
 
-  factory BeizeRuntimeExpection.unexpectedArgumentType(
+  factory BeizeRuntimeException.unexpectedArgumentType(
     final int index,
-    final BeizeValueKind expected,
-    final BeizeValueKind received,
+    final String expected,
+    final String received,
   ) =>
-      BeizeRuntimeExpection(
-        'Expected argument at $index to be "${expected.code}", received "${received.code}"',
+      BeizeRuntimeException(
+        'Expected argument at $index to be "$expected", received "$received"',
       );
 
+  factory BeizeRuntimeException.notCallable(final String value) =>
+      BeizeRuntimeException('Value "$value" is not callable');
+
   @override
-  String toString() => 'BeizeRuntimeExpection: $message';
+  String toString() => 'BeizeRuntimeException: $message';
 }

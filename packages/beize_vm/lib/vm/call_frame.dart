@@ -36,7 +36,7 @@ class BeizeCallFrame {
     }
     return BeizeInterpreterResult.fail(
       BeizeExceptionValue(
-        'BeizeRuntimeException: Value "${value.kind.code}" is not callable',
+        'BeizeRuntimeException: Value "${value.kName}" is not callable',
         getStackTrace(),
       ),
     );
@@ -77,5 +77,46 @@ class BeizeCallFrame {
     final String current = toStackTraceLine(depth);
     if (parent == null) return current;
     return '$current\n${parent!.getStackTrace(depth + 1)}';
+  }
+
+  static BeizeInterpreterResult kCallValueFrameless(
+    final BeizeVM vm,
+    final BeizeValue value,
+  ) {
+    if (value is BeizeFunctionValue) {
+      final BeizeFunctionCall call = BeizeFunctionCall(
+        frame: BeizeCallFrame(
+          vm: vm,
+          function: value.constant,
+          namespace: value.namespace,
+        ),
+        arguments: <BeizeValue>[],
+      );
+      return value.kCall(call);
+    }
+    if (value is BeizeCallableValue) {
+      // TODO: make this better
+      final BeizeFunctionCall call = BeizeFunctionCall(
+        frame: BeizeCallFrame(
+          vm: vm,
+          function: BeizeFunctionConstant(
+            moduleIndex: -1,
+            isAsync: false,
+            arguments: List<int>.empty(),
+            chunk: BeizeChunk.empty(),
+          ),
+          namespace: BeizeNamespace(),
+        ),
+        arguments: <BeizeValue>[],
+      );
+      return value.kCall(call);
+    }
+    return BeizeInterpreterResult.fail(
+      BeizeExceptionValue(
+        'BeizeRuntimeException: Value "${value.kName}" is not callable',
+        '<suspended>',
+        StackTrace.current.toString(),
+      ),
+    );
   }
 }

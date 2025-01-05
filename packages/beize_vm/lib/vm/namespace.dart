@@ -1,15 +1,8 @@
 import '../errors/runtime_exception.dart';
 import '../values/exports.dart';
-import 'natives/exports.dart';
 
 class BeizeNamespace {
   BeizeNamespace([this.parent]);
-
-  factory BeizeNamespace.withNatives() {
-    final BeizeNamespace namespace = BeizeNamespace();
-    BeizeNatives.bind(namespace);
-    return namespace;
-  }
 
   final BeizeNamespace? parent;
   final Map<String, BeizeValue> values = <String, BeizeValue>{};
@@ -17,7 +10,7 @@ class BeizeNamespace {
   BeizeValue lookup(final String name) {
     if (!values.containsKey(name)) {
       if (parent == null) {
-        throw BeizeRuntimeExpection.undefinedVariable(name);
+        throw BeizeRuntimeException.undefinedVariable(name);
       }
       return parent!.lookup(name);
     }
@@ -29,7 +22,7 @@ class BeizeNamespace {
 
   void declare(final String name, final BeizeValue value) {
     if (values.containsKey(name)) {
-      throw BeizeRuntimeExpection.cannotRedecalreVariable(name);
+      throw BeizeRuntimeException.cannotRedeclareVariable(name);
     }
     values[name] = value;
   }
@@ -37,7 +30,7 @@ class BeizeNamespace {
   void assign(final String name, final BeizeValue value) {
     if (!values.containsKey(name)) {
       if (parent == null) {
-        throw BeizeRuntimeExpection.undefinedVariable(name);
+        throw BeizeRuntimeException.undefinedVariable(name);
       }
       return parent!.assign(name, value);
     }

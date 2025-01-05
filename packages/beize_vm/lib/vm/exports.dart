@@ -1,4 +1,5 @@
 export 'call_frame.dart';
+export 'globals.dart';
 export 'interpreter.dart';
 export 'namespace.dart';
 export 'natives/exports.dart';
