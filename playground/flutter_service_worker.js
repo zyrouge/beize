@@ -24,13 +24,13 @@ const RESOURCES = {"assets/assets/fonts/UbuntuMono-Regular.ttf": "c8ca9c5cab2861
 "canvaskit/canvaskit.wasm": "2e9895626fe95683569ed951214f1eb8",
 "canvaskit/skwasm_st.js.symbols": "a564f5dfbd90292f0f45611470170fe1",
 "canvaskit/canvaskit.js": "de27f912e40a372c22a069c1c7244d9b",
-"index.html": "b2b8d530ed317b58017235a32c88dd74",
-"/": "b2b8d530ed317b58017235a32c88dd74",
+"index.html": "5d80a176146a259031e42b3ff1a4f3df",
+"/": "5d80a176146a259031e42b3ff1a4f3df",
 "main.dart.wasm": "d727ceefd76f6d30513eee478393f83c",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "7d12fee647a01d3b09044ee26d50dfdc",
 "main.dart.mjs": "249b001f06519d0119aa6558acf091dc",
-"flutter_bootstrap.js": "0fcb1991e4daa9259ae0f875a8086e0d",
+"flutter_bootstrap.js": "fbfcaf47e45583428642c331d72b58b4",
 "main.dart.js": "7d4c2f8941762814893522ebf7403b7f"};
 // The application shell files that are downloaded before a service worker can
 // start.
