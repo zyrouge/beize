@@ -260,6 +260,35 @@ class BeizeCompiler {
 
   static int version = 0;
 
+  static Future<BeizeProgramConstant> compileScript({
+    required final String script,
+    required final BeizeCompilerOptions options,
+  }) async {
+    const String dummyModulePath = 'main.beize';
+    final BeizeInput input = BeizeInput(script);
+    final BeizeCompiler compiler = BeizeCompiler._(
+      BeizeScanner(input),
+      options: options,
+      mode: BeizeCompilerMode.script,
+      root: dummyModulePath,
+      modulePath: 'root',
+      moduleIndex: 0,
+      modules: <int>[],
+      constants: <BeizeConstant>[],
+    );
+    compiler.prepare(isAsync: true);
+    final int nameIndex = compiler.makeConstant(dummyModulePath);
+    final int functionIndex = compiler.makeConstant(compiler.currentFunction);
+    compiler.modules.add(nameIndex);
+    compiler.modules.add(functionIndex);
+    await compiler.compile();
+    return BeizeProgramConstant(
+      version: version,
+      modules: compiler.modules,
+      constants: compiler.constants,
+    );
+  }
+
   static Future<BeizeProgramConstant> compileProject({
     required final String root,
     required final String entrypoint,

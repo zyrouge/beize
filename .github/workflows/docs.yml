@@ -17,11 +17,22 @@ jobs:
               with:
                   python-version: 3.x
 
+            - uses: subosito/flutter-action@v2
+              with:
+                  channel: beta
+                  cache: true
+
             - name: 🚧 Install dependencies
               run: pip install mkdocs-material
 
-            - name: 👷 Build site
+            - name: 👷 Build site (docs)
               run: mkdocs build -d docs-dist
+
+            - name: 👷 Build site (playground)
+              working-directory: playground
+              run: |
+                  flutter build web --wasm --base-href "/playground/"
+                  mv build/web ../docs-dist/playground
 
             - name: 🚀 Deploy
               uses: zyrouge/gh-push-action@v1.0.5
