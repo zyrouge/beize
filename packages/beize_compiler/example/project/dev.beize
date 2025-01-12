@@ -1,19 +1,20 @@
 parent := $ {
     static p1: "p1",
-    __constructor__: -> {
-        print('called');
-        this.p1 = "p1";
+    __constructor__: -> p1 {
+        this.p1 = p1;
     }
 };
 
 parent2 := $ parent {
+    __constructor__: -> {
+        super.__constructor__('p1');
+    },
 };
 
 child := $ parent2 {
     static c1: "c1",
     static c2: -> : super.p1,
     __constructor__: -> {
-        print('called 2');
         super.__constructor__();
     }
 };

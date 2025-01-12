@@ -7,7 +7,14 @@ class BeizeVMClassValue extends BeizePrimitiveClassValue {
     this.parentVMClass,
     super.fields,
     super.instanceFields,
-  });
+  }) {
+    instanceFields.set(
+      BeizeStringValue(kConstructorFunction),
+      BeizeNativeFunctionValue.boundSync(
+        (final _, final __) => BeizeNullValue.value,
+      ),
+    );
+  }
 
   final BeizeVM vm;
   final BeizeVMClassValue? parentVMClass;
@@ -27,33 +34,35 @@ class BeizeVMClassValue extends BeizePrimitiveClassValue {
 
   BeizeInterpreterResult _kInstantiate(
     final BeizeFunctionCall call, {
-    final bool invokeConstructor = true,
+    final bool callConstructor = true,
   }) {
-    BeizeVMObjectValue? parentVMObject;
-    if (parentVMClass != null) {
-      final BeizeInterpreterResult result =
-          parentVMClass!._kInstantiate(call, invokeConstructor: false);
-      if (result.isFailure) {
-        return result;
+    {
+      BeizeVMObjectValue? parentVMObject;
+      if (parentVMClass != null) {
+        final BeizeInterpreterResult result =
+            parentVMClass!._kInstantiate(call, callConstructor: false);
+        if (result.isFailure) {
+          return result;
+        }
+        parentVMObject = result.value as BeizeVMObjectValue;
       }
-      parentVMObject = result.value as BeizeVMObjectValue;
-    }
-    final BeizeVMObjectValue value = BeizeVMObjectValue(
-      kClass: this,
-      parentVMObject: parentVMObject,
-    );
-    final BeizeValue? constructor = getInstanceFieldOrNull(
-      value,
-      BeizeStringValue(kConstructorFunction),
-    );
-    if (invokeConstructor && constructor != null) {
-      final BeizeInterpreterResult result =
-          call.frame.callValue(constructor, <BeizeValue>[]);
-      if (result.isFailure) {
-        return result;
+      final BeizeVMObjectValue value = BeizeVMObjectValue(
+        kClass: this,
+        parentVMObject: parentVMObject,
+      );
+      final BeizeValue? constructor = super.getInstanceFieldOrNull(
+        value,
+        BeizeStringValue(kConstructorFunction),
+      );
+      if (callConstructor && constructor != null) {
+        final BeizeInterpreterResult result =
+            call.frame.callValue(constructor, <BeizeValue>[]);
+        if (result.isFailure) {
+          return result;
+        }
       }
+      return BeizeInterpreterResult.success(value);
     }
-    return BeizeInterpreterResult.success(value);
   }
 
   @override
