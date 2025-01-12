@@ -10,12 +10,12 @@ class BeizeModuleValue extends BeizePrimitiveObjectValue {
   final String kName = 'Module';
 
   @override
-  BeizeValue get(final BeizeValue key) {
+  BeizeValue? getOrNull(final BeizeValue key) {
     if (key is BeizeStringValue) {
       final BeizeValue? value = namespace.lookupOrNull(key.value);
       if (value != null) return value;
     }
-    return super.get(key);
+    return super.getOrNull(key);
   }
 
   @override

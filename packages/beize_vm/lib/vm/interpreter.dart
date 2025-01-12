@@ -40,7 +40,7 @@ class BeizeInterpreter {
         BeizeExceptionValue(
           'BeizeRuntimeException: $err',
           frame.getStackTrace(),
-          stackTrace.toString(),
+          stackTrace,
         ),
       );
     }
@@ -58,7 +58,7 @@ class BeizeInterpreter {
         BeizeExceptionValue(
           'BeizeRuntimeException: $err',
           frame.getStackTrace(),
-          stackTrace.toString(),
+          stackTrace,
         ),
       );
     }
@@ -118,6 +118,7 @@ class BeizeInterpreter {
         if (constant is BeizeFunctionConstant) {
           final BeizeNamespace functionNamespace = namespace.enclosed;
           functionNamespace.declare('this', BeizeNullValue.value);
+          functionNamespace.declare('super', BeizeNullValue.value);
           value = BeizeFunctionValue(
             constant: constant,
             namespace: functionNamespace,
@@ -411,6 +412,7 @@ class BeizeInterpreter {
           final BeizeValue key = stack.pop();
           if (value is BeizeFunctionValue) {
             value.namespace.assign('this', obj);
+            value.namespace.assign('super', BeizeNullValue.value);
           }
           obj.set(key, value);
         }
@@ -493,29 +495,33 @@ class BeizeInterpreter {
         );
 
       case BeizeOpCodes.opClass:
-        final int count = chunk.codeAt(frame.ip);
-        frame.ip++;
-        final BeizeVMClassValue clazz = BeizeVMClassValue(vm: frame.vm);
-        for (int i = 0; i < count; i += 2) {
-          if (i + 1 != count) {
-            final int instanceCount = chunk.codeAt(frame.ip + i + 1);
-            for (int j = 0; j < instanceCount; j++) {
-              final BeizeValue value = stack.pop();
-              final BeizeValue key = stack.pop();
-              clazz.instanceFields.set(key, value);
-            }
-          }
-          final int staticCount = chunk.codeAt(frame.ip + i);
-          for (int j = 0; j < staticCount; j++) {
+        final bool hasParent = chunk.codeAt(frame.ip) == 1;
+        final int count = chunk.codeAt(frame.ip + 1);
+        frame.ip += 2 + count;
+        final BeizeVMClassValue? parentClass =
+            hasParent ? stack.peek(count * 2) : null;
+        final BeizeVMClassValue clazz =
+            BeizeVMClassValue(vm: frame.vm, parentVMClass: parentClass);
+        final BeizeValue parentClassValue = parentClass ?? BeizeNullValue.value;
+        for (int i = 0; i < count; i++) {
+          final bool isStatic = chunk.codeAt(frame.ip - i - 1) == 0;
+          if (isStatic) {
             final BeizeValue value = stack.pop();
             final BeizeValue key = stack.pop();
             if (value is BeizeFunctionValue) {
               value.namespace.assign('this', clazz);
+              value.namespace.assign('super', parentClassValue);
             }
             clazz.set(key, value);
+            continue;
           }
+          final BeizeValue value = stack.pop();
+          final BeizeValue key = stack.pop();
+          clazz.instanceFields.set(key, value);
         }
-        frame.ip += count;
+        if (hasParent) {
+          stack.pop();
+        }
         stack.push(clazz);
 
       default:

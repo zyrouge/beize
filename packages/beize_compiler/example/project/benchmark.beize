@@ -12,5 +12,3 @@ Benchmarker := $ {
         print('Took ' + (this.endedAt - this.startedAt) + 'ms');
     },
 };
-
-print(Benchmarker);

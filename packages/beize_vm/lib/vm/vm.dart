@@ -103,6 +103,13 @@ class BeizeVM {
       options.onUnhandledException!.call(err);
       return;
     }
+    final StackTrace? dartStackTrace = err.dartStackTrace;
+    if (dartStackTrace != null) {
+      throw Error.throwWithStackTrace(
+        err.toCustomString(includePrefix: false),
+        dartStackTrace,
+      );
+    }
     throw BeizeUnhandledExpection(err.toCustomString(includePrefix: false));
   }
 }

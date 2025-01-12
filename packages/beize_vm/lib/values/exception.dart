@@ -6,7 +6,7 @@ class BeizeExceptionValue extends BeizePrimitiveObjectValue {
 
   final String message;
   final String stackTrace;
-  final String? dartStackTrace;
+  final StackTrace? dartStackTrace;
 
   @override
   final String kName = 'Exception';

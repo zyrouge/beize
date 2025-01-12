@@ -115,7 +115,7 @@ class BeizeCallFrame {
       BeizeExceptionValue(
         'BeizeRuntimeException: Value "${value.kName}" is not callable',
         '<suspended>',
-        StackTrace.current.toString(),
+        StackTrace.current,
       ),
     );
   }

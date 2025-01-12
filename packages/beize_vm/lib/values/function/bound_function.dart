@@ -19,7 +19,11 @@ class BeizeBoundFunctionValue extends BeizePrimitiveObjectValue
     final BeizeCallableValue function = this.function;
     if (function is BeizeFunctionValue) {
       final BeizeNamespace namespace = BeizeNamespace(function.namespace);
+      final BeizeVMObjectValue? parentObject = object is BeizeVMObjectValue
+          ? (object as BeizeVMObjectValue).parentVMObject
+          : null;
       namespace.declare('this', object);
+      namespace.declare('super', parentObject ?? BeizeNullValue.value);
       return BeizeFunctionValue(
         constant: function.constant,
         namespace: namespace,

@@ -1,9 +1,21 @@
-Welcomer := $ {
-    static hello: "hello",
-    static __toString__: -> : "WelcomerToString",
+parent := $ {
+    static p1: "p1",
     __constructor__: -> {
-        this.hello2 = "hello";
-    },
-    __toString__: -> : "WelcomerToString2",
+        print('called');
+        this.p1 = "p1";
+    }
 };
-print(Welcomer());
+
+parent2 := $ parent {
+};
+
+child := $ parent2 {
+    static c1: "c1",
+    static c2: -> : super.p1,
+    __constructor__: -> {
+        print('called 2');
+        super.__constructor__();
+    }
+};
+
+print(child().p1);

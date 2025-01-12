@@ -4,28 +4,45 @@ import 'exports.dart';
 class BeizeVMObjectValue extends BeizePrimitiveObjectValue {
   BeizeVMObjectValue({
     required final BeizeVMClassValue kClass,
+    this.parentVMObject,
     super.fields,
-  }) : _kClass = kClass;
+  }) : kClass_ = kClass;
 
-  final BeizeVMClassValue _kClass;
-
-  @override
-  BeizeVMClassValue kClass(final BeizeCallFrame frame) => _kClass;
+  final BeizeVMClassValue kClass_;
+  final BeizeVMObjectValue? parentVMObject;
 
   @override
-  BeizeVMObjectValue kClone() =>
-      BeizeVMObjectValue(kClass: _kClass, fields: fields.clone());
+  BeizeValue? getOrNull(final BeizeValue key) =>
+      super.getOrNull(key) ?? parentVMObject?.getOrNull(key);
+
+  @override
+  BeizeVMClassValue kClass(final BeizeCallFrame frame) => kClass_;
+
+  @override
+  BeizeVMObjectValue kClone() => BeizeVMObjectValue(
+        kClass: kClass_,
+        fields: fields.clone(),
+        parentVMObject: parentVMObject?.kClone(),
+      );
 
   @override
   String kToString() {
     final BeizeValue? function = getAlongClassOrNull(
-      _kClass,
+      kClass_,
       BeizeStringValue(BeizeVMClassValue.kToStringFunction),
     );
     if (function != null) {
-      return BeizeCallFrame.kCallValueFrameless(_kClass.vm, function)
+      return BeizeCallFrame.kCallValueFrameless(kClass_.vm, function)
           .unwrapUnsafe()
           .kToString();
+    }
+    final String? name = kNameFromNameFunction();
+    if (name != null) {
+      return name;
+    }
+    final String? className = kClass_.kNameFromNameFunction();
+    if (className != null) {
+      return '<instance $className>';
     }
     final StringBuffer buffer = StringBuffer('{');
     bool hasValues = false;
@@ -42,19 +59,21 @@ class BeizeVMObjectValue extends BeizePrimitiveObjectValue {
     return buffer.toString();
   }
 
-  @override
-  String get kName {
-    final BeizeValue? function = _kClass.getAlongClassOrNull(
-      _kClass,
+  String? kNameFromNameFunction() {
+    final BeizeValue? function = kClass_.getAlongClassOrNull(
+      kClass_,
       BeizeStringValue(BeizeVMClassValue.kToStringFunction),
     );
-    if (function != null) {
-      return BeizeCallFrame.kCallValueFrameless(_kClass.vm, function)
-          .unwrapUnsafe()
-          .kToString();
+    if (function == null) {
+      return null;
     }
-    return 'Object';
+    return BeizeCallFrame.kCallValueFrameless(kClass_.vm, function)
+        .unwrapUnsafe()
+        .kToString();
   }
+
+  @override
+  String get kName => kNameFromNameFunction() ?? 'Object';
 
   @override
   bool get isTruthy => fields.map.isNotEmpty;

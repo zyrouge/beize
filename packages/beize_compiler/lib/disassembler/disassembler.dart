@@ -99,18 +99,19 @@ class BeizeDisassembler {
         return 1;
 
       case BeizeOpCodes.opClass:
-        final int count = chunk.codeAt(ip + 1);
+        final int hasParent = chunk.codeAt(ip + 1);
+        final int count = chunk.codeAt(ip + 2);
         final List<int> markings = <int>[];
-        for (int i = 0; i < count; i++) {
-          markings.add(chunk.codeAt(ip + 1 + 1));
+        for (int i = 1; i <= count; i++) {
+          markings.add(chunk.codeAt(ip + 2 + i));
         }
         writeInstruction(
           opCode,
           ip,
           chunk.lineAt(ip),
-          '{so}(markings = ${markings.join(' ')})',
+          '{so}(hasParent = $hasParent, markings = ${markings.join(' ')})',
         );
-        return 1 + count;
+        return 2 + count;
 
       default:
         writeInstruction(opCode, ip, chunk.lineAt(ip));

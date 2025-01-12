@@ -762,10 +762,13 @@ abstract class BeizeParser {
   }
 
   static void parseClass(final BeizeCompiler compiler) {
-    int currentType = 0;
-    int currentCount = 0;
+    bool hasParent = false;
+    if (!compiler.check(BeizeTokens.braceLeft)) {
+      parseExpression(compiler);
+      hasParent = true;
+    }
     // this will be in format such as
-    // <static count>, <instance count>, <static count>, ...
+    // <total count>, <static count>, <instance count>, <static count>, ...
     final List<int> markings = <int>[];
     bool cont = true;
     compiler.consume(BeizeTokens.braceLeft);
@@ -782,28 +785,17 @@ abstract class BeizeParser {
       compiler.consume(BeizeTokens.colon);
       if (isStatic) {
         parseExpression(compiler);
-        if (currentType != 0) {
-          markings.add(currentCount);
-          currentType = 0;
-          currentCount = 0;
-        }
+        markings.add(0);
       } else {
         compiler.consume(BeizeTokens.rightArrow);
         parseFunction(compiler);
-        if (currentType != 1) {
-          markings.add(currentCount);
-          currentType = 1;
-          currentCount = 0;
-        }
+        markings.add(1);
       }
-      currentCount++;
       cont = compiler.match(BeizeTokens.comma);
-    }
-    if (currentCount != 0) {
-      markings.add(currentCount);
     }
     compiler.consume(BeizeTokens.braceRight);
     compiler.emitOpCode(BeizeOpCodes.opClass);
+    compiler.emitCode(hasParent ? 1 : 0);
     compiler.emitCode(markings.length);
     for (final int x in markings) {
       compiler.emitCode(x);

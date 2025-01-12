@@ -21,7 +21,7 @@ class BeizeFunctionValueUtils {
     return BeizeExceptionValue(
       err is BeizeNativeException ? err.message : err.toString(),
       frame.getStackTrace(),
-      stackTrace.toString(),
+      stackTrace,
     );
   }
 }

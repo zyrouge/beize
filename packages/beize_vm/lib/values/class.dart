@@ -4,6 +4,16 @@ import 'exports.dart';
 class BeizeClassValue extends BeizePrimitiveClassValue {
   BeizeClassValue() {
     fields.set(
+      BeizeStringValue('getName'),
+      BeizeNativeFunctionValue.boundSync(
+        (
+          final BeizePrimitiveObjectValue object,
+          final BeizeFunctionCall call,
+        ) =>
+            BeizeStringValue(object.kClass(call.frame).kName),
+      ),
+    );
+    fields.set(
       BeizeStringValue('of'),
       BeizeNativeFunctionValue.boundSync(
         (
