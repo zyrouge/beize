@@ -1,15 +1,18 @@
+import 'dart:html' as html;
 import 'package:beize_compiler/beize_compiler.dart';
 import 'package:beize_vm/beize_vm.dart';
 import 'package:flutter/material.dart';
 
 enum PlaygroundStatus {
-  none,
-  compiling,
-  executing,
-  success,
-  failed;
+  none('None'),
+  compiling('Compiling'),
+  executing('Executing'),
+  success('Success'),
+  failed('Failed');
 
-  String title() => name[0].toUpperCase() + name.substring(1).toLowerCase();
+  const PlaygroundStatus(this.title);
+
+  final String title;
 }
 
 class Playground extends StatefulWidget {
@@ -17,6 +20,9 @@ class Playground extends StatefulWidget {
 
   @override
   State<Playground> createState() => _PlaygroundState();
+
+  static const String documentationUrl = '/beize';
+  static const String examplesUrl = '/beize/Examples/hello-world';
 }
 
 class _PlaygroundState extends State<Playground> {
@@ -29,7 +35,8 @@ class _PlaygroundState extends State<Playground> {
   void initState() {
     super.initState();
     codeController = TextEditingController();
-    codeController.text = 'print("Hello World!");';
+    final String? savedCode = html.window.localStorage['code'];
+    codeController.text = savedCode ?? 'print("Hello World");';
   }
 
   @override
@@ -79,6 +86,14 @@ class _PlaygroundState extends State<Playground> {
     }
   }
 
+  void saveCode() {
+    html.window.localStorage['code'] = codeController.text;
+  }
+
+  void openUrl(final String url) {
+    html.window.open('/beize/Examples/hello-world/', '_blank');
+  }
+
   @override
   Widget build(final BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -86,13 +101,23 @@ class _PlaygroundState extends State<Playground> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text('Beize Playground'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => openUrl(Playground.documentationUrl),
+            child: const Text('Documentation'),
+          ),
+          TextButton(
+            onPressed: () => openUrl(Playground.examplesUrl),
+            child: const Text('Examples'),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           spacing: 8,
           children: <Widget>[
-            const Align(alignment: Alignment.centerLeft, child: Text('Code')),
+            const Align(alignment: Alignment.centerLeft, child: Text('Code ')),
             Expanded(
               child: TextField(
                 controller: codeController,
@@ -123,10 +148,11 @@ class _PlaygroundState extends State<Playground> {
                   fillColor: Colors.transparent,
                   hoverColor: theme.colorScheme.surfaceContainer,
                 ),
+                onChanged: (final _) => saveCode(),
               ),
             ),
-            const Divider(),
-            Row(children: <Widget>[Text('Output (${status.title()})')]),
+            const SizedBox(height: 4),
+            Row(children: <Widget>[Text('Output (${status.title})')]),
             Expanded(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -140,7 +166,10 @@ class _PlaygroundState extends State<Playground> {
                   ),
                   child: SizedBox(
                     width: double.infinity,
-                    child: SelectableText(output),
+                    child: SelectableText(
+                      output,
+                      style: theme.textTheme.bodyLarge,
+                    ),
                   ),
                 ),
               ),
