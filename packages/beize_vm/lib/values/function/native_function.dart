@@ -119,7 +119,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   ) {
     return (final BeizeFunctionCall call) {
       try {
-        final T object = call.argumentAt(0);
+        final T object = call.boundObject! as T;
         final BeizeValue value = function(object, call);
         return BeizeInterpreterResult.success(value);
       } catch (err, stackTrace) {
@@ -165,7 +165,7 @@ class BeizeNativeFunctionValue extends BeizePrimitiveObjectValue
   ) {
     return (final BeizeFunctionCall call) async {
       try {
-        final T object = call.argumentAt(0);
+        final T object = call.boundObject! as T;
         final BeizeValue value = await function(object, call);
         return BeizeInterpreterResult.success(value);
       } catch (err, stackTrace) {

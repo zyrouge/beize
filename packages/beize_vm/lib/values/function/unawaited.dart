@@ -29,7 +29,7 @@ class BeizeUnawaitedValue extends BeizePrimitiveObjectValue {
   }
 
   @override
-  final String kName = 'Function';
+  final String kName = 'Unawaited';
 
   @override
   BeizeUnawaitedClassValue kClass(final BeizeCallFrame frame) =>

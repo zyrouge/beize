@@ -8,12 +8,14 @@ class BeizeGlobalsNatives {
   final BeizeRegExpMatchClassValue regExpMatchClass =
       BeizeRegExpMatchClassValue();
   final BeizeDateTimeClassValue dateTimeClass = BeizeDateTimeClassValue();
+  final BeizeResultClassValue resultClass = BeizeResultClassValue();
 
   void bind(final BeizeNamespace namespace) {
     namespace.declare('BytesList', bytesListClass);
     namespace.declare('RegExp', regExpClass);
     namespace.declare('RegExpMatch', regExpMatchClass);
     namespace.declare('DateTime', dateTimeClass);
+    namespace.declare('Result', resultClass);
     namespace.declare(
       'typeof',
       BeizeNativeFunctionValue.sync((final BeizeFunctionCall call) {

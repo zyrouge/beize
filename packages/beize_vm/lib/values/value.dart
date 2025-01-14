@@ -8,13 +8,16 @@ abstract class BeizeValue {
   bool kEquals(final BeizeValue other);
 
   T cast<T extends BeizeValue>() {
-    if (canCast<T>()) {
-      return this as T;
+    if (!isCastableTo<T>()) {
+      throw BeizeRuntimeException.cannotCastTo(
+        T.toString(),
+        '$runtimeType ($kName)',
+      );
     }
-    throw BeizeRuntimeException.cannotCastTo(kName, T.toString());
+    return this as T;
   }
 
-  bool canCast<T extends BeizeValue>() => this is T;
+  bool isCastableTo<T extends BeizeValue>() => this is T;
 
   bool get isTruthy;
 

@@ -85,7 +85,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('compareTo'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeNumberValue(
             object.value.compareTo(other.value).toDouble(),
           );
@@ -96,7 +96,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('contains'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeBooleanValue(
             call.frame.vm.globals,
             object.value.contains(other.value),
@@ -108,7 +108,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('startsWith'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeBooleanValue(
             call.frame.vm.globals,
             object.value.startsWith(other.value),
@@ -120,7 +120,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('endsWith'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeBooleanValue(
             call.frame.vm.globals,
             object.value.endsWith(other.value),
@@ -132,7 +132,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('indexOf'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeNumberValue(
             object.value.indexOf(other.value).toDouble(),
           );
@@ -143,7 +143,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('lastIndexOf'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue other = call.argumentAt(1);
+          final BeizeStringValue other = call.argumentAt(0);
           return BeizeNumberValue(
             object.value.lastIndexOf(other.value).toDouble(),
           );
@@ -154,8 +154,8 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('substring'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue start = call.argumentAt(1);
-          final BeizeNumberValue end = call.argumentAt(2);
+          final BeizeNumberValue start = call.argumentAt(0);
+          final BeizeNumberValue end = call.argumentAt(1);
           return BeizeStringValue(
             object.value.substring(start.intValue, end.intValue),
           );
@@ -166,8 +166,8 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('replaceFirst'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue from = call.argumentAt(1);
-          final BeizeStringValue to = call.argumentAt(2);
+          final BeizeStringValue from = call.argumentAt(0);
+          final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
             object.value.replaceFirst(from.value, to.value),
           );
@@ -178,8 +178,8 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('replaceAll'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue from = call.argumentAt(1);
-          final BeizeStringValue to = call.argumentAt(2);
+          final BeizeStringValue from = call.argumentAt(0);
+          final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
             object.value.replaceAll(from.value, to.value),
           );
@@ -229,8 +229,8 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('padLeft'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue amount = call.argumentAt(1);
-          final BeizeStringValue by = call.argumentAt(2);
+          final BeizeNumberValue amount = call.argumentAt(0);
+          final BeizeStringValue by = call.argumentAt(1);
           return BeizeStringValue(
             object.value.padLeft(amount.intValue, by.value),
           );
@@ -241,8 +241,8 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('padRight'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue amount = call.argumentAt(1);
-          final BeizeStringValue by = call.argumentAt(2);
+          final BeizeNumberValue amount = call.argumentAt(0);
+          final BeizeStringValue by = call.argumentAt(1);
           return BeizeStringValue(
             object.value.padRight(amount.intValue, by.value),
           );
@@ -253,7 +253,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('split'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue delimiter = call.argumentAt(1);
+          final BeizeStringValue delimiter = call.argumentAt(0);
           return BeizeListValue(
             object.value
                 .split(delimiter.value)
@@ -267,7 +267,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('codeUnitAt'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue index = call.argumentAt(1);
+          final BeizeNumberValue index = call.argumentAt(0);
           return BeizeNumberValue(
             object.value.codeUnitAt(index.intValue).toDouble(),
           );
@@ -278,7 +278,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('charAt'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue index = call.argumentAt(1);
+          final BeizeNumberValue index = call.argumentAt(0);
           return BeizeStringValue(object.value[index.intValue]);
         },
       ),
@@ -311,7 +311,7 @@ class BeizeStringClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('format'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeStringValue object, final BeizeFunctionCall call) {
-          final BeizePrimitiveObjectValue value = call.argumentAt(1);
+          final BeizePrimitiveObjectValue value = call.argumentAt(0);
           return BeizeStringValue(object.format(value));
         },
       ),

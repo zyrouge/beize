@@ -43,7 +43,7 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('hasMatch'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
+          final BeizeStringValue input = call.argumentAt(0);
           return BeizeBooleanValue(
             call.frame.vm.globals,
             object.regexp.hasMatch(input.value),
@@ -55,7 +55,7 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('stringMatch'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
+          final BeizeStringValue input = call.argumentAt(0);
           final String? match = object.regexp.stringMatch(input.value);
           return match is String
               ? BeizeStringValue(match)
@@ -67,7 +67,7 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('firstMatch'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
+          final BeizeStringValue input = call.argumentAt(0);
           final RegExpMatch? match = object.regexp.firstMatch(input.value);
           return match is RegExpMatch
               ? BeizeRegExpMatchValue(match)
@@ -79,7 +79,7 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('allMatches'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
+          final BeizeStringValue input = call.argumentAt(0);
           final Iterable<RegExpMatch> matches =
               object.regexp.allMatches(input.value);
           return BeizeListValue(
@@ -94,8 +94,8 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('replaceFirst'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
-          final BeizeStringValue to = call.argumentAt(2);
+          final BeizeStringValue input = call.argumentAt(0);
+          final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
             input.value.replaceFirst(object.regexp, to.value),
           );
@@ -106,8 +106,8 @@ class BeizeRegExpClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('replaceAll'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeRegExpValue object, final BeizeFunctionCall call) {
-          final BeizeStringValue input = call.argumentAt(1);
-          final BeizeStringValue to = call.argumentAt(2);
+          final BeizeStringValue input = call.argumentAt(0);
+          final BeizeStringValue to = call.argumentAt(1);
           return BeizeStringValue(
             input.value.replaceAll(object.regexp, to.value),
           );

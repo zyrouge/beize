@@ -165,7 +165,7 @@ class BeizeNumberClassValue extends BeizePrimitiveClassValue {
       BeizeStringValue('compareTo'),
       BeizeNativeFunctionValue.boundSync(
         (final BeizeNumberValue object, final BeizeFunctionCall call) {
-          final BeizeNumberValue other = call.argumentAt(1);
+          final BeizeNumberValue other = call.argumentAt(0);
           return BeizeNumberValue(
             object.value.compareTo(other.value).toDouble(),
           );

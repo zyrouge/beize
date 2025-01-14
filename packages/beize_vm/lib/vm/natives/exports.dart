@@ -11,3 +11,5 @@ export 'regexp.dart';
 export 'regexp_class.dart';
 export 'regexp_match.dart';
 export 'regexp_match_class.dart';
+export 'result.dart';
+export 'result_class.dart';

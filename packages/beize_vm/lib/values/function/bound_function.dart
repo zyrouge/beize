@@ -30,7 +30,8 @@ class BeizeBoundFunctionValue extends BeizePrimitiveObjectValue
       ).kCall(call);
     }
     final BeizeFunctionCall boundCall = BeizeFunctionCall(
-      arguments: <BeizeValue>[object, ...call.arguments],
+      boundObject: object,
+      arguments: call.arguments,
       frame: call.frame,
     );
     return function.kCall(boundCall);
@@ -52,47 +53,4 @@ class BeizeBoundFunctionValue extends BeizePrimitiveObjectValue
 
   @override
   int get kHashCode => function.hashCode;
-
-  static BeizeNativeExecuteFunction convertSyncFunction(
-    final BeizeNativeSyncFunction function,
-  ) =>
-      (final BeizeFunctionCall call) {
-        try {
-          final BeizeValue value = function(call);
-          return BeizeInterpreterResult.success(value);
-        } catch (err, stackTrace) {
-          return BeizeFunctionValueUtils.handleException(
-            call.frame,
-            err,
-            stackTrace,
-          );
-        }
-      };
-
-  static BeizeNativeExecuteFunction convertAsyncFunction(
-    final BeizeNativeAsyncFunction function,
-  ) =>
-      (final BeizeFunctionCall call) {
-        final BeizeValue value = BeizeUnawaitedValue(
-          call.arguments,
-          wrapAsyncFunction(function),
-        );
-        return BeizeInterpreterResult.success(value);
-      };
-
-  static BeizeUnawaitedFunction wrapAsyncFunction(
-    final BeizeNativeAsyncFunction function,
-  ) =>
-      (final BeizeFunctionCall call) async {
-        try {
-          final BeizeValue value = await function(call);
-          return BeizeInterpreterResult.success(value);
-        } catch (err, stackTrace) {
-          return BeizeFunctionValueUtils.handleException(
-            call.frame,
-            err,
-            stackTrace,
-          );
-        }
-      };
 }

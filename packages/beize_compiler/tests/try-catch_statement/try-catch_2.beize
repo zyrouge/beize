@@ -1,5 +1,5 @@
 try {
-    throw Exception.new("Test");
+    throw Exception("Test");
     out("c-0");
 } catch (err) {
     out(err.message);
