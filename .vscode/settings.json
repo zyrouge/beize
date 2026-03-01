@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": true,
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Never, ColumnLimit: 0 }",
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+    },
+    "[cmake]": {
+        "editor.defaultFormatter": "ms-vscode.cmake-tools"
+    }
+}
